@@ -1,0 +1,25 @@
+---
+import "../styles/global.css";
+import Head from "./MainHead.astro";
+import Header from "../components/layout/Header.astro";
+import Footer from "../components/layout/Footer.astro";
+import type { PageKey } from "../config/pages/pageRegistry";
+import type { Language } from "../config/i18n/i18n";
+import type { PageSeo } from "../config/pages/pageDefinition";
+
+const { language, pageKey, seo } = Astro.props as {
+  language: Language;
+  pageKey: PageKey;
+  seo?: Partial<PageSeo>;
+};
+---
+
+<html lang={language}>
+  <Head language={language} pageKey={pageKey} seo={seo}/>
+
+  <body class="bg-gray-950 text-white font-inter">
+    <Header language={language} pageKey={pageKey} />
+    <slot />
+    <Footer language={language} pageKey={pageKey} />
+  </body>
+</html>

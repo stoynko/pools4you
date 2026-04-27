@@ -1,0 +1,133 @@
+---
+import { pageDefinitions } from "../config/pages/pageRegistry";
+import { getPagePath } from "../config/pages/helpers";
+import type { PageKey } from "../config/pages/pageRegistry";
+import type { Language } from "../config/i18n/i18n";
+import { defaultSeo } from "../lib/seo/defaultSeo";
+import type { PageSeo } from "../config/pages/pageDefinition";
+import { getSiteBaseUrl, toAbsoluteUrl } from "../lib/seo/urlBase";
+
+const { language, pageKey, seo: seoOverride } = Astro.props as {
+  language: Language;
+  pageKey: PageKey;
+  seo?: Partial<PageSeo>;
+};
+
+const page = pageDefinitions[pageKey];
+const pageSeo = page.seo[language];
+
+const seo = {
+  ...defaultSeo,
+  ...pageSeo,
+  ...seoOverride,
+};
+
+const base = getSiteBaseUrl(Astro.site);
+
+const pagePath = getPagePath(pageKey, language);
+
+const canonical = seo.canonical
+  ? toAbsoluteUrl(seo.canonical, base)
+  : `${base}${pagePath}`;
+
+const alternateBg = seo.alternates?.bg
+  ? toAbsoluteUrl(seo.alternates.bg, base)
+  : `${base}${getPagePath(pageKey, "bg")}`;
+
+const alternateEn = seo.alternates?.en
+  ? toAbsoluteUrl(seo.alternates.en, base)
+  : `${base}${getPagePath(pageKey, "en")}`;
+
+const xDefault = `${base}/`;
+
+const ogTitle = seo.ogTitle ?? seo.title;
+const ogDescription = seo.ogDescription ?? seo.description;
+const ogType = seo.ogType ?? defaultSeo.defaultOgType;
+
+const image = seo.ogImage ?? seo.media?.image ?? defaultSeo.defaultImage;
+const imageUrl = image.src.startsWith("http")
+  ? image.src
+  : `${base}${image.src}`;
+
+const structuredData = seo.structuredData;
+const structuredDataJson = structuredData
+  ? JSON.stringify(structuredData)
+  : null;
+---
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>{seo.title}</title>
+  <meta name="description" content={seo.description} />
+
+  {seo.noIndex && <meta name="robots" content="noindex, nofollow" />}
+  <link rel="canonical" href={canonical} />
+
+  <meta property="og:title" content={ogTitle} />
+  <meta property="og:description" content={ogDescription} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:image" content={imageUrl} />
+  <meta property="og:image:alt" content={image.alt} />
+  <meta property="og:locale" content={language === "bg" ? "bg_BG" : "en_US"} />
+  <meta property="og:site_name" content={defaultSeo.siteName} />
+  {
+    image.width && (
+      <meta property="og:image:width" content={String(image.width)} />
+    )
+  }
+  {
+    image.height && (
+      <meta property="og:image:height" content={String(image.height)} />
+    )
+  }
+  {image.type && <meta property="og:image:type" content={image.type} />}
+
+  {
+    seo.media?.video?.src && (
+      <>
+        <meta
+          property="og:video"
+          content={
+            seo.media.video.src.startsWith("http")
+              ? seo.media.video.src
+              : `${base}${seo.media.video.src}`
+          }
+        />
+        {seo.media.video.width && (
+          <meta
+            property="og:video:width"
+            content={String(seo.media.video.width)}
+          />
+        )}
+        {seo.media.video.height && (
+          <meta
+            property="og:video:height"
+            content={String(seo.media.video.height)}
+          />
+        )}
+        {seo.media.video.type && (
+          <meta property="og:video:type" content={seo.media.video.type} />
+        )}
+      </>
+    )
+  }
+
+  <link rel="alternate" hreflang="x-default" href={xDefault} />
+  <link rel="alternate" hreflang="bg" href={alternateBg} />
+  <link rel="alternate" hreflang="en" href={alternateEn} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+
+  {
+    structuredDataJson && (
+      <script
+        is:inline
+        type="application/ld+json"
+        set:html={structuredDataJson}
+      />
+    )
+  }
+</head>

@@ -1,0 +1,29 @@
+{
+  "name": "pools4you",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": "24"
+  },
+  "scripts": {
+    "check": "astro check && tsc --noEmit",
+    "dev": "npm run check && astro dev",
+    "build": "npm run check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.2",
+    "astro": "^6.1.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.8",
+    "@types/node": "^25.5.2",
+    "autoprefixer": "^10.4.27",
+    "cross-env": "^10.1.0",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

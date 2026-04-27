@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/MainLayout.astro";
+import { getPageTranslations } from "../lib/i18n";
+import type { PageKey } from "../config/pages/pageRegistry";
+import type { Language } from "../config/i18n/i18n";
+
+type Props = {
+  language: Language;
+  pageKey: PageKey;
+};
+
+const { language, pageKey } = Astro.props as Props;
+const translation = getPageTranslations(language, "home");
+
+---
+
+<Layout language={language} pageKey={pageKey}>
+  <section class="max-w-6xl mx-auto px-6 py-20 text-center space-y-6">
+    <h1 class="text-6xl font-libertinus font-bold leading-tight">
+      {translation.hero.title}
+    </h1>
+
+    <p class="text-lg text-gray-400 max-w-2xl mx-auto">
+      {translation.hero.subtitle}
+    </p>
+
+    <div class="flex justify-center gap-4 mt-6">
+      <button class="px-8 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold transition">
+        {translation.hero.ctaPrimary}
+      </button>
+
+      <button class="px-8 py-3 border border-gray-700 hover:border-white rounded-lg transition">
+        {translation.hero.ctaSecondary}
+      </button>
+    </div>
+  </section>
+
+ 
+</Layout>

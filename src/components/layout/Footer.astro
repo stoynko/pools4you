@@ -1,0 +1,129 @@
+---
+import type { PageKey } from "../../config/pages/pageRegistry.ts";
+import type { Language } from "../../config/i18n/i18n.ts";
+import { getPagePath } from "../../config/pages/helpers.ts";
+import { getPageTranslations } from "../../lib/i18n";
+
+const { language, pageKey } = Astro.props as {
+  language: Language;
+  pageKey: PageKey;
+};
+
+const translation = getPageTranslations(language, "footer");
+---
+
+<footer class="bg-black text-gray-400 border-t border-gray-800 mt-20">
+  <div class="max-w-6xl mx-auto px-6 py-16">
+    
+    <!-- GRID -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-10">
+      <div class="col-span-2 md:col-span-1 space-y-4">
+        <div>
+          <p class="text-white font-semibold tracking-wide">POOLS 4 YOU</p>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-white font-semibold mb-4">
+          {translation.categoryServices}
+        </h3>
+        <ul class="space-y-2">
+          <li>{translation.subServicesDesign}</li>
+          <li>{translation.subServicesConstruction}</li>
+          <li>{translation.subServicesRenovation}</li>
+          <li>{translation.subServicesMaintenance}</li>
+          <li>{translation.subServicesConsulting}</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-white font-semibold mb-4">
+          {translation.categorySolutions}
+        </h3>
+        <ul class="space-y-2">
+          <li>{translation.subSolutionsPools}</li>
+          <li>{translation.subSolutionsSpa}</li>
+          <li>{translation.subSolutionsSaunas}</li>
+          <li>{translation.subSolutionsAquaparks}</li>
+          <li>{translation.subSolutionsAttractions}</li>
+          <li>{translation.subSolutionsTechnical}</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-white font-semibold mb-4">
+          {translation.categoryProjects}
+        </h3>
+        <ul class="space-y-2">
+          <li>{translation.subProjectsHospitality}</li>
+          <li>{translation.subProjectsPublic}</li>
+          <li>{translation.subProjectsPrivate}</li>
+        </ul>
+      </div>
+
+      <div class="space-y-8">
+        <div>
+          <h3 class="text-white font-semibold mb-4">
+            {translation.categoryCompany}
+          </h3>
+          <ul class="space-y-2">
+            <li>{translation.subCompanyAbout}</li>
+            <li>{translation.subCompanyContacts}</li>
+            <li>{translation.subCompanyCareers}</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-white font-semibold mb-4">
+            {translation.categoryResources}
+          </h3>
+          <ul class="space-y-2">
+            <li>{translation.subResourcesFaq}</li>
+            <li>{translation.subResourcesBlog}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOCIAL -->
+    <div class="flex items-center justify-center gap-6 mt-16">
+      <div class="h-px bg-yellow-500 w-12 opacity-40"></div>
+
+      <div class="flex gap-6 text-white text-xl">
+        <span class="hover:text-yellow-500 transition cursor-pointer">f</span>
+        <span class="hover:text-yellow-500 transition cursor-pointer">◎</span>
+        <span class="hover:text-yellow-500 transition cursor-pointer">♪</span>
+      </div>
+
+      <div class="h-px bg-yellow-500 w-12 opacity-40"></div>
+    </div>
+
+    <div class="relative mt-10 pt-6 border-t border-gray-800 text-sm text-gray-500">
+
+  <!-- CENTERED TEXT -->
+  <div class="text-center space-y-1">
+    <p>
+      © 2026 Pools 4 You LTD. {translation.rightsReserved} | {translation.terms} | {translation.privacy}
+    </p>
+    <p>Powered by SeaSolutions</p>
+  </div>
+
+  <!-- RIGHT-ALIGNED LANGUAGE SWITCHER -->
+  <div class="absolute right-0 top-1/2 -translate-y-1/2">
+    <select
+      class="bg-gray-900 border border-gray-700 rounded px-3 py-1 text-white"
+      onchange="window.location.href = this.value"
+    >
+      <option value={getPagePath(pageKey, "bg")} selected={language === "bg"}>
+        Български
+      </option>
+      <option value={getPagePath(pageKey, "en")} selected={language === "en"}>
+        English
+      </option>
+    </select>
+  </div>
+
+</div>
+
+  </div>
+</footer>

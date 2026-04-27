@@ -1,0 +1,141 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import MainLayout from "../../layouts/MainLayout.astro";
+import { createProjectStructuredData } from "../../lib/seo/projectData";
+import { getSiteBaseUrl, toAbsoluteUrl } from "../../lib/seo/urlBase";
+
+import type { Language } from "../../config/i18n/i18n";
+
+type ProjectEntry = CollectionEntry<"projects">;
+
+const { project, language } = Astro.props as {
+  project: ProjectEntry;
+  language: Language;
+};
+
+const projectPath =
+  language === "bg"
+    ? `/proekti/${project.data.slug}`
+    : `/en/projects/${project.data.slug}`;
+
+const base = getSiteBaseUrl(Astro.site);
+const projectUrl = toAbsoluteUrl(projectPath, base);
+const heroImageUrl = toAbsoluteUrl(project.data.heroImage.src, base);
+
+const translatedProjects = await getCollection("projects", ({ data }) => {
+  return data.translationKey === project.data.translationKey;
+});
+
+const bgProject = translatedProjects.find((entry) => {
+  return entry.data.language === "bg";
+});
+
+const enProject = translatedProjects.find((entry) => {
+  return entry.data.language === "en";
+});
+
+const alternates = {
+  bg: bgProject ? `/proekti/${bgProject.data.slug}` : undefined,
+  en: enProject ? `/en/projects/${enProject.data.slug}` : undefined,
+};
+
+const structuredData = createProjectStructuredData({
+  project,
+  projectUrl,
+  heroImageUrl,
+  baseUrl: base,
+});
+
+const pageSeo = {
+  title: project.data.seoTitle ?? `${project.data.title} | Pools4You`,
+  description: project.data.seoDescription ?? project.data.description,
+  canonical: projectPath,
+  alternates,
+  ogTitle: project.data.seoTitle ?? project.data.title,
+  ogDescription: project.data.seoDescription ?? project.data.description,
+  ogType: "article" as const,
+  ogImage: {
+    src: project.data.heroImage.src,
+    alt: project.data.title,
+    width: project.data.heroImage.width,
+    height: project.data.heroImage.height,
+  },
+  structuredData,
+};
+
+const { Content } = await render(project);
+const { title, description, date, location, client, heroImage } = project.data;
+
+const gallery: ProjectEntry["data"]["gallery"] = project.data.gallery ?? [];
+
+const formattedDate = date.toLocaleDateString(
+  language === "bg" ? "bg-BG" : "en-GB",
+);
+
+const galleryTitle = language === "bg" ? "Галерия" : "Gallery";
+---
+
+<MainLayout language={language} pageKey="projects" seo={pageSeo}>
+  <main>
+    <section class="max-w-6xl mx-auto px-6 py-20 space-y-12">
+      <header class="max-w-4xl space-y-6">
+        <p class="text-sm uppercase tracking-[0.25em] text-blue-300">
+          {location}
+        </p>
+
+        <h1
+          class="text-5xl md:text-6xl font-libertinus font-bold leading-tight"
+        >
+          {title}
+        </h1>
+
+        <p class="max-w-3xl text-lg text-gray-300 leading-relaxed">
+          {description}
+        </p>
+
+        <div class="flex flex-wrap gap-x-4 gap-y-2 text-sm text-gray-400">
+          <span>{client}</span>
+          <span aria-hidden="true">•</span>
+          <time datetime={date.toISOString()}>
+            {formattedDate}
+          </time>
+        </div>
+      </header>
+
+      <Image
+        src={heroImage}
+        alt={title}
+        loading="eager"
+        decoding="async"
+        class="w-full rounded-2xl object-cover border border-gray-800 shadow-2xl"
+      />
+
+      <article class="max-w-4xl text-gray-300 leading-8 space-y-6">
+        <Content />
+      </article>
+
+      {
+        gallery.length > 0 && (
+          <section class="pt-12 border-t border-gray-800">
+            <h2 class="mb-8 text-3xl font-libertinus font-semibold">
+              {galleryTitle}
+            </h2>
+
+            <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {gallery.map((image) => (
+                <Image
+                  src={image}
+                  alt={title}
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full rounded-xl object-cover border border-gray-800"
+                />
+              ))}
+            </div>
+          </section>
+        )
+      }
+    </section>
+  </main>
+</MainLayout>

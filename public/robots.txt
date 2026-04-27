@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pools4you.bg/sitemap-index.xml
