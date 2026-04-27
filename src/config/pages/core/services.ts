@@ -1,4 +1,4 @@
-import type { PageDefinition } from "../pageDefinition";
+import type { PageDefinition } from "../pageTypes";
 import { servicesSeo } from "../../../lib/seo/pages/servicesSeo";
 
 export const servicesPage = {

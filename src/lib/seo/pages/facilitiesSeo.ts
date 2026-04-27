@@ -1,4 +1,4 @@
-import { defineSeo } from "../../../config/pages/helpers";
+import { defineSeo } from "../../../config/pages/pageSeo";
 
 export const facilitiesSeo = defineSeo({
   bg: {

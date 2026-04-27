@@ -55,3 +55,7 @@ export type PageDefinition<TKey extends string = string> = {
   template: TemplateKey;
   seo: Record<Language, PageSeo>;
 };
+
+export function defineSeo(seo: Record<Language, PageSeo>) {
+  return seo;
+}

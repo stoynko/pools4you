@@ -1,6 +1,6 @@
 export const notFound = {
-  browserTitle: "404 | Page Not Found",
+  browserTitle: "Page Not Found",
   title: "Page not found",
-  description: "The page you're looking for doesn't exist or has been moved.",
+  description: "The address could have been changed, removed, or entered incorrectly.",
   homeButtonText: "Back to Home",
 } as const;

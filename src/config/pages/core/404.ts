@@ -1,5 +1,5 @@
-import { defineSeo } from "../helpers";
-import type { PageDefinition } from "../pageDefinition";
+import { defineSeo } from "../pageSeo";
+import type { PageDefinition } from "../pageTypes";
 
 export const notFoundPage = {
   key: "notFound",
@@ -11,12 +11,14 @@ export const notFoundPage = {
   seo: defineSeo({
     bg: {
       title: "404 | Страницата не е намерена",
-      description: "Страницата, която търсите, не съществува или е била преместена.",
+      description:
+        "Страницата, която търсите, не съществува или е била преместена.",
       noIndex: true,
     },
     en: {
       title: "404 | Page not found",
-      description: "The page you are looking for does not exist or has been moved.",
+      description:
+        "The page you are looking for does not exist or has been moved.",
       noIndex: true,
     },
   }),

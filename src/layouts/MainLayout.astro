@@ -5,7 +5,7 @@ import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import type { PageKey } from "../config/pages/pageRegistry";
 import type { Language } from "../config/i18n/i18n";
-import type { PageSeo } from "../config/pages/pageDefinition";
+import type { PageSeo } from "../config/pages/pageTypes";
 
 const { language, pageKey, seo } = Astro.props as {
   language: Language;
@@ -15,7 +15,7 @@ const { language, pageKey, seo } = Astro.props as {
 ---
 
 <html lang={language}>
-  <Head language={language} pageKey={pageKey} seo={seo}/>
+  <Head language={language} pageKey={pageKey} seo={seo} />
 
   <body class="bg-gray-950 text-white font-inter">
     <Header language={language} pageKey={pageKey} />

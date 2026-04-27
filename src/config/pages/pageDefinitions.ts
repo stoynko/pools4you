@@ -1,3 +1,4 @@
+
 import { homePage } from "./core/home";
 import { servicesPage } from "./core/services";
 import { projectsPage } from "./core/projects";
@@ -11,7 +12,7 @@ export const pageDefinitions = {
   projects: projectsPage,
   facilities: facilitiesPage,
   about: aboutPage,
-  notFound: notFoundPage
+  notFound: notFoundPage,
 } as const;
 
 export type PageKey = keyof typeof pageDefinitions;

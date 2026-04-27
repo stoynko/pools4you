@@ -1,13 +1,17 @@
 ---
 import { pageDefinitions } from "../config/pages/pageRegistry";
-import { getPagePath } from "../config/pages/helpers";
+import { getPagePath } from "../config/pages/pagePaths";
 import type { PageKey } from "../config/pages/pageRegistry";
 import type { Language } from "../config/i18n/i18n";
 import { defaultSeo } from "../lib/seo/defaultSeo";
-import type { PageSeo } from "../config/pages/pageDefinition";
+import type { PageSeo } from "../config/pages/pageTypes";
 import { getSiteBaseUrl, toAbsoluteUrl } from "../lib/seo/urlBase";
 
-const { language, pageKey, seo: seoOverride } = Astro.props as {
+const {
+  language,
+  pageKey,
+  seo: seoOverride,
+} = Astro.props as {
   language: Language;
   pageKey: PageKey;
   seo?: Partial<PageSeo>;

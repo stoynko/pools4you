@@ -1,7 +1,7 @@
 ---
 import type { PageKey } from "../../config/pages/pageRegistry.ts";
 import type { Language } from "../../config/i18n/i18n.ts";
-import { getPagePath } from "../../config/pages/helpers.ts";
+import { getPagePath } from "../../config/pages/pagePaths.ts";
 import { getPageTranslations } from "../../lib/i18n";
 
 const { language, pageKey } = Astro.props as {
@@ -14,7 +14,6 @@ const translation = getPageTranslations(language, "footer");
 
 <footer class="bg-black text-gray-400 border-t border-gray-800 mt-20">
   <div class="max-w-6xl mx-auto px-6 py-16">
-    
     <!-- GRID -->
     <div class="grid grid-cols-2 md:grid-cols-5 gap-10">
       <div class="col-span-2 md:col-span-1 space-y-4">
@@ -98,32 +97,39 @@ const translation = getPageTranslations(language, "footer");
       <div class="h-px bg-yellow-500 w-12 opacity-40"></div>
     </div>
 
-    <div class="relative mt-10 pt-6 border-t border-gray-800 text-sm text-gray-500">
-
-  <!-- CENTERED TEXT -->
-  <div class="text-center space-y-1">
-    <p>
-      © 2026 Pools 4 You LTD. {translation.rightsReserved} | {translation.terms} | {translation.privacy}
-    </p>
-    <p>Powered by SeaSolutions</p>
-  </div>
-
-  <!-- RIGHT-ALIGNED LANGUAGE SWITCHER -->
-  <div class="absolute right-0 top-1/2 -translate-y-1/2">
-    <select
-      class="bg-gray-900 border border-gray-700 rounded px-3 py-1 text-white"
-      onchange="window.location.href = this.value"
+    <div
+      class="relative mt-10 pt-6 border-t border-gray-800 text-sm text-gray-500"
     >
-      <option value={getPagePath(pageKey, "bg")} selected={language === "bg"}>
-        Български
-      </option>
-      <option value={getPagePath(pageKey, "en")} selected={language === "en"}>
-        English
-      </option>
-    </select>
-  </div>
+      <!-- CENTERED TEXT -->
+      <div class="text-center space-y-1">
+        <p>
+          © 2026 Pools 4 You LTD. {translation.rightsReserved} | {
+            translation.terms
+          } | {translation.privacy}
+        </p>
+        <p>Powered by SeaSolutions</p>
+      </div>
 
-</div>
-
+      <!-- RIGHT-ALIGNED LANGUAGE SWITCHER -->
+      <div class="absolute right-0 top-1/2 -translate-y-1/2">
+        <select
+          class="bg-gray-900 border border-gray-700 rounded px-3 py-1 text-white"
+          onchange="window.location.href = this.value"
+        >
+          <option
+            value={getPagePath(pageKey, "bg")}
+            selected={language === "bg"}
+          >
+            Български
+          </option>
+          <option
+            value={getPagePath(pageKey, "en")}
+            selected={language === "en"}
+          >
+            English
+          </option>
+        </select>
+      </div>
+    </div>
   </div>
 </footer>
