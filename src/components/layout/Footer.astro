@@ -4,9 +4,10 @@ import type { Language } from "../../config/i18n/i18n.ts";
 import { getPagePath } from "../../config/pages/pagePaths.ts";
 import { getPageTranslations } from "../../lib/i18n";
 
-const { language, pageKey } = Astro.props as {
+const { language, pageKey, alternates } = Astro.props as {
   language: Language;
   pageKey: PageKey;
+  alternates?: Partial<Record<Language, string>>;
 };
 
 const translation = getPageTranslations(language, "footer");
@@ -68,17 +69,6 @@ const translation = getPageTranslations(language, "footer");
           <ul class="space-y-2">
             <li>{translation.subCompanyAbout}</li>
             <li>{translation.subCompanyContacts}</li>
-            <li>{translation.subCompanyCareers}</li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 class="text-white font-semibold mb-4">
-            {translation.categoryResources}
-          </h3>
-          <ul class="space-y-2">
-            <li>{translation.subResourcesFaq}</li>
-            <li>{translation.subResourcesBlog}</li>
           </ul>
         </div>
       </div>
@@ -117,17 +107,14 @@ const translation = getPageTranslations(language, "footer");
           onchange="window.location.href = this.value"
         >
           <option
-            value={getPagePath(pageKey, "bg")}
-            selected={language === "bg"}
+            value={alternates?.bg ?? getPagePath(pageKey, "bg")}
+            selected={language === "bg"}>Български</option
           >
-            Български
-          </option>
+
           <option
-            value={getPagePath(pageKey, "en")}
-            selected={language === "en"}
+            value={alternates?.en ?? getPagePath(pageKey, "en")}
+            selected={language === "en"}>English</option
           >
-            English
-          </option>
         </select>
       </div>
     </div>

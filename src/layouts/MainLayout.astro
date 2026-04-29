@@ -7,10 +7,11 @@ import type { PageKey } from "../config/pages/pageRegistry";
 import type { Language } from "../config/i18n/i18n";
 import type { PageSeo } from "../config/pages/pageTypes";
 
-const { language, pageKey, seo } = Astro.props as {
+const { language, pageKey, seo, alternates } = Astro.props as {
   language: Language;
   pageKey: PageKey;
   seo?: Partial<PageSeo>;
+  alternates?: Partial<Record<Language, string>>;
 };
 ---
 
@@ -20,6 +21,6 @@ const { language, pageKey, seo } = Astro.props as {
   <body class="bg-gray-950 text-white font-inter">
     <Header language={language} pageKey={pageKey} />
     <slot />
-    <Footer language={language} pageKey={pageKey} />
+    <Footer language={language} pageKey={pageKey} alternates={alternates} />
   </body>
 </html>
