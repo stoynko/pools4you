@@ -7,11 +7,6 @@ export async function getStaticPaths() {
     return data.language === "en";
   });
 
-  console.log(
-    "EN PROJECT PATHS:",
-    projects.map((project) => project.data.slug)
-  );
-
   return projects.map((project) => ({
     params: {
       slug: project.data.slug,
