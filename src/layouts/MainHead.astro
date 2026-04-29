@@ -1,11 +1,12 @@
 ---
-import { pageDefinitions } from "../config/pages/pageRegistry";
+import { pageDefinitions } from "../config/pages/pageDefinitions";
 import { getPagePath } from "../config/pages/pagePaths";
-import type { PageKey } from "../config/pages/pageRegistry";
-import type { Language } from "../config/i18n/i18n";
 import { defaultSeo } from "../lib/seo/defaultSeo";
-import type { PageSeo } from "../config/pages/pageTypes";
 import { getSiteBaseUrl, toAbsoluteUrl } from "../lib/seo/urlBase";
+
+import type { Language } from "../config/i18n/i18n";
+import type { PageKey } from "../config/pages/pageDefinitions";
+import type { PageSeo } from "../config/pages/pageTypes";
 
 const {
   language,

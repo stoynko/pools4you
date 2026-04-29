@@ -1,6 +1,6 @@
 import type { Language } from "../i18n/i18n";
-import { pageDefinitions } from "./pageRegistry";
-import type { PageKey } from "./pageRegistry";
+import { pageDefinitions } from "./pageDefinitions";
+import type { PageKey } from "./pageDefinitions";
 
 // * RETURNS THE LOCALIZED PATH FOR A PAGE KEY AND LANGUAGE. */
 export function getPagePath(pageKey: PageKey, language: Language): string {
