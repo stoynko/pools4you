@@ -27,4 +27,4 @@ pnpm-debug.log*
 .vscode/
 
 # notes
-notes.md
+.docs/
