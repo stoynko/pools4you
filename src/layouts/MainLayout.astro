@@ -19,7 +19,37 @@ const { language, pageKey, seo, alternates } = Astro.props as {
 <html lang={language}>
   <Head language={language} pageKey={pageKey} seo={seo} />
 
-  <body class="bg-gray-950 text-white font-inter">
+  <script is:inline>
+    const storedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+
+    if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
+
+    document.addEventListener("click", (event) => {
+      const toggle = event.target.closest("[data-theme-toggle]");
+
+      if (!toggle) {
+        return;
+      }
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+      if (isDark) {
+        document.documentElement.removeAttribute("data-theme");
+        localStorage.setItem("theme", "light");
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
+      }
+    });
+  </script>
+
+  <body class="font-inter">
     <Header language={language} pageKey={pageKey} />
     <slot />
     <Footer language={language} pageKey={pageKey} alternates={alternates} />

@@ -1,13 +1,20 @@
 ---
-const { href, label, isActive } = Astro.props as {
+const { href, label, isActive = false } = Astro.props as {
   href: string;
   label: string;
-  isActive: boolean;
+  isActive?: boolean;
 };
 
-const linkClass = isActive
-  ? "text-white font-semibold underline underline-offset-4 decoration-2"
-  : "text-gray-300 hover:text-white transition";
+const activeLinkClass = isActive
+  ? "font-semibold underline underline-offset-4 decoration-2"
+  : "transition";
 ---
 
-<a href={href} aria-current={isActive ? "page" : undefined} class={linkClass}> {label} </a>
+<a
+  href={href}
+  class={activeLinkClass}
+  style={`color: ${isActive ? "var(--color-gold)" : "var(--color-text-secondary)"}; text-decoration-color: var(--color-gold);`}
+  aria-current={isActive ? "page" : undefined}
+>
+  {label}
+</a>

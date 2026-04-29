@@ -96,6 +96,10 @@
   /* === FONTS === */
   --font-inter: "Inter", sans-serif;
   --font-libertinus: "Libertinus Serif", serif;
+
+  /* === ELEMENTS === */
+  --header-height: clamp(64px, 5vw, 64px);
+  --header-logo-height: clamp(100px, 6.4vw, 250px);
 }
 
 /* -- 3. DARK MODE OVERRIDES */
@@ -294,4 +298,31 @@ h6 {
 [data-animate].is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* -- CUSTOM  */
+
+.site-logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.site-logo-image {
+  display: block;
+  height: var(--header-logo-height);
+  width: auto;
+  max-width: none;
+}
+
+.site-logo-image-dark {
+  display: none;
+}
+
+[data-theme="dark"] .site-logo-image-light {
+  display: none;
+}
+
+[data-theme="dark"] .site-logo-image-dark {
+  display: block;
 }

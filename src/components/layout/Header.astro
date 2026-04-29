@@ -5,6 +5,7 @@ import { getPagePath } from "../../config/pages/pagePaths.ts";
 import { getPageTranslations } from "../../lib/i18n";
 import { primaryNav } from "../../config/navigation/navigationItems";
 import HeaderLink from "./HeaderLink.astro";
+import HeaderLogo from "../brand/HeaderLogo.astro";
 
 const { language, pageKey } = Astro.props as {
   language: Language;
@@ -14,15 +15,12 @@ const { language, pageKey } = Astro.props as {
 const translation = getPageTranslations(language, "header");
 ---
 
-<header class="border-b border-gray-800">
-  <div class="max-w-6xl mx-auto flex justify-between items-center p-6">
+<header class="border-b border-border bg-site text-text">
+
+  <div class="site-container flex min-h-header items-center justify-between">
+    
     <!-- LOGO -->
-    <a
-      href={getPagePath("home", language)}
-      class="font-libertinus text-2xl font-semibold text-blue-400"
-    >
-      Pools4You
-    </a>
+    <HeaderLogo language={language} />
 
     <!-- NAVIGATION -->
     <nav class="flex items-center gap-6" aria-label="Main navigation">
@@ -36,5 +34,17 @@ const translation = getPageTranslations(language, "header");
         ))
       }
     </nav>
+
+    <!-- HEADER ACTIONS -->
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        data-theme-toggle
+        class="inline-flex h-10 w-10 items-center justify-center rounded border border-border bg-transparent text-sm text-text transition hover:border-brand-gold hover:text-brand-gold"
+        aria-label="Toggle dark mode"
+      >
+        ◐
+      </button>
+    </div>
   </div>
 </header>
