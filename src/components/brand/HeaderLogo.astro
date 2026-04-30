@@ -4,57 +4,57 @@ import { getPagePath } from "../../config/pages/pagePaths.ts";
 
 const { language, variant = "adaptive" } = Astro.props as {
   language: Language;
-  variant?: "adaptive" | "gold" | "black";
+  variant?: "adaptive" | "color" | "black";
 };
 
 const homePath = getPagePath("home", language);
 ---
 
-<a href={homePath} class="site-logo" aria-label="Pools4You home">
-  {
-    variant === "adaptive" && (
-      <>
+  <a href={homePath} class="site-logo" aria-label="Pools4You home">
+    {
+      variant === "adaptive" && (
+        <>
+          <img
+            src="/images/brand/pools4you-logo-text-black.svg"
+            alt="Pools4You Ltd."
+            class="site-logo-image site-logo-image-light"
+            loading="eager"
+            decoding="async"
+          />
+
+          <img
+            src="/images/brand/pools4you-logo-text-color.svg"
+            alt=""
+            class="site-logo-image site-logo-image-dark"
+            loading="eager"
+            decoding="async"
+            aria-hidden="true"
+          />
+        </>
+      )
+    }
+
+    {
+      variant === "black" && (
         <img
           src="/images/brand/pools4you-logo-text-black.svg"
           alt="Pools4You Ltd."
-          class="site-logo-image site-logo-image-light"
+          class="site-logo-image"
           loading="eager"
           decoding="async"
         />
+      )
+    }
 
+    {
+      variant === "color" && (
         <img
           src="/images/brand/pools4you-logo-text-color.svg"
-          alt=""
-          class="site-logo-image site-logo-image-dark"
+          alt="Pools4You Ltd."
+          class="site-logo-image"
           loading="eager"
           decoding="async"
-          aria-hidden="true"
         />
-      </>
-    )
-  }
-
-  {
-    variant === "black" && (
-      <img
-        src="/images/brand/pools4you-logo-text-black.svg"
-        alt="Pools4You Ltd."
-        class="site-logo-image"
-        loading="eager"
-        decoding="async"
-      />
-    )
-  }
-
-  {
-    variant === "gold" && (
-      <img
-        src="/images/brand/pools4you-logo-text-color.svg"
-        alt="Pools4You Ltd."
-        class="site-logo-image"
-        loading="eager"
-        decoding="async"
-      />
-    )
-  }
-</a>
+      )
+    }
+  </a>

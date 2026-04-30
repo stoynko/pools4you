@@ -38,6 +38,8 @@ Focus mainly on the scalability of the architecture, routing, SEO. Specify clear
  - detailed .md file for the projects architecture, how it works, etc.
  - detailed .md file for a fix plan of the listed issues with scaling
 
+## FAVICO - https://realfavicongenerator.net
+
 ## CLI COMMANDS
 
 rm -rf .astro dist node_modules/.astro - CLEANUP BUILD FILES

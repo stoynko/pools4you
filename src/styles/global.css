@@ -62,7 +62,7 @@
 
 :root {
   /* === GOLD ACCENT === */
-  --color-gold: #ceb476; /* PRIMARY ACCENT */
+  --color-gold: #d3b368; /* PRIMARY ACCENT */
   --color-gold-hover: #a8925f; /* PRIMARY ACCENT ALT - BUTTON HOVERS */
   --color-gold-subtle: #d9c48a; /* DECORATIVE GOLD TINTS */
 
@@ -98,8 +98,24 @@
   --font-libertinus: "Libertinus Serif", serif;
 
   /* === ELEMENTS === */
-  --header-height: clamp(64px, 5vw, 64px);
-  --header-logo-height: clamp(100px, 6.4vw, 250px);
+  --header-height: clamp(80px, 6vw, 96px);
+  --header-logo-height: clamp(48px, 4vw, 64px);
+  
+}
+
+html[data-theme="dark"] [data-theme-toggle] .theme-toggle-default {
+  display: none;
+}
+
+html[data-theme="dark"] [data-theme-toggle] .theme-toggle-active {
+  display: inline-flex;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --header-height: 64px;
+    --header-logo-height: 42px;
+  }
 }
 
 /* -- 3. DARK MODE OVERRIDES */

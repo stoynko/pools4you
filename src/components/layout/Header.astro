@@ -6,6 +6,7 @@ import { getPageTranslations } from "../../lib/i18n";
 import { primaryNav } from "../../config/navigation/navigationItems";
 import HeaderLink from "./HeaderLink.astro";
 import HeaderLogo from "../brand/HeaderLogo.astro";
+import ThemeToggleIcon from "../ui/ThemeToggle.astro";
 
 const { language, pageKey } = Astro.props as {
   language: Language;
@@ -15,15 +16,19 @@ const { language, pageKey } = Astro.props as {
 const translation = getPageTranslations(language, "header");
 ---
 
-<header class="border-b border-border bg-site text-text">
-
-  <div class="site-container flex min-h-header items-center justify-between">
+<!-- border-b border-borderw -->
+<header class="bg-site text-text">
+  
+  <div class="grid min-h-[var(--header-height)] grid-cols-[1fr_auto_1fr] items-center px-6">
     
-    <!-- LOGO -->
-    <HeaderLogo language={language} />
+    <div class="flex justify-self-start items-center">
+      <HeaderLogo language={language} />
+    </div>
 
-    <!-- NAVIGATION -->
-    <nav class="flex items-center gap-6" aria-label="Main navigation">
+    <nav
+      class="flex justify-self-center items-center gap-10"
+      aria-label="Main navigation"
+    >
       {
         primaryNav.map((key) => (
           <HeaderLink
@@ -35,15 +40,14 @@ const translation = getPageTranslations(language, "header");
       }
     </nav>
 
-    <!-- HEADER ACTIONS -->
-    <div class="flex items-center gap-3">
+    <div class="flex justify-self-end" aria-label="Header actions">
       <button
         type="button"
         data-theme-toggle
-        class="inline-flex h-10 w-10 items-center justify-center rounded border border-border bg-transparent text-sm text-text transition hover:border-brand-gold hover:text-brand-gold"
-        aria-label="Toggle dark mode"
+        class="inline-flex justify-center items-center h-10 w-10 hover:text-brand-gold"
+        aria-label="Theme Toggle"
       >
-        ◐
+        <ThemeToggleIcon />
       </button>
     </div>
   </div>
