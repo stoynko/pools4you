@@ -1,0 +1,30 @@
+.site-container {
+  width: min(100% - 3rem, 1280px);
+  margin-inline: auto;
+}
+
+.section {
+  padding-block: clamp(5rem, 8vw, 7rem);
+}
+
+.eyebrow {
+  font-family: var(--font-inter);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+[data-animate] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-animate].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
