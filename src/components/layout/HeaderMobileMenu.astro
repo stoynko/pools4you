@@ -4,7 +4,7 @@ import type { Language } from "../../config/i18n/i18n";
 import { getPagePath } from "../../config/pages/pagePaths";
 import { getPageTranslations } from "../../lib/i18n";
 import { primaryNav } from "../../config/navigation/navigationItems";
-import HeaderLink from "./HeaderLink.astro";
+import HeaderLogo from "../brand/HeaderLogo.astro";
 
 const { language, pageKey } = Astro.props as {
   language: Language;
@@ -14,10 +14,10 @@ const { language, pageKey } = Astro.props as {
 const translation = getPageTranslations(language, "header");
 ---
 
-<div class="relative block lg:hidden ml-auto pr-4 my-auto" data-mobile-menu>
+<div class="relative ml-auto block lg:hidden" data-mobile-menu>
   <button
     type="button"
-    class="group inline-flex h-10 w-10 items-center justify-center"
+    class="group relative z-[70] inline-flex h-10 w-10 items-center justify-center"
     data-mobile-nav-toggle
     aria-label="Open navigation"
     aria-expanded="false"
@@ -30,33 +30,119 @@ const translation = getPageTranslations(language, "header");
     </div>
   </button>
 
-  <nav id="mobile-navigation" class="absolute border-b border-borderw right-0 top-full mt-4 hidden min-w-64 rounded-lg border border-border bg-site p-6 shadow-lg"
-    data-mobile-nav aria-label="Mobile navigation">
-    
-    <div class="flex flex-col gap-5">
-      {
-        primaryNav.map((key) => (
-          <HeaderLink
-            href={getPagePath(key, language)}
-            label={translation[key]}
-            isActive={pageKey === key}
-          />
-        ))
-      }
+  <nav
+    id="mobile-navigation"
+    class="fixed inset-0 z-[60] flex translate-x-full flex-col bg-site text-text transition-transform duration-300 ease-out"
+    data-mobile-nav
+    aria-label="Mobile navigation"
+  >
+    <div class="flex h-header shrink-0 items-center justify-between border-b border-border px-6">
+      <HeaderLogo language={language} />
+    </div>
+
+    <div class="flex flex-1 flex-col px-10 pt-[22vh]">
+      <div class="flex flex-col gap-9">
+        {
+          primaryNav.map((key) => {
+            const isActive = pageKey === key;
+
+            return (
+              <a
+                href={getPagePath(key, language)}
+                class:list={[
+                  "block w-full border-b-2 pb-4 text-[1.45rem] font-semibold transition-colors duration-150",
+                  isActive
+                    ? "border-brand-gold text-brand-gold"
+                    : "border-transparent text-text hover:text-brand-gold focus-visible:text-brand-gold",
+                ]}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {translation[key]}
+              </a>
+            );
+          })
+        }
+      </div>
     </div>
   </nav>
 </div>
 
 <script>
+  const mobileMenuRoot = document.querySelector<HTMLElement>("[data-mobile-menu]");
   const toggleButton = document.querySelector<HTMLElement>("[data-mobile-nav-toggle]");
   const mobileNavigation = document.querySelector<HTMLElement>("[data-mobile-nav]");
 
-  toggleButton?.addEventListener("click", () => {
-    if (!mobileNavigation) return;
+  const closeMobileMenu = () => {
+    if (!toggleButton || !mobileNavigation) return;
 
-    const isOpen = toggleButton.classList.toggle("open");
+    toggleButton.classList.remove("open");
+    toggleButton.setAttribute("aria-expanded", "false");
 
-    toggleButton.setAttribute("aria-expanded", String(isOpen));
-    mobileNavigation.classList.toggle("hidden", !isOpen);
+    mobileNavigation.classList.add("translate-x-full");
+    mobileNavigation.classList.remove("translate-x-0");
+
+    document.documentElement.classList.remove("overflow-hidden");
+    document.body.classList.remove("overflow-hidden");
+  };
+
+  const openMobileMenu = () => {
+    if (!toggleButton || !mobileNavigation) return;
+
+    toggleButton.classList.add("open");
+    toggleButton.setAttribute("aria-expanded", "true");
+
+    mobileNavigation.classList.remove("translate-x-full");
+    mobileNavigation.classList.add("translate-x-0");
+
+    document.documentElement.classList.add("overflow-hidden");
+    document.body.classList.add("overflow-hidden");
+  };
+
+  const toggleMobileMenu = () => {
+    if (!toggleButton) return;
+
+    const isOpen = toggleButton.classList.contains("open");
+
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  };
+
+  toggleButton?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleMobileMenu();
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (!(target instanceof Element)) return;
+    if (!mobileMenuRoot) return;
+
+    const clickedInsideMobileMenu = mobileMenuRoot.contains(target);
+
+    if (!clickedInsideMobileMenu) {
+      closeMobileMenu();
+    }
+  });
+
+  mobileNavigation?.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (!(target instanceof Element)) return;
+
+    const clickedLink = target.closest("a");
+
+    if (clickedLink) {
+      closeMobileMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+
+    closeMobileMenu();
   });
 </script>
