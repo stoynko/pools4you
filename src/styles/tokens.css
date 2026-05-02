@@ -12,6 +12,7 @@
   --color-text: #111111; /* MAIN BODY TEXT */
   --color-text-secondary: #6b7280; /* CAPTIONS, META, SECONDARY LABELS*/
   --color-text-muted: #9ca3af; /* PLACEHOLDER, DISABLED */
+  --color-text-cta: #0d0e11;
 
   --color-border: #e5e7eb; /* DIVIDERS, CARD BORDERS*/
   --color-border-alt: #f2f3f5; /* DIVIDERS, SEPARATORS ALT */
@@ -25,7 +26,7 @@
 
   --color-dark-border: rgba(255, 255, 255, 0.08);
 
-  --color-hamburger: #231f20; /* HAMBURGER ICON COLOR */
+  --color-hamburger: #0d0e11; /* HAMBURGER ICON COLOR */
 
   --font-inter: "Inter", sans-serif;
   --font-libertinus: "Libertinus Serif", serif;
@@ -45,7 +46,7 @@
   --color-text-muted: #6b7280;
   --color-border: rgba(255, 255, 255, 0.08);
   --color-border-alt: rgba(255, 255, 255, 0.04);
-  --color-hamburger: var(--color-gold);
+  --color-hamburger: var(--color-text);
 }
 
 @media (max-width: 1023px) {

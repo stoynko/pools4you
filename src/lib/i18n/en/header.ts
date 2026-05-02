@@ -4,4 +4,6 @@ export const header = {
   services: "Services",
   facilities: "Facilities",
   about: "About Us",
+  language: "BG",
+  enquire: "Enquire"
 } as const;

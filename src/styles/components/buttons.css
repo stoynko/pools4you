@@ -1,44 +1,17 @@
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  padding-inline: 28px;
-  border-radius: 4px;
-  font-family: var(--font-inter);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-}
+@layer components {
+  .button-base {
+    @apply inline-flex min-h-button cursor-pointer items-center justify-center rounded-button border px-btn-x font-inter text-sm font-medium no-underline transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out hover:scale-[1.015] active:scale-[0.99];
+  }
 
-.btn-primary {
-  background: var(--color-gold);
-  color: #0d0e11;
-  border: 1px solid var(--color-gold);
-}
+  .button-primary {
+    @apply button-base border-brand-gold bg-brand-gold text-[var(--color-text-cta)] shadow-sm hover:border-brand-goldHover hover:bg-brand-goldHover hover:shadow-md active:shadow-sm;
+  }
 
-.btn-primary:hover {
-  background: var(--color-gold-hover);
-  border-color: var(--color-gold-hover);
-}
+  .button-ghost {
+    @apply button-base border-brand-gold bg-transparent text-brand-gold hover:border-brand-goldHover hover:bg-brand-goldHover hover:text-[var(--color-text-cta)];
+  }
 
-.btn-ghost {
-  background: transparent;
-  color: var(--color-text);
-  border: 1px solid currentColor;
-}
-
-[data-theme="dark"] .btn-ghost {
-  color: var(--color-gold);
-  border-color: var(--color-gold);
-}
-
-.btn-ghost:hover {
-  background: rgba(206, 180, 118, 0.1);
+  [data-theme="dark"] .button-ghost {
+    @apply border-brand-gold text-brand-gold hover:border-brand-goldHover hover:bg-brand-goldHover hover:text-[var(--color-text-cta)];
+  }
 }

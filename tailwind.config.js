@@ -40,10 +40,25 @@ export default {
       },
       minHeight: {
         header: "var(--header-height)",
+        button: "48px",
+      },
+      width: {
+        "header-cta": "180px", 
       },
       maxWidth: {
         site: "1280px",
+        
       },
+
+      spacing: {
+        "btn-x": "28px",
+      },
+
+      borderRadius: {
+        button: "4px",
+      },
+
+      
     },
   },
   plugins: [],

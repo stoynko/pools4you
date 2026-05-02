@@ -1,0 +1,74 @@
+html[lang="bg"] .header-link-effect {
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+
+html[lang="en"] .header-link-effect {
+  font-size: 0.92rem;
+  font-weight: 400;
+}
+
+.header-link-effect {
+  position: relative;
+  display: inline-block;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.header-link-effect::before {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  color: var(--color-gold);
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  pointer-events: none;
+  transition: width 300ms ease;
+}
+
+.header-link-effect::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  width: 100%;
+  height: 2px;
+  background: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 100ms ease;
+}
+
+.header-link-effect:hover,
+.header-link-effect:focus-visible {
+  color: var(--color-text-secondary);
+}
+
+.header-link-effect:hover::before,
+.header-link-effect:focus-visible::before,
+.header-link-effect-active::before {
+  width: 100%;
+}
+
+.header-link-effect:hover::after,
+.header-link-effect:focus-visible::after,
+.header-link-effect-active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}
+
+.header-link-effect:not(:hover):not(:focus-visible)::before {
+  transition: none;
+}
+
+.header-link-effect-active {
+  color: var(--color-gold);
+  font-weight: 600;
+}
+
+.header-link-effect-active::before {
+  width: 100%;
+}

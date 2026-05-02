@@ -20,18 +20,20 @@ const { language, pageKey } = Astro.props as {
 const translation = getPageTranslations(language, "header");
 ---
 
-<!-- border-b border-borderw -->
-<header class="bg-site text-text">
-
-  <div class="site-container grid min-h-[var(--header-height)] grid-cols-[1fr_auto_1fr] items-center"> 
-
+<header class="bg-site text-text border-b border-border">
+  <div
+    class="site-container grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 lg:grid-cols-[240px_1fr_260px] xl:gap-8"
+  >
     <!-- LEFT: LOGO -->
     <div class="flex items-center justify-self-start">
       <HeaderLogo language={language} />
     </div>
 
     <!-- CENTER: DESKTOP NAV -->
-    <nav class="lg:flex hidden items-center col-start-2 justify-self-center gap-8 xl:gap-10" aria-label="Main navigation">
+    <nav
+      class="col-start-2 hidden items-center justify-self-start gap-4 pl-10 lg:flex xl:gap-8 xl:pl-14"
+      aria-label="Main navigation"
+    >
       {
         primaryNav.map((key) => (
           <HeaderLink
@@ -43,25 +45,45 @@ const translation = getPageTranslations(language, "header");
       }
     </nav>
 
-    <!-- RIGHT: DESKTOP ACTIONS + MOBILE MENU -->
-    <div class="col-start-3 flex items-center justify-self-end" aria-label="Header actions">
+    <!-- RIGHT: THEME + LANGUAGE + ENQUIRE -->
+    <div
+      class="col-start-3 hidden h-full w-[340px] items-center justify-end gap-4 lg:flex"
+      aria-label="Header actions"
+    >
+      <button
+        type="button"
+        data-theme-toggle
+        class="group inline-flex h-10 w-10 shrink-0 items-center justify-center text-text-secondary transition-colors duration-150 hover:text-brand-gold focus-visible:text-brand-gold"
+        aria-label="Theme Toggle"
+      >
+        <ThemeToggleIcon />
+      </button>
 
-      <!-- DESKTOP ACTIONS -->
-      <div class="hidden items-center gap-3 lg:flex">
-        <button
-          type="button"
-          data-theme-toggle
-          class="inline-flex h-10 w-10 items-center justify-center hover:text-brand-gold"
-          aria-label="Theme Toggle"
+      <a
+        href={language === "bg"
+          ? getPagePath(pageKey, "en")
+          : getPagePath(pageKey, "bg")}
+        class="inline-flex h-10 w-12 shrink-0 items-center justify-center rounded-button border border-border px-0 font-inter text-sm font-medium text-text-secondary transition-[border-color,color,background-color] duration-150 ease-out hover:border-brand-gold hover:bg-brand-goldSubtle hover:text-brand-gold"
+        aria-label="Switch language"
+      >
+        {translation.language}
+      </a>
+
+      <div
+        class="col-start-4 hidden items-center justify-self-end pl-4 lg:flex xl:pl-6"
+      >
+        <a
+          href={getPagePath("services", language)}
+          class="button-primary h-12 w-header-cta whitespace-nowrap"
         >
-          <ThemeToggleIcon />
-        </button>
+          {translation.enquire}
+        </a>
       </div>
+    </div>
 
-      <!-- MOBILE HAMBURGER -->
-      <div class="flex items-center justify-end lg:hidden">
-        <HeaderMobileMenu language={language} pageKey={pageKey} />
-      </div>
+    <!-- MOBILE HAMBURGER -->
+    <div class="col-start-3 flex items-center justify-end lg:hidden">
+      <HeaderMobileMenu language={language} pageKey={pageKey} />
     </div>
   </div>
 </header>

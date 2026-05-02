@@ -8,7 +8,9 @@
   "scripts": {
     "check": "astro check && tsc --noEmit",
     "dev": "npm run check && astro dev",
+    "clean": "rm -rf .astro dist node_modules/.astro",
     "build": "npm run check && astro build",
+    "build:clean": "npm run clean && npm run check && astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
