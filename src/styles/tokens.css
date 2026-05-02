@@ -16,7 +16,6 @@
   --color-border: #e5e7eb; /* DIVIDERS, CARD BORDERS*/
   --color-border-alt: #f2f3f5; /* DIVIDERS, SEPARATORS ALT */
 
-
   --color-dark-bg: #0d0e11; /* MAIN PAGE BACKGROUND */
   --color-dark-surface: #15171c; /* CARDS, ACCENT ELEMENTS */
   --color-dark-surface-alt: #1b1e24; /* HOVER STATES, MODALS */
@@ -26,11 +25,13 @@
 
   --color-dark-border: rgba(255, 255, 255, 0.08);
 
+  --color-hamburger: #231f20; /* HAMBURGER ICON COLOR */
+
   --font-inter: "Inter", sans-serif;
   --font-libertinus: "Libertinus Serif", serif;
 
   --header-height: clamp(80px, 6vw, 96px);
-  --header-logo-height: clamp(48px, 4vw, 48px);
+  --header-logo-height: clamp(36px, 4vw, 48px);
 }
 
   /* === DARK OVERRIDE === */
@@ -44,9 +45,10 @@
   --color-text-muted: #6b7280;
   --color-border: rgba(255, 255, 255, 0.08);
   --color-border-alt: rgba(255, 255, 255, 0.04);
+  --color-hamburger: var(--color-gold);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   :root {
     --header-height: 64px;
     --header-logo-height: 42px;

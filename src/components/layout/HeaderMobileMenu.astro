@@ -1,0 +1,62 @@
+---
+import type { PageKey } from "../../config/pages/pageDefinitions";
+import type { Language } from "../../config/i18n/i18n";
+import { getPagePath } from "../../config/pages/pagePaths";
+import { getPageTranslations } from "../../lib/i18n";
+import { primaryNav } from "../../config/navigation/navigationItems";
+import HeaderLink from "./HeaderLink.astro";
+
+const { language, pageKey } = Astro.props as {
+  language: Language;
+  pageKey: PageKey;
+};
+
+const translation = getPageTranslations(language, "header");
+---
+
+<div class="relative block lg:hidden ml-auto pr-4 my-auto" data-mobile-menu>
+  <button
+    type="button"
+    class="group inline-flex h-10 w-10 items-center justify-center"
+    data-mobile-nav-toggle
+    aria-label="Open navigation"
+    aria-expanded="false"
+    aria-controls="mobile-navigation"
+  >
+    <div class="flex flex-col gap-1.5">
+      <span class="block h-0.5 w-8 origin-center rounded-full bg-[var(--color-hamburger)] transition-transform duration-150 group-[.open]:translate-y-2 group-[.open]:rotate-45"></span>
+      <span class="block h-0.5 w-8 rounded-full bg-[var(--color-hamburger)] transition-opacity duration-200 group-[.open]:opacity-0"></span>
+      <span class="block h-0.5 w-8 origin-center rounded-full bg-[var(--color-hamburger)] transition-transform duration-150 group-[.open]:-translate-y-2 group-[.open]:-rotate-45"></span>
+    </div>
+  </button>
+
+  <nav id="mobile-navigation" class="absolute right-0 top-full mt-4 hidden min-w-64 rounded-lg border border-border bg-site p-6 shadow-lg"
+    data-mobile-nav aria-label="Mobile navigation">
+    
+    <div class="flex flex-col gap-5">
+      {
+        primaryNav.map((key) => (
+          <HeaderLink
+            href={getPagePath(key, language)}
+            label={translation[key]}
+            isActive={pageKey === key}
+          />
+        ))
+      }
+    </div>
+  </nav>
+</div>
+
+<script>
+  const toggleButton = document.querySelector<HTMLElement>("[data-mobile-nav-toggle]");
+  const mobileNavigation = document.querySelector<HTMLElement>("[data-mobile-nav]");
+
+  toggleButton?.addEventListener("click", () => {
+    if (!mobileNavigation) return;
+
+    const isOpen = toggleButton.classList.toggle("open");
+
+    toggleButton.setAttribute("aria-expanded", String(isOpen));
+    mobileNavigation.classList.toggle("hidden", !isOpen);
+  });
+</script>

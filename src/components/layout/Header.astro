@@ -1,11 +1,15 @@
 ---
 import type { PageKey } from "../../config/pages/pageDefinitions.ts";
 import type { Language } from "../../config/i18n/i18n.ts";
+
 import { getPagePath } from "../../config/pages/pagePaths.ts";
 import { getPageTranslations } from "../../lib/i18n";
 import { primaryNav } from "../../config/navigation/navigationItems";
+
+// Components
 import HeaderLink from "./HeaderLink.astro";
 import HeaderLogo from "../brand/HeaderLogo.astro";
+import HeaderMobileMenu from "./HeaderMobileMenu.astro";
 import ThemeToggleIcon from "../ui/ThemeToggle.astro";
 
 const { language, pageKey } = Astro.props as {
@@ -18,17 +22,16 @@ const translation = getPageTranslations(language, "header");
 
 <!-- border-b border-borderw -->
 <header class="bg-site text-text">
-  
-  <div class="grid min-h-[var(--header-height)] grid-cols-[1fr_auto_1fr] items-center px-6">
-    
-    <div class="flex justify-self-start items-center">
+
+  <div class="site-container grid min-h-[var(--header-height)] grid-cols-[1fr_auto_1fr] items-center"> 
+
+    <!-- LEFT: LOGO -->
+    <div class="flex items-center justify-self-start">
       <HeaderLogo language={language} />
     </div>
 
-    <nav
-      class="flex justify-self-center items-center gap-10"
-      aria-label="Main navigation"
-    >
+    <!-- CENTER: DESKTOP NAV -->
+    <nav class="lg:flex hidden items-center col-start-2 justify-self-center gap-8 xl:gap-10" aria-label="Main navigation">
       {
         primaryNav.map((key) => (
           <HeaderLink
@@ -40,15 +43,25 @@ const translation = getPageTranslations(language, "header");
       }
     </nav>
 
-    <div class="flex justify-self-end" aria-label="Header actions">
-      <button
-        type="button"
-        data-theme-toggle
-        class="inline-flex justify-center items-center h-10 w-10 hover:text-brand-gold"
-        aria-label="Theme Toggle"
-      >
-        <ThemeToggleIcon />
-      </button>
+    <!-- RIGHT: DESKTOP ACTIONS + MOBILE MENU -->
+    <div class="col-start-3 flex items-center justify-self-end" aria-label="Header actions">
+
+      <!-- DESKTOP ACTIONS -->
+      <div class="hidden items-center gap-3 lg:flex">
+        <button
+          type="button"
+          data-theme-toggle
+          class="inline-flex h-10 w-10 items-center justify-center hover:text-brand-gold"
+          aria-label="Theme Toggle"
+        >
+          <ThemeToggleIcon />
+        </button>
+      </div>
+
+      <!-- MOBILE HAMBURGER -->
+      <div class="flex items-center justify-end lg:hidden">
+        <HeaderMobileMenu language={language} pageKey={pageKey} />
+      </div>
     </div>
   </div>
 </header>
