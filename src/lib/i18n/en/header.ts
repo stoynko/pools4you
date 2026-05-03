@@ -5,5 +5,6 @@ export const header = {
   facilities: "Facilities",
   about: "About Us",
   language: "BG",
-  enquire: "Enquire"
+  enquire: "Enquire",
+  mobileNavPreferencesRegion: "Language and theme",
 } as const;

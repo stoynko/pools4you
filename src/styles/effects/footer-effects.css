@@ -1,0 +1,63 @@
+.footer-link-effect {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: rgb(156 163 175);
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.footer-link-effect::before {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-gold);
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0;
+  pointer-events: none;
+  transition: width 300ms ease;
+}
+
+.footer-link-effect:hover,
+.footer-link-effect:focus-visible {
+  color: rgb(209 213 219);
+}
+
+.footer-link-effect:hover::before,
+.footer-link-effect:focus-visible::before {
+  width: 100%;
+}
+
+.footer-link-effect:not(:hover):not(:focus-visible)::before {
+  transition: none;
+}
+
+.footer-social-link {
+  display: inline-flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.footer-social-link:hover,
+.footer-social-link:focus-visible {
+  color: var(--color-gold);
+  transform: translateY(-2px);
+}
+
+.footer-social-link svg {
+  height: 1.5rem;
+  width: 1.5rem;
+}

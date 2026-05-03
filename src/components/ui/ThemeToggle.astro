@@ -1,4 +1,7 @@
 ---
+const { iconClass = "h-5 w-5" } = Astro.props as {
+  iconClass?: string;
+};
 ---
 
 <span class="relative inline-flex items-center justify-center">
@@ -8,7 +11,7 @@
                group-hover:scale-110 group-focus-visible:scale-110
                [[data-theme='dark']_&]:scale-90 [[data-theme='dark']_&]:opacity-0">
     <svg
-      class="h-5 w-5"
+      class:list={[iconClass]}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
@@ -25,7 +28,7 @@
                group-hover:scale-110 group-focus-visible:scale-110
                [[data-theme='dark']_&]:scale-100 [[data-theme='dark']_&]:opacity-100">
     <svg
-      class="h-5 w-5"
+      class:list={[iconClass]}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"

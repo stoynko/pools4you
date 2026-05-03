@@ -1,15 +1,88 @@
+.header-actions-icons {
+  flex: none;
+  flex-shrink: 0;
+  align-items: center;
+}
+
+.header-actions-icons [data-language-dropdown],
+.header-actions-icons [data-language-dropdown-button] {
+  flex: none;
+  flex-shrink: 0;
+}
+
+.header-actions-icons [data-theme-toggle] {
+  overflow: visible;
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  min-height: 40px;
+}
+
+.header-actions-icons [data-language-dropdown] {
+  position: relative;
+  display: inline-flex;
+  width: 56px;
+  min-width: 56px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-actions-icons [data-language-dropdown-button] {
+  box-sizing: border-box;
+  width: 56px;
+  min-width: 56px;
+  height: 40px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-actions-icons svg {
+  flex-shrink: 0;
+  max-width: none;
+  max-height: none;
+}
+
+.header-actions-icons [data-theme-toggle] svg {
+  width: 20px;
+  height: 20px;
+}
+
+.header-actions-icons [data-language-dropdown-button] > svg:first-of-type {
+  width: 20px;
+  height: 20px;
+}
+
+.header-actions-icons [data-language-dropdown-button] > svg:last-of-type {
+  width: 16px;
+  height: 16px;
+}
+
 .header-link-effect {
   position: relative;
   display: inline-flex;
   height: 48px;
   align-items: center;
   color: var(--color-text);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1;
   white-space: nowrap;
   text-decoration: none;
   transition: color 180ms ease;
+}
+
+html[lang="bg"] .header-link-effect {
+  font-size: 1.075rem;
+}
+
+.mobile-nav-primary-link {
+  font-size: 1.45rem;
+}
+
+html[lang="bg"] .mobile-nav-primary-link {
+  font-size: 1.54375rem; 
 }
 
 .header-link-effect::before {
@@ -69,5 +142,4 @@
 
 .header-link-effect-active::before {
   width: 100%;
-  font-weight: 600;
 }

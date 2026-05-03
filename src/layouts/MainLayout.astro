@@ -17,40 +17,63 @@ const { language, pageKey, seo, alternates } = Astro.props as {
 ---
 
 <html lang={language}>
+
   <Head language={language} pageKey={pageKey} seo={seo} />
 
-  <script is:inline>
-    const storedTheme = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
+  <script>
+  const rootElement = document.documentElement;
 
-    if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
-      document.documentElement.setAttribute("data-theme", "dark");
+  const getStoredTheme = () => {
+    try {
+      return localStorage.getItem("theme");
+    } catch {
+      return null;
+    }
+  };
+
+  const setStoredTheme = (theme: "light" | "dark") => {
+    try {
+      localStorage.setItem("theme", theme);
+    } catch { }
+  };
+
+  const prefersDark =
+    window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+
+  const storedTheme = getStoredTheme();
+
+  if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
+    rootElement.setAttribute("data-theme", "dark");
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
     }
 
-    document.addEventListener("click", (event) => {
-      const toggle = event.target.closest("[data-theme-toggle]");
+    const toggle = target.closest("[data-theme-toggle]");
 
-      if (!toggle) {
-        return;
-      }
+    if (!(toggle instanceof HTMLElement)) {
+      return;
+    }
 
-      const isDark =
-        document.documentElement.getAttribute("data-theme") === "dark";
+    const isDark = rootElement.getAttribute("data-theme") === "dark";
 
-      if (isDark) {
-        document.documentElement.removeAttribute("data-theme");
-        localStorage.setItem("theme", "light");
-      } else {
-        document.documentElement.setAttribute("data-theme", "dark");
-        localStorage.setItem("theme", "dark");
-      }
-    });
-  </script>
+    if (isDark) {
+      rootElement.removeAttribute("data-theme");
+      setStoredTheme("light");
+      return;
+    }
+
+    rootElement.setAttribute("data-theme", "dark");
+    setStoredTheme("dark");
+  });
+</script>
 
   <body class="font-inter">
-    <Header language={language} pageKey={pageKey} />
+    <Header language={language} pageKey={pageKey} alternates={alternates} />
     <slot />
     <Footer language={language} pageKey={pageKey} alternates={alternates} />
   </body>

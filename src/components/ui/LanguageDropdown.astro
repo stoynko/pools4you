@@ -4,13 +4,14 @@ import type { Language } from "../../config/i18n/i18n.ts";
 
 import { getPagePath } from "../../config/pages/pagePaths.ts";
 
-const { language, pageKey } = Astro.props as {
+const { language, pageKey, alternates } = Astro.props as {
   language: Language;
   pageKey: PageKey;
+  alternates?: Partial<Record<Language, string>>;
 };
 
-const bgPath = getPagePath(pageKey, "bg");
-const enPath = getPagePath(pageKey, "en");
+const bgPath = alternates?.bg ?? getPagePath(pageKey, "bg");
+const enPath = alternates?.en ?? getPagePath(pageKey, "en");
 ---
 
 <div class="relative inline-flex h-10 w-14 shrink-0" data-language-dropdown>

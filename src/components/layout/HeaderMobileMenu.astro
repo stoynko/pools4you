@@ -5,13 +5,21 @@ import { getPagePath } from "../../config/pages/pagePaths";
 import { getPageTranslations } from "../../lib/i18n";
 import { primaryNav } from "../../config/navigation/navigationItems";
 import HeaderLogo from "../brand/HeaderLogo.astro";
+import ThemeToggleIcon from "../ui/ThemeToggle.astro";
 
-const { language, pageKey } = Astro.props as {
+const { language, pageKey, alternates } = Astro.props as {
   language: Language;
   pageKey: PageKey;
+  alternates?: Partial<Record<Language, string>>;
 };
 
 const translation = getPageTranslations(language, "header");
+
+const bgPath = alternates?.bg ?? getPagePath(pageKey, "bg");
+const enPath = alternates?.en ?? getPagePath(pageKey, "en");
+
+const themeToggleLabel =
+  language === "bg" ? "Превключване на тема" : "Toggle theme";
 ---
 
 <div class="relative ml-auto block lg:hidden" data-mobile-menu>
@@ -24,53 +32,149 @@ const translation = getPageTranslations(language, "header");
     aria-controls="mobile-navigation"
   >
     <div class="flex flex-col gap-1.5">
-      <span class="block h-0.5 w-8 origin-center rounded-full bg-[var(--color-hamburger)] transition-transform duration-200 group-[.open]:translate-y-2 group-[.open]:rotate-45"></span>
-      <span class="block h-0.5 w-8 rounded-full bg-[var(--color-hamburger)] transition-opacity duration-100 group-[.open]:opacity-0"></span>
-      <span class="block h-0.5 w-8 origin-center rounded-full bg-[var(--color-hamburger)] transition-transform duration-200 group-[.open]:-translate-y-2 group-[.open]:-rotate-45"></span>
+      <span
+        class="block h-0.5 w-8 origin-center rounded-full bg-[var(--color-hamburger)] transition-transform duration-200 group-[.open]:translate-y-2 group-[.open]:rotate-45"
+      ></span>
+      <span
+        class="block h-0.5 w-8 rounded-full bg-[var(--color-hamburger)] transition-opacity duration-100 group-[.open]:opacity-0"
+      ></span>
+      <span
+        class="block h-0.5 w-8 origin-center rounded-full bg-[var(--color-hamburger)] transition-transform duration-200 group-[.open]:-translate-y-2 group-[.open]:-rotate-45"
+      ></span>
     </div>
   </button>
 
+  <div
+    class="pointer-events-none fixed inset-0 z-[55] bg-[color-mix(in_srgb,var(--color-text)_20%,transparent)] opacity-0 backdrop-blur-2xl transition-[opacity,backdrop-filter] duration-300 ease-out max-[699px]:backdrop-blur-[3rem] [html[data-theme='dark']_&]:bg-[color-mix(in_srgb,#000_55%,transparent)]"
+    data-mobile-nav-backdrop
+    aria-hidden="true"
+  >
+  </div>
+
   <nav
     id="mobile-navigation"
-    class="fixed inset-0 z-[60] flex translate-x-full flex-col bg-site text-text transition-transform duration-300 ease-out"
+    class="fixed inset-y-0 right-0 z-[60] flex w-[calc(100%*6/7)] translate-x-full flex-col bg-site text-text transition-transform duration-300 ease-out min-[700px]:max-[900px]:w-2/3"
     data-mobile-nav
     aria-label="Mobile navigation"
   >
-    <div class="flex h-header shrink-0 items-center justify-between border-b border-border px-6">
+    <div class="flex h-header shrink-0 items-center justify-between px-6">
       <HeaderLogo language={language} />
     </div>
 
-    <div class="flex flex-1 flex-col px-10 pt-[22vh]">
-      <div class="flex flex-col gap-9">
-        {
-          primaryNav.map((key) => {
-            const isActive = pageKey === key;
+    <div class="flex min-h-0 flex-1 flex-col">
+      <div class="min-h-0 flex-1 overflow-y-auto px-10 pt-[18vh] pb-8">
+        <div class="flex flex-col gap-9">
+          {
+            primaryNav.map((key) => {
+              const isActive = pageKey === key;
 
-            return (
-              <a
-                href={getPagePath(key, language)}
-                class:list={[
-                  "block w-full border-b-2 pb-4 text-[1.45rem] font-semibold transition-colors duration-150",
-                  isActive
-                    ? "border-brand-gold text-brand-gold"
-                    : "border-transparent text-text hover:text-brand-gold focus-visible:text-brand-gold",
-                ]}
-                aria-current={isActive ? "page" : undefined}
+              return (
+                <a
+                  href={getPagePath(key, language)}
+                  class:list={[
+                    "mobile-nav-primary-link inline-block w-fit max-w-full border-b-2 pb-1 font-semibold leading-snug transition-colors duration-150",
+                    isActive
+                      ? "border-brand-gold text-brand-gold"
+                      : "border-transparent text-text hover:border-brand-gold/35 hover:text-brand-gold focus-visible:border-brand-gold/35 focus-visible:text-brand-gold",
+                  ]}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {translation[key]}
+                </a>
+              );
+            })
+          }
+        </div>
+      </div>
+
+      <div
+        class="shrink-0 border-t border-brand-gold px-6 py-6 sm:px-10 sm:py-7"
+        aria-label={translation.mobileNavPreferencesRegion}
+      >
+        <div class="flex w-full flex-nowrap items-center justify-between gap-4">
+          <div
+            class="flex min-w-0 flex-nowrap items-center gap-5 font-inter text-lg font-semibold sm:gap-6 sm:text-xl"
+          >
+            <span
+              class="inline-flex shrink-0 items-center text-text-secondary"
+              aria-hidden="true"
+            >
+              <svg
+                class="h-6 w-6 sm:h-7 sm:w-7"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                focusable="false"
               >
-                {translation[key]}
+                <path
+                  d="M6.23509 6.45329C4.85101 7.89148 4 9.84636 4 12C4 16.4183 7.58172 20 12 20C13.0808 20 14.1116 19.7857 15.0521 19.3972C15.1671 18.6467 14.9148 17.9266 14.8116 17.6746C14.582 17.115 13.8241 16.1582 12.5589 14.8308C12.2212 14.4758 12.2429 14.2035 12.3636 13.3943L12.3775 13.3029C12.4595 12.7486 12.5971 12.4209 14.4622 12.1248C15.4097 11.9746 15.6589 12.3533 16.0043 12.8777C16.0425 12.9358 16.0807 12.9928 16.1198 13.0499C16.4479 13.5297 16.691 13.6394 17.0582 13.8064C17.2227 13.881 17.428 13.9751 17.7031 14.1314C18.3551 14.504 18.3551 14.9247 18.3551 15.8472V15.9518C18.3551 16.3434 18.3168 16.6872 18.2566 16.9859C19.3478 15.6185 20 13.8854 20 12C20 8.70089 18.003 5.8682 15.1519 4.64482C14.5987 5.01813 13.8398 5.54726 13.575 5.91C13.4396 6.09538 13.2482 7.04166 12.6257 7.11976C12.4626 7.14023 12.2438 7.12589 12.012 7.11097C11.3905 7.07058 10.5402 7.01606 10.268 7.75495C10.0952 8.2232 10.0648 9.49445 10.6239 10.1543C10.7134 10.2597 10.7307 10.4547 10.6699 10.6735C10.59 10.9608 10.4286 11.1356 10.3783 11.1717C10.2819 11.1163 10.0896 10.8931 9.95938 10.7412C9.64554 10.3765 9.25405 9.92233 8.74797 9.78176C8.56395 9.73083 8.36166 9.68867 8.16548 9.64736C7.6164 9.53227 6.99443 9.40134 6.84992 9.09302C6.74442 8.8672 6.74488 8.55621 6.74529 8.22764C6.74529 7.8112 6.74529 7.34029 6.74529 6.88256C6.46246 6.70541 6.35689 6.56446 6.23509 6.45329ZM12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22Z"
+                ></path>
+              </svg>
+            </span>
+            <div class="flex shrink-0 items-center gap-3">
+              <a
+                href={bgPath}
+                class:list={[
+                  "whitespace-nowrap rounded px-0.5 py-0.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+                  language === "bg"
+                    ? "text-brand-gold"
+                    : "text-text-secondary hover:text-brand-gold",
+                ]}
+                hreflang="bg"
+              >
+                BG
               </a>
-            );
-          })
-        }
+
+              <span class="shrink-0 text-border" aria-hidden="true"> / </span>
+              <a
+                href={enPath}
+                class:list={[
+                  "whitespace-nowrap rounded px-0.5 py-0.5 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold",
+                  language === "en"
+                    ? "text-brand-gold"
+                    : "text-text-secondary hover:text-brand-gold",
+                ]}
+                hreflang="en"
+              >
+                EN
+              </a>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            data-theme-toggle
+            class="group inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md p-0 text-text-secondary transition-colors duration-150 hover:text-brand-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:h-14 sm:w-14"
+            aria-label={themeToggleLabel}
+          >
+            <ThemeToggleIcon iconClass="h-7 w-7 sm:h-8 sm:w-8" />
+          </button>
+        </div>
       </div>
     </div>
   </nav>
 </div>
 
 <script>
-  const mobileMenuRoot = document.querySelector<HTMLElement>("[data-mobile-menu]");
-  const toggleButton = document.querySelector<HTMLElement>("[data-mobile-nav-toggle]");
-  const mobileNavigation = document.querySelector<HTMLElement>("[data-mobile-nav]");
+  const mobileMenuRoot =
+    document.querySelector<HTMLElement>("[data-mobile-menu]");
+  const toggleButton = document.querySelector<HTMLElement>(
+    "[data-mobile-nav-toggle]",
+  );
+  const mobileNavigation =
+    document.querySelector<HTMLElement>("[data-mobile-nav]");
+  const mobileBackdrop = document.querySelector<HTMLElement>(
+    "[data-mobile-nav-backdrop]",
+  );
+
+  const setBackdropOpen = (open: boolean) => {
+    if (!mobileBackdrop) return;
+
+    mobileBackdrop.classList.toggle("opacity-0", !open);
+    mobileBackdrop.classList.toggle("pointer-events-none", !open);
+    mobileBackdrop.classList.toggle("opacity-100", open);
+    mobileBackdrop.classList.toggle("pointer-events-auto", open);
+  };
 
   const closeMobileMenu = () => {
     if (!toggleButton || !mobileNavigation) return;
@@ -80,6 +184,8 @@ const translation = getPageTranslations(language, "header");
 
     mobileNavigation.classList.add("translate-x-full");
     mobileNavigation.classList.remove("translate-x-0");
+
+    setBackdropOpen(false);
 
     document.documentElement.classList.remove("overflow-hidden");
     document.body.classList.remove("overflow-hidden");
@@ -93,6 +199,8 @@ const translation = getPageTranslations(language, "header");
 
     mobileNavigation.classList.remove("translate-x-full");
     mobileNavigation.classList.add("translate-x-0");
+
+    setBackdropOpen(true);
 
     document.documentElement.classList.add("overflow-hidden");
     document.body.classList.add("overflow-hidden");
@@ -113,6 +221,10 @@ const translation = getPageTranslations(language, "header");
   toggleButton?.addEventListener("click", (event) => {
     event.stopPropagation();
     toggleMobileMenu();
+  });
+
+  mobileBackdrop?.addEventListener("click", () => {
+    closeMobileMenu();
   });
 
   document.addEventListener("click", (event) => {
