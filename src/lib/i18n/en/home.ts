@@ -1,5 +1,4 @@
 export const home = {
-  browserTitle: "Home",
  
   hero: {
     title: "Premium Pools",
@@ -29,5 +28,33 @@ export const home = {
           body: "Smart design and technical decisions aligned with your budget and long-term quality.",
         }
       ]
-    }
-  } as const;
+    },
+
+    services: {
+    title: "Services",
+    intro: "From concept and design to construction, maintenance and operations",
+    ctaLabel: "See all services",
+    items: [
+      {
+        id: "concept-design",
+        title: "Concept and design",
+        alt: "Architectural planning for pool",
+      },
+      {
+        id: "construction",
+        title: "Construction",
+        alt: "Engineer overlooking pool project",
+      },
+      {
+        id: "operations-maintenance",
+        title: "Technical maintenance",
+        alt: "Technical equipment for pools",
+      },
+      {
+        id: "renovation-modernization",
+        title: "Renovation & modernization",
+        alt: "Renovation of a pool",
+      },
+    ],
+  },
+} as const;

@@ -6,6 +6,7 @@
 @import "./components/buttons.css";
 
 @import "./effects/header-effects.css";
+@import "./effects/page-effects.css";
 @import "./effects/footer-effects.css";
 
 @tailwind base;

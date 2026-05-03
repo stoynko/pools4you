@@ -1,0 +1,83 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import type { Language } from "../../../config/i18n/i18n";
+
+import { getPageTranslations } from "../../../lib/i18n";
+import { getPagePath } from "../../../config/pages/pagePaths";
+
+import conceptImage from "../../../assets/images/pages/home/services-drawing.jpg";
+import constructionImage from "../../../assets/images/pages/home/services-construction.png";
+import maintenanceImage from "../../../assets/images/pages/home/services-maintenance.png";
+import renovationImage from "../../../assets/images/pages/home/services-renovation.jpg";
+import HomeServiceCard from "./HomeServiceCard.astro";
+
+type Props = {
+  language: Language;
+};
+
+const { language } = Astro.props as {
+  language: Language;
+};
+
+const translation = getPageTranslations(language, "home");
+
+type ServiceItem = {
+  title: string;
+  image: ImageMetadata;
+  alt: string;
+};
+const servicesHref = getPagePath("services", language);
+
+const serviceImages: Record<string, ImageMetadata> = {
+  "concept-design": conceptImage,
+  construction: constructionImage,
+  "operations-maintenance": maintenanceImage,
+  "renovation-modernization": renovationImage,
+};
+---
+
+<section class="relative overflow-hidden bg-site">
+  <div class="site-container">
+    <div class="mb-14 sm:mb-16">
+      <div
+        class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
+      >
+        <h2
+          class="font-libertinus text-3xl font-semibold text-brand-gold sm:text-4xl"
+        >
+          {translation.services.title}
+        </h2>
+
+        <a href={servicesHref} class="button-primary w-fit">
+          {translation.services.ctaLabel}
+        </a>
+      </div>
+
+      <div class="mt-5 h-px w-full bg-brand-gold"></div>
+
+      <p
+        class="ml-auto mt-4 max-w-xl text-right font-inter text-sm font-semibold leading-snug text-text-muted sm:text-[0.95rem]"
+      >
+        {translation.services.intro}
+      </p>
+    </div>
+  </div>
+
+  <!-- SERVICES CARDS -->
+  <div class="mx-auto max-w-6xl">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+      {
+        translation.services.items.map((service) => (
+          <HomeServiceCard
+            id={service.id}
+            title={service.title}
+            href={servicesHref}
+            image={serviceImages[service.id]}
+            alt={service.alt}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>

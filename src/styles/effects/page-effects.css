@@ -1,0 +1,52 @@
+/* SERVICE CARD TITLE EFFECT */
+
+.service-card-title-effect {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  text-align: center;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35rem;
+
+  background-image: linear-gradient(
+    90deg,
+    var(--color-gold) 0%,
+    var(--color-gold) 50%,
+    var(--color-text) 50%,
+    var(--color-text) 100%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  transition: none;
+}
+
+.service-card-title-effect::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.35rem;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: none;
+}
+
+.group:hover .service-card-title-effect,
+.group:focus-within .service-card-title-effect {
+  background-position: 0 0;
+  transition: background-position 300ms ease;
+}
+
+.group:hover .service-card-title-effect::after,
+.group:focus-within .service-card-title-effect::after {
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 300ms ease;
+}

@@ -1,0 +1,39 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+type Props = {
+  id: string;
+  title: string;
+  href: string;
+  image: ImageMetadata;
+  alt: string;
+};
+
+const { id, title, href, image, alt } = Astro.props as Props;
+---
+
+
+<article id={id} data-service-id={id} class="group">
+  <a href={href} class="flex flex-col items-center text-center">
+    <div class="relative w-full overflow-hidden rounded-[1.5rem] bg-site-surface shadow-sm">
+      <Image
+        src={image}
+        alt={alt}
+        width={image.width}
+        height={image.height}
+        loading="lazy"
+        decoding="async"
+        class="aspect-[3/4] w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+      />
+
+      <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-70"></div>
+    </div>
+
+   <h3
+  class="service-card-title-effect mt-5 inline-block text-center font-inter text-lg font-bold leading-tight tracking-tight sm:text-xl"
+>
+  {title}
+</h3>
+  </a>
+</article>

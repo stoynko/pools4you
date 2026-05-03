@@ -6,6 +6,7 @@ import type { Language } from "../config/i18n/i18n";
 
 import HomeHero from "../components/pages/home/HomeHero.astro";
 import HomeVision from "../components/pages/home/HomeVision.astro"
+import HomeServices from "../components/pages/home/HomeServices.astro";
 
 type Props = {
   language: Language;
@@ -20,4 +21,6 @@ const { language, pageKey } = Astro.props as Props;
   <HomeHero language={language} />
 
   <HomeVision language={language} />
+
+  <HomeServices language={language} />
 </Layout>
