@@ -1,0 +1,20 @@
+---
+const { id, title, body } = Astro.props as {
+  id: string;
+  title: string;
+  body: string;
+};
+---
+
+<article
+  id={`process-${id}`}
+  class="group relative border-l border-brand-gold/35 pl-8"
+>
+  <h3 class="mt-5 font-libertinus text-4xl text-brand-gold sm:tewxt-5xl">
+    {title}
+  </h3>
+
+  <p class="mt-5 max-w-xl text-lg leading-relaxed sm:text-xl">
+    {body}
+  </p>
+</article>

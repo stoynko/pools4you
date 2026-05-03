@@ -1,0 +1,60 @@
+---
+import type { Language } from "../../../config/i18n/i18n";
+import { getPageTranslations } from "../../../lib/i18n";
+import Image from "astro/components/Image.astro";
+import poolImage from "../../../assets/images/pages/home/pool.png";
+import HomeProcessItem from "./homeProcessItem.astro";
+
+const { language } = Astro.props as {
+  language: Language;
+};
+
+const translation = getPageTranslations(language, "home");
+---
+
+<section class="relative overflow-hidden bg-site py-24 sm:py-28 lg:py-32">
+  <div class="site-container">
+
+    <div class="w-full">
+
+      <h2 class="font-libertinus text-3xl font-semibold text-brand-gold sm:text-4xl">
+        {translation.vision.title}
+      </h2>
+
+      <!-- DIVIDER LINE -->
+      <div class="mt-5 h-px w-72 max-w-full bg-brand-gold"></div>
+
+      <div class="mt-5 space-y-7 text-lg leading-relaxed sm:text-xl">
+        <p>{translation.vision.introMain}</p>
+        <p>{translation.vision.introSecondary}</p>
+      </div>
+    </div>
+
+    <div
+      class="mt-16 grid gap-12 lg:grid-cols-[0.95fr_1fr] lg:items-center lg:gap-20"
+    >
+      <div class="relative">
+        <Image
+          src={poolImage}
+          alt="alt"
+          width={poolImage.width}
+          height={poolImage.height}
+          loading="lazy"
+          class="h-full max-h-[620px] w-full rounded-2xl object-cover shadow-2xl shadow-black/40 sm:aspect-[5/4] lg:aspect-[4/5]"
+        />
+      </div>
+
+      <div class="space-y-20">
+        {
+          translation.vision.accents.map((accent, index) => (
+            <HomeProcessItem
+              id={accent.id}
+              title={accent.title}
+              body={accent.body}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
