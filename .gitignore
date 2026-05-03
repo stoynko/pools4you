@@ -26,9 +26,8 @@ pnpm-debug.log*
 # vscode setting folder
 .vscode/
 
-# notes
-.docs/
-.docs/notes.md
+# notes / generated docs
+docs/
 
 #misc
 *.zip

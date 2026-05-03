@@ -1,0 +1,61 @@
+---
+import { Image } from "astro:assets";
+import heroImage from "../../../assets/images/pages/home/hero.png";
+
+import type { Language } from "../../../config/i18n/i18n";
+import { getPageTranslations } from "../../../lib/i18n";
+
+type Props = {
+  language: Language;
+};
+
+const { language } = Astro.props as Props;
+
+const translation = getPageTranslations(language, "home");
+const imageAlt = "Luxury swimming pool";
+---
+
+<section
+  class="relative isolate min-h-[calc(100vh-var(--header-height))] overflow-hidden bg-black text-white"
+>
+  <Image
+    src={heroImage}
+    alt={imageAlt}
+    class="absolute inset-0 -z-30 h-full w-full object-cover object-[50%_48%]"
+    widths={[640, 960, 1280, 1600, 1920, 2400]}
+    sizes="100vw"
+    loading="eager"
+    decoding="async"
+    fetchpriority="high"
+  />
+
+  <div class="absolute inset-0 -z-20 bg-black/45"></div>
+
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-32 bg-gradient-to-b from-[#0b0c0f] via-[#0b0c0f]/45 to-transparent"
+  ></div>
+
+  <div
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-40 bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/50 to-transparent"
+  ></div>
+
+  <div
+    class="site-container relative z-10 flex min-h-[calc(100vh-var(--header-height))] items-center px-6 py-20"
+  >
+    <div class="max-w-5xl">
+      <h1
+        class="font-libertinus text-[clamp(3.25rem,7vw,6.5rem)] font-bold leading-[1.05] tracking-tight text-brand-gold"
+      >
+        {translation.hero.title}
+      </h1>
+
+      <p
+        class="mt-8 max-w-4xl text-[clamp(1.125rem,2vw,1.75rem)] font-bold leading-snug text-white"
+      >
+        {translation.hero.subtitle}
+      </p>
+    </div>
+  </div>
+</section>
