@@ -1,0 +1,64 @@
+---
+import type { Language } from "../../../config/i18n/i18n";
+import { getPagePath } from "../../../config/pages/pagePaths";
+import { getPageTranslations } from "../../../lib/i18n";
+
+type Props = {
+  language: Language;
+};
+
+const { language } = Astro.props as Props;
+
+const translation = getPageTranslations(language, "home");
+
+// TODO: FIX THE CONTACTS LINK
+const contactHref = getPagePath("services", language);
+const servicesHref = getPagePath("services", language);
+---
+
+<section class="home-cta-section">
+    
+  <div class="site-container">
+
+    <div class="section-divider mb-10" />
+    
+    <div class="home-cta-panel">
+        
+      <div class="home-cta-icon" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          class="home-cta-icon-svg"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 2.75C12 2.75 5.5 9.55 5.5 15.1C5.5 18.75 8.4 21.25 12 21.25C15.6 21.25 18.5 18.75 18.5 15.1C18.5 9.55 12 2.75 12 2.75Z"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M9.1 16.1C9.7 17.55 10.85 18.25 12.35 18.25"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          />
+        </svg>
+      </div>
+
+      <h2 class="home-cta-title">{translation.cta.title}</h2>
+
+      <p class="home-cta-body">{translation.cta.body}</p>
+
+      <div class="home-cta-actions">
+        <a href={contactHref} class="button-primary home-cta-button">
+          {translation.cta.primaryLabel}
+        </a>
+
+        <a href={servicesHref} class="button-ghost home-cta-button">
+          {translation.cta.secondaryLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

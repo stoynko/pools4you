@@ -1,0 +1,51 @@
+@layer components {
+  .home-cta-section {
+    @apply bg-site py-20 sm:py-24 lg:py-28;
+  }
+
+  .home-cta-panel {
+    @apply mx-auto flex max-w-5xl flex-col items-center justify-center rounded-2xl border border-border  px-6 py-16 text-center shadow-sm sm:px-10 sm:py-20 lg:px-16;
+  }
+
+  .home-cta-icon {
+    @apply mb-5 flex h-12 w-12 items-center justify-center text-brand-gold;
+  }
+
+  .home-cta-icon-svg {
+    @apply h-12 w-12;
+  }
+
+  .home-cta-title {
+    @apply max-w-4xl font-libertinus text-4xl font-normal leading-none text-text sm:text-5xl lg:text-7xl;
+  }
+
+  .home-cta-body {
+    @apply mt-6 max-w-3xl font-inter text-base leading-8 text-text-secondary sm:text-lg;
+  }
+
+  .home-cta-actions {
+    @apply mt-10 flex w-full max-w-2xl flex-col items-stretch justify-center gap-4 sm:flex-row;
+  }
+
+  .home-cta-button {
+    @apply w-full sm:w-auto sm:min-w-[230px];
+  }
+
+  [data-theme="dark"] .home-cta-panel {
+    @apply border-border-alt ;
+  }
+
+  @media (max-width: 640px) {
+    .home-cta-panel {
+      @apply rounded-xl px-5 py-14;
+    }
+
+    .home-cta-title {
+      @apply text-4xl;
+    }
+
+    .home-cta-body {
+      @apply text-base leading-7;
+    }
+  }
+}

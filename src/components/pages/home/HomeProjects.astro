@@ -1,0 +1,68 @@
+---
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+import type { Language } from "../../../config/i18n/i18n";
+import { getPagePath } from "../../../config/pages/pagePaths";
+import { getPageTranslations } from "../../../lib/i18n";
+
+import HomeFeaturedProject from "./HomeFeaturedProject.astro";
+
+type Props = {
+  language: Language;
+  limit?: number;
+};
+
+const { language, limit = 2 } = Astro.props as Props;
+
+const translation = getPageTranslations(language, "home");
+const projectsHref = getPagePath("projects", language);
+
+const allProjects = await getCollection("projects");
+
+const featuredProjects = allProjects
+  .filter(
+    (project) => project.data.language === language && project.data.isFeatured,
+  )
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, limit);
+
+function getProjectHref(project: CollectionEntry<"projects">) {
+  const basePath = language === "en" ? "/en/projects" : "/proekti";
+  return `${basePath}/${project.data.slug}`;
+}
+---
+
+{
+  featuredProjects.length > 0 && (
+    <section class="featured-projects">
+      <div class="site-container">
+        <div class="featured-projects-section-header">
+          <div class="featured-projects-section-header-row">
+            <h2 class="featured-projects-section-title">
+              {translation.featuredProjects.title}
+            </h2>
+
+            <a href={projectsHref} class="button-primary w-fit">
+              {translation.featuredProjects.ctaLabel}
+            </a>
+          </div>
+
+          <div class="section-divider" />
+        </div>
+
+        <div class="featured-projects-list">
+          {featuredProjects.map((project, index) => (
+            <HomeFeaturedProject
+              project={project}
+              href={getProjectHref(project)}
+              ctaLabel={translation.featuredProjects.projectCtaLabel}
+              isReversed={index % 2 === 1}
+              eager={index === 0}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

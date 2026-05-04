@@ -36,10 +36,15 @@ const projects = defineCollection({
       heroImage: image(),
       thumbnailImage: image(),
       gallery: z.array(image()).default([]),
-      relatedProjects: z.array(z.string()).default([]),
 
+      relatedProjects: z.array(z.string()).default([]),
+      
       seoTitle: z.string().optional(),
       seoDescription: z.string().optional(),
+
+      isFeatured: z.boolean().default(false),
+      featuredQuote: z.string().optional(),
+      featuredExcerpt: z.string().optional(),
     }),
 });
 

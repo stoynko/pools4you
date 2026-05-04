@@ -1,0 +1,5 @@
+@layer components {
+  .section-divider {
+    @apply mt-5 h-px w-full bg-brand-gold;
+  }
+}

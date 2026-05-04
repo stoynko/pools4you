@@ -1,5 +1,5 @@
 ---
-title: "Hotel Sunrise – Pool Project"
+title: "Hotel Sunrise"
 description: "Construction of an outdoor infinity pool for a 5-star hotel."
 date: "2025-01-10"
 location: "Sunny Beach, Bulgaria"
@@ -19,6 +19,10 @@ relatedProjects:
 
 seoTitle: "Hotel Sunrise Pool Project | Pools4You"
 seoDescription: "See the completed Hotel Sunrise pool project by Pools4You, including design, construction, and final execution details."
+
+isFeatured: true
+featuredQuote: "A masterpiece of fluid dynamics."
+featuredExcerpt: "We reimagined the resort into a modern one."
 ---
 
 ## Overview

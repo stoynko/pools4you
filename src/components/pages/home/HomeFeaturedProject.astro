@@ -1,0 +1,60 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+type Props = {
+  project: CollectionEntry<"projects">;
+  href: string;
+  ctaLabel: string;
+  isReversed?: boolean;
+  eager?: boolean;
+};
+
+const {
+  project,
+  href,
+  ctaLabel,
+  isReversed = false,
+  eager = false,
+} = Astro.props as Props;
+---
+
+<article
+  class:list={[
+    "featured-project",
+    { "featured-project-reversed": isReversed },
+  ]}
+>
+  <a href={href} class="featured-project-image-link">
+    <Image
+      src={project.data.thumbnailImage}
+      alt={project.data.title}
+      class="featured-project-image"
+      widths={[480, 768, 1024, 1280]}
+      sizes="(max-width: 900px) 100vw, 55vw"
+      loading={eager ? "eager" : "lazy"}
+    />
+  </a>
+
+  <div class="featured-project-content">
+    <h3 class="featured-project-title">{project.data.title}</h3>
+
+    {
+      project.data.featuredQuote && (
+        <p class="featured-project-quote">
+          “{project.data.featuredQuote}”
+        </p>
+      )
+    }
+
+    <p class="featured-project-description">
+      {project.data.featuredExcerpt ?? project.data.description}
+    </p>
+
+    <div class="featured-project-cta">
+  <a href={href} class="button-primary w-fit">
+    {ctaLabel}
+  </a>
+</div>
+  </div>
+</article>
