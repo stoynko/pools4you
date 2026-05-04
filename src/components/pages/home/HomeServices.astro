@@ -37,8 +37,10 @@ const serviceImages: Record<string, ImageMetadata> = {
 };
 ---
 
-<section class="relative overflow-hidden bg-site">
+<section class="relative overflow-hidden bg-site py-20 sm:py-24 lg:py-28">
+  
   <div class="site-container">
+
     <div class="mb-14 sm:mb-16">
       <div
         class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
@@ -66,7 +68,8 @@ const serviceImages: Record<string, ImageMetadata> = {
 
   <!-- SERVICES CARDS -->
   <div class="mx-auto max-w-6xl">
-    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+
+      <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
       {
         translation.services.items.map((service) => (
           <HomeServiceCard

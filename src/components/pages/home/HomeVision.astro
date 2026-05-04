@@ -14,25 +14,28 @@ const translation = getPageTranslations(language, "home");
 
 <section class="relative overflow-hidden bg-site py-24 sm:py-28 lg:py-32">
   <div class="site-container">
-
     <div class="w-full">
-
-      <h2 class="font-libertinus text-3xl font-semibold text-brand-gold sm:text-4xl">
+      <h2
+        class="font-libertinus text-4xl font-semibold text-brand-gold sm:text-5xl"
+      >
         {translation.vision.title}
       </h2>
 
       <!-- DIVIDER LINE -->
-      <div class="mt-5 h-px w-72 max-w-full bg-brand-gold"></div>
+      <div class="mt-5 h-px w-full bg-brand-gold"></div>
 
-      <div class="mt-5 space-y-7 text-lg leading-relaxed sm:text-xl">
-        <p>{translation.vision.introMain}</p>
-        <p>{translation.vision.introSecondary}</p>
+      <div class="mt-10 space-y-7">
+        <p class="text-lg leading-relaxed text-text-secondary sm:text-xl">
+          {translation.vision.introMain}
+        </p>
+
+        <p class="text-lg leading-relaxed text-text-secondary sm:text-xl">
+          {translation.vision.introSecondary}
+        </p>
       </div>
     </div>
 
-    <div
-      class="mt-16 grid gap-12 lg:grid-cols-[0.95fr_1fr] lg:items-center lg:gap-20"
-    >
+    <div class="mt-20 grid gap-12 lg:grid-cols-[0.95fr_1fr] lg:items-center lg:gap-20">
       <div class="relative">
         <Image
           src={poolImage}
