@@ -1,6 +1,6 @@
 @layer components {
   .home-cta-section {
-    @apply bg-site py-20 sm:py-24 lg:py-28;
+    @apply bg-site pb-20 pt-12 sm:pb-24 sm:pt-14 lg:pb-28 lg:pt-16;
   }
 
   .home-cta-panel {
@@ -8,11 +8,23 @@
   }
 
   .home-cta-icon {
-    @apply mb-5 flex h-12 w-12 items-center justify-center text-brand-gold;
+    @apply mb-5 flex h-14 w-14 items-center justify-center;
   }
 
-  .home-cta-icon-svg {
-    @apply h-12 w-12;
+  .home-cta-logo {
+    @apply h-14 w-14 object-contain;
+  }
+
+  .home-cta-logo-dark {
+    @apply hidden;
+  }
+
+  [data-theme="dark"] .home-cta-logo-light {
+    @apply hidden;
+  }
+
+  [data-theme="dark"] .home-cta-logo-dark {
+    @apply block;
   }
 
   .home-cta-title {
@@ -32,7 +44,7 @@
   }
 
   [data-theme="dark"] .home-cta-panel {
-    @apply border-border-alt ;
+    @apply border-border-alt;
   }
 
   @media (max-width: 640px) {

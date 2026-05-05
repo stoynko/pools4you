@@ -69,7 +69,7 @@ export const home = {
   cta: {
     title: "Ready to dive in?",
     body: "Your vision of the perfect sanctuary is just one conversation away. Let us bring light and water to your legacy.",
-    primaryLabel: "Start your project",
-    secondaryLabel: "Request brochure",
+    primaryLabel: "Request consultation",
+    emailSubject: "Consultation request",
   },
 } as const;
