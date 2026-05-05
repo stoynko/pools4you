@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import type { Language } from "../../../config/i18n/i18n";
 
@@ -22,11 +21,6 @@ const { language } = Astro.props as {
 
 const translation = getPageTranslations(language, "home");
 
-type ServiceItem = {
-  title: string;
-  image: ImageMetadata;
-  alt: string;
-};
 const servicesHref = getPagePath("services", language);
 
 const serviceImages: Record<string, ImageMetadata> = {

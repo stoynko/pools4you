@@ -3,19 +3,6 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { LANGUAGES } from "./config/i18n/i18n";
 
-const services = defineCollection({
-  loader: glob ({
-    base: ".src/content/services",
-    pattern: "**/*.{md,mdx}",
-    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, "")
-  }),
-  
-  schema: ({ image }) => 
-    z.object({
-
-    })
-})
-
 const projects = defineCollection({
   loader: glob({
     base: "./src/content/projects",
@@ -49,6 +36,5 @@ const projects = defineCollection({
 });
 
 export const collections = {
-  projects, 
-  services
+  projects
 };
