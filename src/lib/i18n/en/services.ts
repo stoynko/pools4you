@@ -1,9 +1,20 @@
 export const services = {
   hero: {
-    title: "Professional Pool Services",
-    subtitle:
-      "From concept to maintenance — everything your pool needs, handled properly.",
-  },
+  title: "From the First Idea to Long-Term Operation",
+  body: "We partner with private clients, hotels, investors, and operators of aquatic and wellness facilities — from consultation and planning to construction, equipment, renovation, service, and seasonal maintenance.a",
+  primaryCta: "Request a Consultation",
+  secondaryCta: "Explore Services",
+  cardAriaLabel: "Main service highlights",
+  cardEyebrow: "Coordinated Process",
+  cardText:
+    "Planning, budgeting, technical decisions, construction, equipment, service, and seasonal maintenance in one coherent process.",
+  stats: [
+    "Clear budget",
+    "Lower risk",
+    "Technical control",
+    "Service and upkeep",
+  ],
+},
 
   pool: {
     title: "Pool Construction",

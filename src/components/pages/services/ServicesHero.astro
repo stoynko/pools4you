@@ -1,0 +1,48 @@
+---
+import type { Language } from "../../../config/i18n/i18n";
+import { getPageTranslations } from "../../../lib/i18n";
+import { getPagePath } from "../../../config/pages/pagePaths";
+
+type Props = {
+  language: Language;
+};
+
+const { language } = Astro.props as Props;
+
+const translation = getPageTranslations(language, "services");
+
+const contactHref = "mailto:office@pools4you.bg";
+const servicesHref = `${getPagePath("services", language)}#services-overview`;
+---
+
+<section
+  class="relative isolate w-full overflow-hidden bg-site py-20 sm:py-24 lg:py-28"
+>
+  <div class="mx-auto w-full max-w-[1600px] px-6 sm:px-8 lg:px-14 xl:px-20">
+    <div class="w-full text-left">
+      
+
+      <h1
+        class="font-libertinus text-[clamp(3.25rem,7vw,6.5rem)] font-bold leading-[1.05] tracking-tight text-brand-gold"
+      >
+        {translation.hero.title}
+      </h1>
+
+      <p
+        class="mt-8 max-w-4xl text-[clamp(1.125rem,2vw,1.75rem)] font-bold leading-snug text-white"
+      >
+        {translation.hero.body}
+      </p>
+
+      <!-- <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+        <a href={contactHref} class="button-primary w-full justify-center sm:w-fit">
+          {translation.hero.primaryCta}
+        </a>
+
+        <a href={servicesHref} class="button-ghost w-full justify-center sm:w-fit">
+          {translation.hero.secondaryCta}
+        </a>
+      </div> -->
+    </div>
+  </div>
+</section>
