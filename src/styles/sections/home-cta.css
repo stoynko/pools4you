@@ -3,9 +3,14 @@
     @apply bg-site pb-20 pt-12 sm:pb-24 sm:pt-14 lg:pb-28 lg:pt-16;
   }
 
-  .home-cta-panel {
-    @apply mx-auto flex max-w-5xl flex-col items-center justify-center rounded-2xl border border-border  px-6 py-16 text-center shadow-sm sm:px-10 sm:py-20 lg:px-16;
-  }
+ .home-cta-panel {
+  @apply mx-auto flex max-w-5xl flex-col items-center justify-center rounded-2xl px-6 py-16 text-center shadow-sm sm:px-10 sm:py-20 lg:px-16;
+
+  border: 1px solid color-mix(in srgb, var(--color-gold) 75%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-gold) 22%, transparent),
+    0 18px 55px color-mix(in srgb, var(--color-gold) 10%, transparent);
+}
 
   .home-cta-icon {
     @apply mb-5 flex h-14 w-14 items-center justify-center;
@@ -17,14 +22,6 @@
 
   .home-cta-logo-dark {
     @apply hidden;
-  }
-
-  [data-theme="dark"] .home-cta-logo-light {
-    @apply hidden;
-  }
-
-  [data-theme="dark"] .home-cta-logo-dark {
-    @apply block;
   }
 
   .home-cta-title {
@@ -41,6 +38,14 @@
 
   .home-cta-button {
     @apply w-full sm:w-auto sm:min-w-[230px];
+  }
+
+    [data-theme="dark"] .home-cta-logo-light {
+    @apply hidden;
+  }
+
+  [data-theme="dark"] .home-cta-logo-dark {
+    @apply block;
   }
 
   [data-theme="dark"] .home-cta-panel {

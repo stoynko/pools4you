@@ -1,0 +1,57 @@
+@layer components {
+  .hero-section {
+    @apply relative isolate w-full overflow-hidden bg-site;
+  }
+
+  .hero-section-full {
+    @apply min-h-[calc(100vh-var(--header-height))] bg-black text-white;
+  }
+
+  .hero-section-standard {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .hero-container {
+    @apply mx-auto w-full max-w-[1600px] px-6 sm:px-8 lg:px-14 xl:px-20;
+  }
+
+  .hero-container-full {
+    @apply relative z-10 flex min-h-[calc(100vh-var(--header-height))] items-center py-16 sm:py-20 lg:py-24;
+  }
+
+  .hero-title {
+    @apply font-libertinus text-[clamp(2.75rem,5.5vw,5.25rem)] font-bold leading-[1.06] tracking-tight text-brand-gold;
+  }
+
+  .hero-lead {
+    @apply mt-7 max-w-3xl text-[clamp(1.05rem,1.45vw,1.35rem)] font-bold leading-snug;
+  }
+
+  .hero-lead-on-image {
+    @apply text-white;
+  }
+
+  .hero-lead-on-page {
+    @apply text-text;
+  }
+
+  .hero-blur-panel {
+    @apply max-w-4xl rounded-2xl bg-black/10 p-4 text-left backdrop-blur-[2px] sm:p-5 lg:p-6;
+  }
+
+  .hero-image {
+    @apply absolute inset-0 -z-30 h-full w-full object-cover;
+  }
+
+  .hero-image-overlay {
+    @apply absolute inset-0 -z-20 bg-black/45;
+  }
+
+  .hero-fade-top {
+    @apply pointer-events-none absolute inset-x-0 top-0 -z-10 h-16 bg-gradient-to-b from-[var(--color-bg)] via-[color-mix(in_srgb,var(--color-bg)_35%,transparent)] to-transparent;
+  }
+
+  .hero-fade-bottom {
+    @apply pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-20 bg-gradient-to-t from-[var(--color-bg)] via-[color-mix(in_srgb,var(--color-bg)_30%,transparent)] to-transparent;
+  }
+}

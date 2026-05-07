@@ -1,4 +1,5 @@
 @layer components {
+  
   .featured-projects {
     @apply relative overflow-hidden bg-site py-20 sm:py-24 lg:py-28;
   }

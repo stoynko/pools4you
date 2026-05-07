@@ -31,17 +31,11 @@ const serviceImages: Record<string, ImageMetadata> = {
 };
 ---
 
-<section class="relative overflow-hidden bg-site py-20 sm:py-24 lg:py-28">
-  
-  <div class="site-container">
-
-    <div class="mb-14 sm:mb-16">
-      <div
-        class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between"
-      >
-        <h2
-          class="font-libertinus text-3xl font-semibold text-brand-gold sm:text-4xl"
-        >
+<section class="section-shell section-spacing-md">
+  <div class="section-container">
+    <div class="section-header">
+      <div class="section-header-row">
+        <h2 class="section-title">
           {translation.services.title}
         </h2>
 
@@ -50,20 +44,16 @@ const serviceImages: Record<string, ImageMetadata> = {
         </a>
       </div>
 
-      <div class="mt-5 h-px w-full bg-brand-gold"></div>
+      <div class="section-divider"></div>
 
-      <p
-        class="ml-auto mt-4 max-w-xl text-right font-inter text-sm font-semibold leading-snug text-text-muted sm:text-[0.95rem]"
-      >
+      <p class="section-intro section-intro-right">
         {translation.services.intro}
       </p>
     </div>
   </div>
 
-  <!-- SERVICES CARDS -->
   <div class="mx-auto max-w-6xl">
-
-      <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+    <div class="card-grid-4">
       {
         translation.services.items.map((service) => (
           <HomeServiceCard

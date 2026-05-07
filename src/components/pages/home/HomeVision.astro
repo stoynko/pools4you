@@ -12,30 +12,27 @@ const { language } = Astro.props as {
 const translation = getPageTranslations(language, "home");
 ---
 
-<section class="relative overflow-hidden bg-site py-24 sm:py-28 lg:py-32">
-  <div class="site-container">
+<section class="section-shell section-spacing-lg">
+  <div class="section-container">
     <div class="w-full">
-      <h2
-        class="font-libertinus text-4xl font-semibold text-brand-gold sm:text-5xl"
-      >
+      <h2 class="section-title-lg">
         {translation.vision.title}
       </h2>
 
-      <!-- DIVIDER LINE -->
-      <div class="mt-5 h-px w-full bg-brand-gold"></div>
+      <div class="section-divider"></div>
 
-      <div class="mt-10 space-y-7">
-        <p class="text-lg leading-relaxed text-text-secondary sm:text-xl">
+      <div class="section-body-stack">
+        <p class="section-body-lg">
           {translation.vision.introMain}
         </p>
 
-        <p class="text-lg leading-relaxed text-text-secondary sm:text-xl">
+        <p class="section-body-lg">
           {translation.vision.introSecondary}
         </p>
       </div>
     </div>
 
-    <div class="mt-20 grid gap-12 lg:grid-cols-[0.95fr_1fr] lg:items-center lg:gap-20">
+    <div class="split-grid split-grid-spaced">
       <div class="relative">
         <Image
           src={poolImage}
@@ -43,7 +40,7 @@ const translation = getPageTranslations(language, "home");
           width={poolImage.width}
           height={poolImage.height}
           loading="lazy"
-          class="h-full max-h-[620px] w-full rounded-2xl object-cover shadow-2xl shadow-black/40 sm:aspect-[5/4] lg:aspect-[4/5]"
+          class="media-card media-card-portrait"
         />
       </div>
 

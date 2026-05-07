@@ -1,0 +1,73 @@
+@layer components {
+  .section-shell {
+    @apply relative overflow-hidden bg-site;
+  }
+
+  .section-spacing-sm {
+    @apply py-16 sm:py-20 lg:py-24;
+  }
+
+  .section-spacing-md {
+    @apply py-20 sm:py-24 lg:py-28;
+  }
+
+  .section-spacing-lg {
+    @apply py-24 sm:py-28 lg:py-32;
+  }
+
+  .section-container {
+    @apply site-container;
+  }
+
+  .section-header {
+    @apply mb-14 sm:mb-16;
+  }
+
+  .section-header-row {
+    @apply flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between;
+  }
+
+  .section-title {
+    @apply font-libertinus text-3xl font-semibold text-brand-gold sm:text-4xl;
+  }
+
+  .section-title-lg {
+    @apply font-libertinus text-4xl font-semibold text-brand-gold sm:text-5xl;
+  }
+
+  .section-intro {
+    @apply mt-4 max-w-xl font-inter text-sm font-semibold leading-snug text-text-muted sm:text-[0.95rem];
+  }
+
+  .section-intro-right {
+    @apply ml-auto text-right;
+  }
+
+  .section-body-stack {
+    @apply mt-10 space-y-7;
+  }
+
+  .section-body-lg {
+    @apply text-lg leading-relaxed text-text-secondary sm:text-xl;
+  }
+
+  .split-grid {
+    @apply grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-20;
+  }
+
+  .split-grid-spaced {
+    @apply mt-20;
+  }
+
+  .media-card {
+    @apply h-full w-full rounded-2xl object-cover shadow-2xl shadow-black/40;
+  }
+
+  .media-card-portrait {
+    @apply max-h-[620px] sm:aspect-[5/4] lg:aspect-[4/5];
+  }
+
+  .card-grid-4 {
+    @apply grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10;
+  }
+}

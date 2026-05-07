@@ -1,7 +1,7 @@
 export const home = {
   hero: {
-    title: "Premium Pools",
-    subtitle: "Designed with precision. Built with elegance.",
+    title: "From the First Idea to Long-Term Operation",
+    subtitle: "We partner with private clients, hotels, investors, and operators of aquatic and wellness facilities - from consultation and planning to construction, equipment, renovation, service, and seasonal maintenance.a",
     ctaPrimary: "Request a Quote",
     ctaSecondary: "View Projects",
   },
@@ -54,7 +54,7 @@ export const home = {
       },
       {
         id: "renovation-modernization",
-        title: "Renovation & modernization",
+        title: "Renovation",
         alt: "Renovation of a pool",
       },
     ],
