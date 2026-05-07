@@ -7,6 +7,7 @@ import { getPagePath } from "../../../config/pages/pagePaths";
 import { getPageTranslations } from "../../../lib/i18n";
 
 import HomeFeaturedProject from "./HomeFeaturedProject.astro";
+import SectionHeader from "../../shared/SectionHeader.astro";
 
 type Props = {
   language: Language;
@@ -37,19 +38,11 @@ function getProjectHref(project: CollectionEntry<"projects">) {
   featuredProjects.length > 0 && (
     <section class="featured-projects">
       <div class="site-container">
-        <div class="featured-projects-section-header">
-          <div class="featured-projects-section-header-row">
-            <h2 class="featured-projects-section-title">
-              {translation.featuredProjects.title}
-            </h2>
-
-            <a href={projectsHref} class="button-primary w-fit">
-              {translation.featuredProjects.ctaLabel}
-            </a>
-          </div>
-
-          <div class="section-divider" />
-        </div>
+        <SectionHeader
+          title={translation.featuredProjects.title}
+          buttonLabel={translation.featuredProjects.ctaLabel}
+          buttonHref={projectsHref}
+        />
 
         <div class="featured-projects-list">
           {featuredProjects.map((project, index) => (

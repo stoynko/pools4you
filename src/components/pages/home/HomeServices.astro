@@ -9,15 +9,15 @@ import conceptImage from "../../../assets/images/pages/home/services-drawing.jpg
 import constructionImage from "../../../assets/images/pages/home/services-construction.png";
 import maintenanceImage from "../../../assets/images/pages/home/services-maintenance.png";
 import renovationImage from "../../../assets/images/pages/home/services-renovation.jpg";
+
 import HomeServiceCard from "./HomeServiceCard.astro";
+import SectionHeader from "../../shared/SectionHeader.astro";
 
 type Props = {
   language: Language;
 };
 
-const { language } = Astro.props as {
-  language: Language;
-};
+const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "home");
 
@@ -32,27 +32,19 @@ const serviceImages: Record<string, ImageMetadata> = {
 ---
 
 <section class="section-shell section-spacing-md">
+
   <div class="section-container">
-    <div class="section-header">
-      <div class="section-header-row">
-        <h2 class="section-title">
-          {translation.services.title}
-        </h2>
 
-        <a href={servicesHref} class="button-primary w-fit">
-          {translation.services.ctaLabel}
-        </a>
-      </div>
+    <SectionHeader
+      title={translation.services.title}
+      description={translation.services.intro}
+      buttonLabel={translation.services.ctaLabel}
+      buttonHref={servicesHref}
+    />
 
-      <div class="section-divider"></div>
-
-      <p class="section-intro section-intro-right">
-        {translation.services.intro}
-      </p>
-    </div>
   </div>
 
-  <div class="mx-auto max-w-6xl">
+  <div class="mx-auto max-w-6xl px-6">
     <div class="card-grid-4">
       {
         translation.services.items.map((service) => (
@@ -67,4 +59,5 @@ const serviceImages: Record<string, ImageMetadata> = {
       }
     </div>
   </div>
+  
 </section>

@@ -1,10 +1,11 @@
 ---
 import Layout from "../layouts/MainLayout.astro";
-import { getPageTranslations } from "../lib/i18n";
 import type { PageKey } from "../config/pages/pageDefinitions";
 import type { Language } from "../config/i18n/i18n";
 
 import ServicesHero from "../components/pages/services/ServicesHero.astro";
+import ServicesList from "../components/pages/services/ServicesList.astro";
+import ServicesWhy from "../components/pages/services/ServicesWhy.astro";
 
 type Props = {
   language: Language;
@@ -12,99 +13,14 @@ type Props = {
 };
 
 const { language, pageKey } = Astro.props as Props;
-const translation = getPageTranslations(language, "services");
 ---
 
 <Layout language={language} pageKey={pageKey}>
 
-  <!-- HERO -->
   <ServicesHero language={language} />
 
-  <!-- SERVICES GRID -->
-  <section id="services-overview" class="max-w-6xl mx-auto px-6 py-16">
-    <div class="grid md:grid-cols-2 gap-8">
-      
-      <!-- POOL CONSTRUCTION -->
-      <div
-        class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-xl transition space-y-4"
-      >
-        <h2 class="text-2xl font-semibold">{translation.pool.title}</h2>
+  <ServicesList language={language} />
 
-        <p class="text-gray-400">{translation.pool.description}</p>
-
-        <ul class="space-y-2 mt-4">
-          <li class="flex items-start gap-2 text-gray-300">
-            <span class="text-blue-400 mt-1">•</span>
-            <span>{translation.pool.f1}</span>
-          </li>
-
-          <li class="flex items-start gap-2 text-gray-300">
-            <span class="text-blue-400 mt-1">•</span>
-            <span>{translation.pool.f2}</span>
-          </li>
-
-          <li class="flex items-start gap-2 text-gray-300">
-            <span class="text-blue-400 mt-1">•</span>
-            <span>{translation.pool.f3}</span>
-          </li>
-
-          <li class="flex items-start gap-2 text-gray-300">
-            <span class="text-blue-400 mt-1">•</span>
-            <span>{translation.pool.f4}</span>
-          </li>
-        </ul>
-      </div>
-
-      <!-- EQUIPMENT INSTALLATION -->
-      <div
-        class="bg-gray-900 rounded-xl p-8 shadow-lg hover:shadow-xl transition space-y-4"
-      >
-        <h2 class="text-2xl font-semibold">{translation.equipment.title}</h2>
-
-        <p class="text-gray-400">{translation.equipment.description}</p>
-
-        <ul class="space-y-2 mt-4">
-          <li class="flex items-start gap-2 text-gray-300">
-            <span class="text-blue-400 mt-1">•</span>
-            <span>{translation.equipment.f1}</span>
-          </li>
-
-          <li class="flex items-start gap-2 text-gray-300">
-            <span class="text-blue-400 mt-1">•</span>
-            <span>{translation.equipment.f2}</span>
-          </li>
-
-          <li class="flex items-start gap-2 text-gray-300">
-            <span class="text-blue-400 mt-1">•</span>
-            <span>{translation.equipment.f3}</span>
-          </li>
-
-          <li class="flex items-start gap-2 text-gray-300">
-            <span class="text-blue-400 mt-1">•</span>
-            <span>{translation.equipment.f4}</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="max-w-4xl mx-auto px-6 py-20 text-center">
-    <div class="bg-gray-900 rounded-xl p-10 space-y-6 shadow-lg">
-      <h2 class="text-3xl font-libertinus font-bold">
-        {translation.cta.title}
-      </h2>
-
-      <p class="text-gray-400">
-        {translation.cta.subtitle}
-      </p>
-
-      <button
-        class="px-8 py-3 bg-blue-500 hover:bg-blue-600 rounded-lg font-semibold transition"
-      >
-        {translation.cta.button}
-      </button>
-    </div>
-  </section>
+  <ServicesWhy language={language} />
 
 </Layout>

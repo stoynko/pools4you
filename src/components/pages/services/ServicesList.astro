@@ -1,0 +1,66 @@
+---
+import type { Language } from "../../../config/i18n/i18n";
+import { getPageTranslations } from "../../../lib/i18n";
+import { mailTo } from "../../../lib/i18n/contact/mailing";
+
+import SectionHeader from "../../shared/SectionHeader.astro";
+import BandCta from "../../shared/BandCta.astro";
+
+type Props = {
+  language: Language;
+};
+
+const { language } = Astro.props as Props;
+
+const translation = getPageTranslations(language, "services");
+
+const contactEmailAddress = import.meta.env.PUBLIC_CONTACT_EMAIL;
+const contactHref = mailTo(contactEmailAddress);
+---
+
+<section
+  id="services"
+  class="section-shell section-spacing-md bg-site-secondary"
+>
+  <div class="section-container">
+    <SectionHeader
+      title={translation.list.title}
+      description={translation.list.text}
+    />
+
+    <div class="border-t border-border">
+      {
+        translation.list.items.map((service, index) => (
+          <details class="border-b border-border">
+            <summary class="grid cursor-pointer list-none gap-5 py-7 marker:hidden md:grid-cols-[4rem_minmax(0,0.75fr)_minmax(0,1fr)] md:items-start md:gap-8">
+              <span class="font-inter text-xs font-bold uppercase tracking-[0.18em] text-brand-gold">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <h3 class="font-libertinus text-2xl font-semibold leading-tight text-text">
+                {service.title}
+              </h3>
+
+              <p class="font-inter text-sm font-semibold leading-relaxed text-text-secondary">
+                {service.summary}
+              </p>
+            </summary>
+
+            <div class="pb-8 md:ml-[calc(4rem+2rem)] md:max-w-4xl">
+              <p class="font-inter leading-relaxed text-text-secondary">
+                {service.body}
+              </p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+
+    <BandCta
+      title={translation.list.cta.title}
+      text={translation.list.cta.text}
+      buttonLabel={translation.list.cta.button}
+      buttonHref={contactHref}
+    />
+  </div>
+</section>

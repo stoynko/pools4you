@@ -4,17 +4,8 @@
     @apply relative overflow-hidden bg-site py-20 sm:py-24 lg:py-28;
   }
 
-  .featured-projects-section-header {
-    @apply mb-14 sm:mb-16;
-  }
 
-  .featured-projects-section-header-row {
-    @apply flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between;
-  }
-
-  .featured-projects-section-title {
-    @apply font-libertinus text-3xl font-semibold text-brand-gold sm:text-4xl;
-  }
+  
 
   .featured-projects-intro {
     @apply ml-auto mt-4 max-w-xl text-right font-inter text-sm font-semibold leading-snug text-text-muted sm:text-[0.95rem];
@@ -118,9 +109,6 @@
   }
 
   @media (max-width: 640px) {
-    .featured-projects-section-header-row {
-      align-items: flex-start;
-    }
 
     .featured-projects-intro {
       margin-left: 0;

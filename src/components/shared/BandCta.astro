@@ -1,0 +1,30 @@
+---
+type Props = {
+  title: string;
+  text: string;
+  buttonLabel: string;
+  buttonHref: string;
+};
+
+const { title, text, buttonLabel, buttonHref } = Astro.props as Props;
+---
+
+<div
+  class="mt-14 grid gap-8 border border-brand-gold/30 bg-darkSurface p-8 text-white lg:grid-cols-[1fr_auto] lg:items-center lg:p-9"
+>
+  <div>
+    <h3
+      class="font-libertinus text-3xl font-semibold leading-tight text-brand-gold"
+    >
+      {title}
+    </h3>
+
+    <p class="mt-3 max-w-3xl font-inter leading-relaxed text-white/75">
+      {text}
+    </p>
+  </div>
+
+  <a href={buttonHref} class="button-primary w-fit">
+    {buttonLabel}
+  </a>
+</div>

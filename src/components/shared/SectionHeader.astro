@@ -1,0 +1,67 @@
+---
+type Props = {
+  title: string;
+  description?: string;
+  size?: "default" | "large";
+  introAlign?: "left" | "right";
+  buttonLabel?: string;
+  buttonHref?: string;
+  buttonVariant?: "primary" | "ghost";
+};
+
+const {
+  title,
+  description,
+  size = "default",
+  introAlign = "right",
+  buttonLabel,
+  buttonHref,
+  buttonVariant = "primary",
+} = Astro.props as Props;
+
+const isLarge = size === "large";
+const isIntroRight = introAlign === "right";
+const hasButton = Boolean(buttonLabel && buttonHref);
+const buttonClass =
+  buttonVariant === "ghost" ? "button-ghost w-fit" : "button-primary w-fit";
+---
+
+<div class="mb-14 sm:mb-16">
+  <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <h2
+        class:list={[
+          "font-libertinus font-semibold leading-tight text-brand-gold",
+          isLarge ? "text-4xl sm:text-5xl" : "text-3xl sm:text-4xl",
+        ]}
+      >
+        {title}
+      </h2>
+    </div>
+
+    {
+      hasButton ? (
+        <a href={buttonHref} class={buttonClass}>
+          {buttonLabel}
+        </a>
+      ) : (
+        <slot name="action" />
+      )
+    }
+  </div>
+
+  <div class="mt-5 h-px w-full bg-brand-gold"></div>
+
+  {
+    description && (
+      <p
+        class:list={[
+          "mt-4 max-w-[760px] font-inter text-sm font-semibold leading-snug text-text-muted sm:text-[0.95rem] lg:whitespace-nowrap",
+          isIntroRight && "ml-auto text-right",
+        ]}
+      >
+        {description}
+      </p>
+    )
+  }
+</div>

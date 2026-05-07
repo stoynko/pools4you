@@ -3,11 +3,15 @@ import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
 import Image from "astro/components/Image.astro";
 import poolImage from "../../../assets/images/pages/home/pool.png";
-import HomeProcessItem from "./HomeProcessItem.astro";
 
-const { language } = Astro.props as {
+import HomeProcessItem from "./HomeProcessItem.astro";
+import SectionHeader from "../../shared/SectionHeader.astro";
+
+type Props = {
   language: Language;
 };
+
+const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "home");
 ---
@@ -15,11 +19,7 @@ const translation = getPageTranslations(language, "home");
 <section class="section-shell section-spacing-lg">
   <div class="section-container">
     <div class="w-full">
-      <h2 class="section-title-lg">
-        {translation.vision.title}
-      </h2>
-
-      <div class="section-divider"></div>
+      <SectionHeader title={translation.vision.title} size="large" />
 
       <div class="section-body-stack">
         <p class="section-body-lg">

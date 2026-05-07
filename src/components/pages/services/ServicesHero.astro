@@ -1,7 +1,4 @@
 ---
-import { Image } from "astro:assets";
-import heroImage from "../../../assets/images/pages/home/hero.png";
-
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
 
@@ -12,35 +9,40 @@ type Props = {
 const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "services");
-const imageAlt = "Luxury swimming pool";
 ---
 
-<section class="hero-section hero-section-full">
-  <Image
-    src={heroImage}
-    alt={imageAlt}
-    class="hero-image object-[50%_48%]"
-    widths={[640, 960, 1280, 1600, 1920, 2400]}
-    sizes="100vw"
-    loading="eager"
-    decoding="async"
-    fetchpriority="high"
-  />
-
-  <div class="hero-image-overlay"></div>
-
-  <div aria-hidden="true" class="hero-fade-top"></div>
-
-  <div aria-hidden="true" class="hero-fade-bottom"></div>
-
-  <div class="hero-container hero-container-full">
-    <div class="hero-blur-panel">
-      
-      <h1 class="hero-title">
+<section class="section-shell section-spacing-lg">
+  <div class="section-container">
+    <div class="w-full">
+      <h1 class="hero-title w-full">
         {translation.hero.title}
       </h1>
 
-   
+      <div class="mt-9 h-0.5 w-24 bg-brand-gold"></div>
+
+      <div class="mt-12 max-w-5xl">
+        <div class="space-y-7">
+          <p
+            class="font-inter text-[clamp(1.1rem,1.5vw,1.35rem)] font-medium leading-relaxed text-text-secondary"
+          >
+            {translation.hero.description}
+          </p>
+        </div>
+
+        <ul class="mt-10 grid gap-5">
+          {
+            translation.hero.benefits.map((benefit) => (
+              <li class="grid grid-cols-[0.75rem_1fr] gap-6 font-inter text-[clamp(1rem,1.3vw,1.15rem)] font-medium leading-relaxed text-text-secondary">
+                <span
+                  class="mt-2.5 h-2 w-2 bg-brand-gold"
+                  aria-hidden="true"
+                />
+                <span>{benefit}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   </div>
 </section>
