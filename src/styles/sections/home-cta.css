@@ -4,12 +4,12 @@
   }
 
  .home-cta-panel {
-  @apply mx-auto flex max-w-5xl flex-col items-center justify-center rounded-2xl px-6 py-16 text-center shadow-sm sm:px-10 sm:py-20 lg:px-16;
+  @apply mx-auto flex max-w-5xl flex-col items-center justify-center rounded-2xl px-6 py-16 text-center sm:px-10 sm:py-20 lg:px-16;
 
-  border: 1px solid color-mix(in srgb, var(--color-gold) 75%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-gold) 58%, transparent);
   box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--color-gold) 22%, transparent),
-    0 18px 55px color-mix(in srgb, var(--color-gold) 10%, transparent);
+    0 0 0 1px color-mix(in srgb, var(--color-gold) 10%, transparent),
+    0 12px 36px color-mix(in srgb, var(--color-gold) 5%, transparent);
 }
 
   .home-cta-icon {

@@ -1,0 +1,59 @@
+---
+type Props = {
+  title: string;
+  body: string;
+  buttonLabel: string;
+  buttonHref: string;
+  showDivider?: boolean;
+};
+
+const {
+  title,
+  body,
+  buttonLabel,
+  buttonHref,
+  showDivider = true,
+} = Astro.props as Props;
+---
+
+<section class="home-cta-section">
+  <div class="site-container">
+    {
+      showDivider && (
+        <div class="section-divider mb-16 sm:mb-20 lg:mb-24" />
+      )
+    }
+
+    <div class="home-cta-panel">
+      <div class="home-cta-icon" aria-hidden="true">
+        <img
+          src="/images/brand/pools4you-logo-icon-black.svg"
+          alt=""
+          class="home-cta-logo home-cta-logo-light"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <img
+          src="/images/brand/pools4you-logo-icon-color.svg"
+          alt=""
+          class="home-cta-logo home-cta-logo-dark"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <h2 class="home-cta-title">{title}</h2>
+
+      <p class="home-cta-body">
+        {body}
+      </p>
+
+      <div class="home-cta-actions">
+        <a href={buttonHref} class="button-primary home-cta-button">
+          {buttonLabel}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

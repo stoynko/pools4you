@@ -10,17 +10,15 @@ type Props = {
 };
 
 const { language } = Astro.props as Props;
-const translation = getPageTranslations(language, "home");
+const translation = getPageTranslations(language, "services");
 
 const contactEmailAddress = import.meta.env.PUBLIC_CONTACT_EMAIL;
-const contactHref = mailTo(contactEmailAddress, {
-  subject: translation.cta.emailSubject,
-});
+const contactHref = mailTo(contactEmailAddress);
 ---
 
 <SectionCta
-  title={translation.cta.title}
-  body={translation.cta.body}
-  buttonLabel={translation.cta.primaryLabel}
+  title={translation.list.cta.title}
+  body={translation.list.cta.text}
+  buttonLabel={translation.list.cta.button}
   buttonHref={contactHref}
 />

@@ -2,12 +2,7 @@
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
 
-import { mailTo } from "../../../lib/i18n/contact/mailing";
-
 import SectionHeader from "../../shared/SectionHeader.astro";
-import BandCta from "../../shared/BandCta.astro";
-const contactEmailAddress = import.meta.env.PUBLIC_CONTACT_EMAIL;
-const contactHref = mailTo(contactEmailAddress);
 
 type Props = {
   language: Language;
@@ -29,7 +24,7 @@ const translation = getPageTranslations(language, "services");
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {
         translation.why.proof.map((item) => (
-          <article class="min-h-60 border border-border bg-site-surface p-7 transition duration-200 hover:-translate-y-1 hover:border-brand-gold hover:shadow-xl hover:shadow-black/10">
+          <article class="min-h-60 border border-border bg-site-surface p-7 transition-colors duration-200 hover:border-brand-gold">
             <h3 class="font-libertinus text-2xl font-semibold leading-tight text-text">
               {item.title}
             </h3>
@@ -41,13 +36,6 @@ const translation = getPageTranslations(language, "services");
         ))
       }
     </div>
-
-    <BandCta
-      title={translation.list.cta.title}
-      text={translation.list.cta.text}
-      buttonLabel={translation.list.cta.button}
-      buttonHref={contactHref}
-    />
   </div>
 
   

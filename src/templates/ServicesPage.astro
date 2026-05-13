@@ -6,6 +6,7 @@ import type { Language } from "../config/i18n/i18n";
 import ServicesHero from "../components/pages/services/ServicesHero.astro";
 import ServicesList from "../components/pages/services/ServicesList.astro";
 import ServicesWhy from "../components/pages/services/ServicesWhy.astro";
+import ServicesCta from "../components/pages/services/ServicesCta.astro";
 
 type Props = {
   language: Language;
@@ -22,5 +23,7 @@ const { language, pageKey } = Astro.props as Props;
   <ServicesList language={language} />
 
   <ServicesWhy language={language} />
+
+  <ServicesCta language={language} />
 
 </Layout>
