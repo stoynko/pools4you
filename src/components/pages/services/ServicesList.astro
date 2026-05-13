@@ -1,10 +1,8 @@
 ---
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
-import { mailTo } from "../../../lib/i18n/contact/mailing";
 
 import SectionHeader from "../../shared/SectionHeader.astro";
-import BandCta from "../../shared/BandCta.astro";
 import DropdownButton from "../../ui/DropdownButton.astro";
 
 type Props = {
@@ -14,37 +12,45 @@ type Props = {
 const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "services");
-
-const contactEmailAddress = import.meta.env.PUBLIC_CONTACT_EMAIL;
-const contactHref = mailTo(contactEmailAddress);
 ---
 
 <script>
   import "../../../scripts/components/accordion";
 </script>
 
-<section id="services" class="section-shell section-spacing-md bg-site-secondary">
-
+<section
+  id="services"
+  class="section-shell section-spacing-md bg-site-secondary"
+>
   <div class="section-container">
     <SectionHeader
       title={translation.list.title}
       description={translation.list.text}
     />
 
-    <div data-accordion class="relative before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-border">
-
+    <div
+      data-accordion
+      class="relative before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-border"
+    >
       {
         translation.list.items.map((service) => (
 
-          <details data-accordion-item data-accordion-state="closed"
+          <details
+            data-accordion-item
+            data-accordion-state="closed"
             class="group relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-border"
           >
-            <summary data-accordion-summary class="flex cursor-pointer list-none items-center gap-4 py-7 marker:hidden">
 
-              <h3 class="font-inter text-xl font-semibold leading-tight">
+            <summary
+              data-accordion-summary
+              class="flex cursor-pointer list-none items-center justify-between gap-4 py-7 marker:hidden"
+            >
 
-                {/* SERVICE TITLE */}
-                <span class="page-text-reveal-effect" data-label={service.title}>
+              <h3 class="min-w-0 flex-1 font-inter text-xl font-semibold leading-tight">
+                <span
+                  class="page-text-reveal-effect max-[620px]:inline max-[620px]:whitespace-normal max-[620px]:before:hidden max-[620px]:group-data-[accordion-state=open]:text-brand-gold"
+                  data-label={service.title}
+                >
                   {service.title}
                 </span>
               </h3>
@@ -55,10 +61,12 @@ const contactHref = mailTo(contactEmailAddress);
             <div data-accordion-panel class="h-0 overflow-hidden">
               <div class="w-full pb-8 pl-6 md:w-11/12 md:pl-10 lg:w-5/6 lg:pl-12">
                 <ul class="space-y-3 font-inter text-[1.0625rem] leading-relaxed text-text-secondary md:text-lg">
-
                   {service.details.map((detail) => (
                     <li class="flex gap-3">
-                      <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold"/>
+                      <span
+                        aria-hidden="true"
+                        class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold"
+                      />
                       <span>{detail}</span>
                     </li>
                   ))}
@@ -70,13 +78,5 @@ const contactHref = mailTo(contactEmailAddress);
       }
     </div>
 
-    <BandCta
-      title={translation.list.cta.title}
-      text={translation.list.cta.text}
-      buttonLabel={translation.list.cta.button}
-      buttonHref={contactHref}
-    />
   </div>
 </section>
-
-

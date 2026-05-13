@@ -2,7 +2,12 @@
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
 
+import { mailTo } from "../../../lib/i18n/contact/mailing";
+
 import SectionHeader from "../../shared/SectionHeader.astro";
+import BandCta from "../../shared/BandCta.astro";
+const contactEmailAddress = import.meta.env.PUBLIC_CONTACT_EMAIL;
+const contactHref = mailTo(contactEmailAddress);
 
 type Props = {
   language: Language;
@@ -36,5 +41,14 @@ const translation = getPageTranslations(language, "services");
         ))
       }
     </div>
+
+    <BandCta
+      title={translation.list.cta.title}
+      text={translation.list.cta.text}
+      buttonLabel={translation.list.cta.button}
+      buttonHref={contactHref}
+    />
   </div>
+
+  
 </section>
