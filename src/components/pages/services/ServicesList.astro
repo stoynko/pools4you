@@ -5,6 +5,7 @@ import { mailTo } from "../../../lib/i18n/contact/mailing";
 
 import SectionHeader from "../../shared/SectionHeader.astro";
 import BandCta from "../../shared/BandCta.astro";
+import DropdownButton from "../../ui/DropdownButton.astro";
 
 type Props = {
   language: Language;
@@ -18,38 +19,51 @@ const contactEmailAddress = import.meta.env.PUBLIC_CONTACT_EMAIL;
 const contactHref = mailTo(contactEmailAddress);
 ---
 
-<section
-  id="services"
-  class="section-shell section-spacing-md bg-site-secondary"
->
+<script>
+  import "../../../scripts/components/accordion";
+</script>
+
+<section id="services" class="section-shell section-spacing-md bg-site-secondary">
+
   <div class="section-container">
     <SectionHeader
       title={translation.list.title}
       description={translation.list.text}
     />
 
-    <div class="border-t border-border">
-      {
-        translation.list.items.map((service, index) => (
-          <details class="border-b border-border">
-            <summary class="grid cursor-pointer list-none gap-5 py-7 marker:hidden md:grid-cols-[4rem_minmax(0,0.75fr)_minmax(0,1fr)] md:items-start md:gap-8">
-              <span class="font-inter text-xs font-bold uppercase tracking-[0.18em] text-brand-gold">
-                {String(index + 1).padStart(2, "0")}
-              </span>
+    <div data-accordion class="relative before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-border">
 
-              <h3 class="font-libertinus text-2xl font-semibold leading-tight text-text">
-                {service.title}
+      {
+        translation.list.items.map((service) => (
+
+          <details data-accordion-item data-accordion-state="closed"
+            class="group relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-border"
+          >
+            <summary data-accordion-summary class="flex cursor-pointer list-none items-center gap-4 py-7 marker:hidden">
+
+              <h3 class="font-inter text-xl font-semibold leading-tight">
+
+                {/* SERVICE TITLE */}
+                <span class="page-text-reveal-effect" data-label={service.title}>
+                  {service.title}
+                </span>
               </h3>
 
-              <p class="font-inter text-sm font-semibold leading-relaxed text-text-secondary">
-                {service.summary}
-              </p>
+              <DropdownButton />
             </summary>
 
-            <div class="pb-8 md:ml-[calc(4rem+2rem)] md:max-w-4xl">
-              <p class="font-inter leading-relaxed text-text-secondary">
-                {service.body}
-              </p>
+            <div data-accordion-panel class="h-0 overflow-hidden">
+              <div class="w-full pb-8 pl-6 md:w-11/12 md:pl-10 lg:w-5/6 lg:pl-12">
+                <ul class="space-y-3 font-inter text-[1.0625rem] leading-relaxed text-text-secondary md:text-lg">
+
+                  {service.details.map((detail) => (
+                    <li class="flex gap-3">
+                      <span aria-hidden="true" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold"/>
+                      <span>{detail}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </details>
         ))
@@ -64,3 +78,5 @@ const contactHref = mailTo(contactEmailAddress);
     />
   </div>
 </section>
+
+

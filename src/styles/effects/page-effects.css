@@ -1,3 +1,37 @@
+/* SHARED LEFT-TO-RIGHT TEXT COLOR REVEAL EFFECT */
+
+.page-text-reveal-effect {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.page-text-reveal-effect::before {
+  content: attr(data-label);
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  width: 0;
+  overflow: hidden;
+  color: var(--color-gold);
+  white-space: nowrap;
+  pointer-events: none;
+  transition: width 350ms ease;
+}
+
+.group:hover .page-text-reveal-effect::before,
+.group[data-accordion-state="open"] .page-text-reveal-effect::before {
+  width: 100%;
+}
+
+.group:not(:hover):not([data-accordion-state="open"])
+  .page-text-reveal-effect::before {
+  transition: none;
+}
+
 /* SERVICE CARD TITLE EFFECT */
 
 .service-card-title-effect {
