@@ -1,0 +1,121 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+type HeroAlign = "left" | "center";
+type HeroDivider = "none" | "short" | "medium" | "wide";
+
+type Props = {
+  title: string;
+  body?: string;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  imagePositionClass?: string;
+  benefits?: readonly string[];
+  align?: HeroAlign;
+  divider?: HeroDivider;
+  frostedPanel?: boolean;
+};
+
+const {
+  title,
+  body,
+  image,
+  imageAlt = "",
+  imagePositionClass = "object-center",
+  benefits = [],
+  align = "left",
+  divider = "short",
+  frostedPanel = false,
+} = Astro.props as Props;
+
+const hasImage = Boolean(image);
+const isCentered = align === "center";
+const hasDivider = divider !== "none";
+---
+
+<section class:list={["hero-section", hasImage && "hero-section-with-image"]}>
+  {
+    hasImage && image && (
+      <div class="hero-media" aria-hidden="true">
+        <Image
+          src={image}
+          alt={imageAlt}
+          class:list={["hero-image", imagePositionClass]}
+          widths={[640, 960, 1280, 1600, 1920, 2400]}
+          sizes="100vw"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+
+        <div class="hero-image-overlay" />
+        <div class="hero-fade-top" />
+        <div class="hero-fade-bottom" />
+      </div>
+    )
+  }
+
+  <div class="hero-container">
+    <div
+      class:list={[
+        "hero-copy",
+        isCentered && "hero-copy-centered",
+        frostedPanel && "hero-blur-panel",
+      ]}
+    >
+      <h1 class="hero-title">
+        {title}
+      </h1>
+
+      {
+        hasDivider && (
+          <div
+            class:list={[
+              "hero-divider",
+              `hero-divider-${divider}`,
+              isCentered && "hero-divider-centered",
+            ]}
+          />
+        )
+      }
+
+      {
+        body && (
+          <p
+            class:list={[
+              "hero-lead",
+              hasImage ? "hero-lead-on-image" : "hero-lead-on-page",
+              hasDivider ? "hero-lead-after-divider" : "hero-lead-no-divider",
+            ]}
+          >
+            {body}
+          </p>
+        )
+      }
+
+      {
+        benefits.length > 0 && (
+          <ul
+            class:list={[
+              "hero-benefits",
+              isCentered && "hero-benefits-centered",
+            ]}
+          >
+            {benefits.map((benefit) => (
+              <li
+                class:list={[
+                  "hero-benefit-item",
+                  isCentered && "hero-benefit-item-centered",
+                ]}
+              >
+                <span class="hero-benefit-marker" aria-hidden="true" />
+                <span>{benefit}</span>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+</section>

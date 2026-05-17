@@ -2,48 +2,24 @@
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
 
+import heroImage from "../../../assets/images/pages/home/hero.png";
+import PageHero from "../../shared/PageHero.astro";
+
 type Props = {
   language: Language;
 };
 
 const { language } = Astro.props as Props;
-
 const translation = getPageTranslations(language, "services");
 ---
 
-<section class="section-shell section-spacing-lg">
-
-  <div class="section-container">
-
-    <div class="w-full">
-
-      <h1 class="hero-title w-full">
-        {translation.hero.title}
-      </h1>
-
-      <div class="mt-12 max-w-5xl">
-        <div class="space-y-7">
-
-          <p class="font-inter text-[clamp(1.1rem,1.5vw,1.35rem)] font-medium leading-relaxed text-text-secondary">
-            {translation.hero.description}
-          </p>
-          
-        </div>
-
-        <ul class="mt-10 grid gap-5">
-          {
-            translation.hero.benefits.map((benefit) => (
-              <li class="grid grid-cols-[0.75rem_1fr] gap-6 font-inter text-[clamp(1rem,1.3vw,1.15rem)] font-medium leading-relaxed text-text-secondary">
-                <span
-                  class="mt-2.5 h-2 w-2 bg-brand-gold"
-                  aria-hidden="true"
-                />
-                <span>{benefit}</span>
-              </li>
-            ))
-          }
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
+<PageHero
+  title={translation.hero.title}
+  body={translation.hero.description}
+  benefits={translation.hero.benefits}
+  image={heroImage}
+  imageAlt="Luxury swimming pool"
+  imagePositionClass="object-[50%_48%]"
+  frostedPanel={false}
+  divider="none"
+/>

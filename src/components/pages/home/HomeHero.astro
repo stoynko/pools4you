@@ -1,9 +1,9 @@
 ---
-import { Image } from "astro:assets";
-import heroImage from "../../../assets/images/pages/home/hero.png";
-
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
+
+import PageHero from "../../shared/PageHero.astro";
+import heroImage from "../../../assets/images/pages/home/hero.png";
 
 type Props = {
   language: Language;
@@ -15,34 +15,12 @@ const translation = getPageTranslations(language, "home");
 const imageAlt = "Luxury swimming pool";
 ---
 
-<section class="hero-section hero-section-full">
-  <Image
-    src={heroImage}
-    alt={imageAlt}
-    class="hero-image object-[50%_48%]"
-    widths={[640, 960, 1280, 1600, 1920, 2400]}
-    sizes="100vw"
-    loading="eager"
-    decoding="async"
-    fetchpriority="high"
-  />
-
-  <div class="hero-image-overlay"></div>
-
-  <div aria-hidden="true" class="hero-fade-top"></div>
-
-  <div aria-hidden="true" class="hero-fade-bottom"></div>
-
-  <div class="hero-container hero-container-full">
-    <div class="hero-blur-panel">
-      
-      <h1 class="hero-title">
-        {translation.hero.title}
-      </h1>
-
-      <p class="hero-lead hero-lead">
-        {translation.hero.subtitle}
-      </p>
-    </div>
-  </div>
-</section>
+<PageHero
+  title={translation.hero.title}
+  body={translation.hero.subtitle}
+  image={heroImage}
+  imageAlt="Luxury swimming pool"
+  imagePositionClass="object-[50%_48%]"
+  frostedPanel={false}
+  divider="none"
+/>

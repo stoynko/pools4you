@@ -1,30 +1,64 @@
 @layer components {
   .hero-section {
-    @apply relative isolate w-full overflow-hidden bg-site;
+    --hero-visual-height: calc(100vh - var(--header-height));
+
+    @apply relative isolate min-h-[var(--hero-visual-height)] w-full overflow-hidden bg-site text-text;
   }
 
-  .hero-section-full {
-    @apply min-h-[calc(100vh-var(--header-height))] bg-black text-white;
+  .hero-section-with-image {
+    @apply bg-black text-white;
   }
 
-  .hero-section-standard {
-    @apply py-16 sm:py-20 lg:py-24;
+  .hero-media {
+    @apply pointer-events-none absolute inset-x-0 top-0 -z-30 h-[var(--hero-visual-height)] overflow-hidden;
   }
 
   .hero-container {
-    @apply mx-auto w-full max-w-[1600px] px-6 sm:px-8 lg:px-14 xl:px-20;
+    @apply relative z-10 mx-auto min-h-[var(--hero-visual-height)] w-full max-w-[1600px] px-6 pb-16 pt-[clamp(7.5rem,20vh,14rem)] sm:px-8 sm:pb-20 lg:px-14 lg:pb-24 xl:px-20;
   }
 
-  .hero-container-full {
-    @apply relative z-10 flex min-h-[calc(100vh-var(--header-height))] items-center py-16 sm:py-20 lg:py-24;
+  .hero-copy {
+    @apply relative max-w-5xl;
+  }
+
+  .hero-copy-centered {
+    @apply mx-auto text-center;
   }
 
   .hero-title {
-    @apply font-libertinus text-[clamp(2.75rem,5.5vw,5.25rem)] font-bold leading-[1.06] tracking-tight text-brand-gold;
+    @apply max-w-5xl font-libertinus text-[clamp(2.75rem,5.5vw,5.25rem)] font-bold leading-[1.06] tracking-tight text-brand-gold;
+  }
+
+  .hero-divider {
+    @apply mt-9 h-0.5 bg-brand-gold;
+  }
+
+  .hero-divider-short {
+    @apply w-24;
+  }
+
+  .hero-divider-medium {
+    @apply w-48;
+  }
+
+  .hero-divider-wide {
+    @apply w-64;
+  }
+
+  .hero-divider-centered {
+    @apply mx-auto;
   }
 
   .hero-lead {
-    @apply mt-7 max-w-3xl text-[clamp(1.05rem,1.45vw,1.35rem)] font-bold leading-snug;
+    @apply max-w-3xl text-[clamp(1.05rem,1.45vw,1.35rem)] font-bold leading-[1.45] tracking-[0.015em];
+  }
+
+  .hero-lead-after-divider {
+    @apply mt-8;
+  }
+
+  .hero-lead-no-divider {
+    @apply mt-7;
   }
 
   .hero-lead-on-image {
@@ -36,22 +70,47 @@
   }
 
   .hero-blur-panel {
-    @apply max-w-4xl rounded-2xl bg-black/10 p-4 text-left backdrop-blur-[2px] sm:p-5 lg:p-6;
+    @apply relative;
+  }
+
+  .hero-blur-panel::before {
+    content: "";
+    @apply pointer-events-none absolute -inset-4 -z-10 rounded-2xl bg-black/10 backdrop-blur-[2px] sm:-inset-5 lg:-inset-6;
   }
 
   .hero-image {
-    @apply absolute inset-0 -z-30 h-full w-full object-cover;
+    @apply absolute inset-0 h-full w-full object-cover;
   }
 
   .hero-image-overlay {
-    @apply absolute inset-0 -z-20 bg-black/45;
+    @apply absolute inset-0 z-10 bg-black/45;
   }
 
   .hero-fade-top {
-    @apply pointer-events-none absolute inset-x-0 top-0 -z-10 h-16 bg-gradient-to-b from-[var(--color-bg)] via-[color-mix(in_srgb,var(--color-bg)_35%,transparent)] to-transparent;
+    @apply pointer-events-none absolute inset-x-0 top-0 z-20 h-16 bg-gradient-to-b from-[var(--color-bg)] via-[color-mix(in_srgb,var(--color-bg)_35%,transparent)] to-transparent;
   }
 
   .hero-fade-bottom {
-    @apply pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-20 bg-gradient-to-t from-[var(--color-bg)] via-[color-mix(in_srgb,var(--color-bg)_30%,transparent)] to-transparent;
+    @apply pointer-events-none absolute inset-x-0 bottom-0 z-20 h-20 bg-gradient-to-t from-[var(--color-bg)] via-[color-mix(in_srgb,var(--color-bg)_30%,transparent)] to-transparent;
+  }
+
+  .hero-benefits {
+    @apply mt-7 grid gap-2;
+  }
+
+  .hero-benefits-centered {
+    @apply mx-auto max-w-3xl;
+  }
+
+  .hero-benefit-item {
+    @apply grid grid-cols-[0.75rem_1fr] gap-6 font-inter text-[clamp(1rem,1.3vw,1.15rem)] font-medium leading-[1.45] text-white/70;
+  }
+
+  .hero-benefit-item-centered {
+    @apply text-left;
+  }
+
+  .hero-benefit-marker {
+    @apply mt-2.5 h-2 w-2 bg-brand-gold;
   }
 }
