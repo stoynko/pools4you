@@ -10,8 +10,7 @@ export const footer = {
   subSolutionsPools: "Pools",
   subSolutionsSaunas: "Saunas",
   subSolutionsSpa: "Spa",
-  subSolutionsAquaparks: "Aqu aparks",
-  subSolutionsAttractions: "Water Attractions",
+  subSolutionsAquaparks: "Aquaparks",
   subSolutionsTechnical: "Technical Solutions",
 
   categoryProjects: "Projects",

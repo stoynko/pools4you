@@ -10,8 +10,7 @@ export const footer = {
   subSolutionsPools: "Басейни",
   subSolutionsSaunas: "Сауни",
   subSolutionsSpa: "Спа",
-  subSolutionsAquaparks: "Аквапарки",
-  subSolutionsAttractions: "Атракции",
+  subSolutionsAquaparks: "Аквапаркове",
   subSolutionsTechnical: "Технически решения",
 
   categoryProjects: "Проекти",
