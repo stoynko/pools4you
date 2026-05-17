@@ -2,7 +2,6 @@
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
 
-import heroImage from "../../../assets/images/pages/home/hero.png";
 import PageHero from "../../shared/PageHero.astro";
 
 type Props = {
@@ -17,8 +16,6 @@ const translation = getPageTranslations(language, "services");
   title={translation.hero.title}
   body={translation.hero.description}
   benefits={translation.hero.benefits}
-  image={heroImage}
-  imageAlt="Luxury swimming pool"
   imagePositionClass="object-[50%_48%]"
   frostedPanel={false}
   divider="none"

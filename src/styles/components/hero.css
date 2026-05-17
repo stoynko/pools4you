@@ -103,7 +103,7 @@
   }
 
   .hero-benefit-item {
-    @apply grid grid-cols-[0.75rem_1fr] gap-6 font-inter text-[clamp(1rem,1.3vw,1.15rem)] font-medium leading-[1.45] text-white/70;
+    @apply grid grid-cols-[0.75rem_1fr] gap-6 font-inter text-[clamp(1rem,1.3vw,1.15rem)] font-medium leading-[1.45] text-text;
   }
 
   .hero-benefit-item-centered {
