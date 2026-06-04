@@ -1,0 +1,18 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+
+type FacilitiesPageEntry = CollectionEntry<"facilitiesPages">;
+
+type Props = {
+  page: FacilitiesPageEntry;
+};
+
+const { page } = Astro.props as Props;
+const { Content } = await render(page);
+---
+
+<section class="mx-auto max-w-6xl px-6 py-12">
+  <article class="max-w-4xl space-y-6 text-gray-300 leading-8">
+    <Content />
+  </article>
+</section>

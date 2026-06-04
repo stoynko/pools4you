@@ -1,0 +1,47 @@
+@layer components {
+  .facility-content {
+    @apply max-w-4xl font-inter text-base leading-8 text-text-muted;
+  }
+
+  .facility-content > * + * {
+    @apply mt-6;
+  }
+
+  .facility-content h2 {
+    @apply mt-16 font-libertinus text-4xl font-semibold leading-tight text-brand-gold sm:text-5xl;
+  }
+
+  .facility-content h2:first-child {
+    @apply mt-0;
+  }
+
+  .facility-content h2::after {
+    content: "";
+    @apply mt-5 block h-px w-full bg-brand-gold;
+  }
+
+  .facility-content h3 {
+    @apply mt-10 font-libertinus text-2xl font-semibold leading-tight text-text;
+  }
+
+  .facility-content p {
+    @apply text-text-muted;
+  }
+
+  .facility-content strong {
+    @apply font-semibold text-text;
+  }
+
+  .facility-content ul,
+  .facility-content ol {
+    @apply ml-6 space-y-3;
+  }
+
+  .facility-content ul {
+    @apply list-disc;
+  }
+
+  .facility-content ol {
+    @apply list-decimal;
+  }
+}

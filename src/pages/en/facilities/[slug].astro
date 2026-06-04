@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import FacilityPage from "../../../templates/facilities/FacilityPage.astro";
+
+export async function getStaticPaths() {
+  const facilities = await getCollection("facilities", ({ data }) => {
+    return data.language === "en";
+  });
+
+  return facilities.map((facility) => ({
+    params: {
+      slug: facility.data.slug,
+    },
+    props: {
+      facility,
+    },
+  }));
+}
+
+const { facility } = Astro.props;
+---
+
+<FacilityPage facility={facility} language="en" />

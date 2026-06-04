@@ -9,13 +9,16 @@
 @import "./components/section-divider.css";
 @import "./components/sections.css";
 @import "./components/hero.css";
+@import "./components/facility-feature-card.css";
 
 @import "./sections/featured-projects.css";
 @import "./sections/home-cta.css";
+@import "./sections/facility-content.css";
 
 @import "./effects/header-effects.css";
 @import "./effects/page-effects.css";
 @import "./effects/footer-effects.css";
+
 
 
 @tailwind base;

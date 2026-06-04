@@ -16,6 +16,18 @@ const projectsPath = getPagePath("projects", language);
 const facilitiesPath = getPagePath("facilities", language);
 const aboutPath = getPagePath("about", language);
 
+const poolsPath =
+  language === "bg" ? "/suorazhenia/baseyni" : "/en/facilities/pools";
+
+const spaPath =
+  language === "bg" ? "/suorazhenia/spa" : "/en/facilities/spa";
+
+const saunasPath =
+  language === "bg" ? "/suorazhenia/sauni" : "/en/facilities/saunas";
+
+const aquaparksPath =
+  language === "bg" ? "/suorazhenia/akvaparkove" : "/en/facilities/aquaparks";
+
 const fallbackPath = homePath;
 const facebookUrl = import.meta.env.PUBLIC_FACEBOOK_URL || fallbackPath;
 const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || fallbackPath;
@@ -112,7 +124,7 @@ const socialLinks = [
         <ul class="space-y-2.5">
           <li>
             <a
-              href={facilitiesPath}
+              href={poolsPath}
               data-label={translation.subSolutionsPools}
               class="footer-link-effect"
             >
@@ -121,7 +133,7 @@ const socialLinks = [
           </li>
           <li>
             <a
-              href={facilitiesPath}
+              href={spaPath}
               data-label={translation.subSolutionsSpa}
               class="footer-link-effect"
             >
@@ -130,7 +142,7 @@ const socialLinks = [
           </li>
           <li>
             <a
-              href={facilitiesPath}
+              href={saunasPath}
               data-label={translation.subSolutionsSaunas}
               class="footer-link-effect"
             >
@@ -139,15 +151,12 @@ const socialLinks = [
           </li>
           <li>
             <a
-              href={facilitiesPath}
+              href={aquaparksPath}
               data-label={translation.subSolutionsAquaparks}
               class="footer-link-effect"
             >
               {translation.subSolutionsAquaparks}
             </a>
-          </li>
-          <li>
-            
           </li>
           <li>
             <a

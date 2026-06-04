@@ -7,7 +7,7 @@ const projects = defineCollection({
   loader: glob({
     base: "./src/content/projects",
     pattern: "**/*.{md,mdx}",
-    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, "")
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, ""),
   }),
 
   schema: ({ image }) =>
@@ -20,12 +20,13 @@ const projects = defineCollection({
       language: z.enum(LANGUAGES),
       slug: z.string(),
       translationKey: z.string(),
+
       heroImage: image(),
       thumbnailImage: image(),
       gallery: z.array(image()).default([]),
 
       relatedProjects: z.array(z.string()).default([]),
-      
+
       seoTitle: z.string().optional(),
       seoDescription: z.string().optional(),
 
@@ -35,6 +36,63 @@ const projects = defineCollection({
     }),
 });
 
+const facilitiesPages = defineCollection({
+  loader: glob({
+    base: "./src/content/facilitiesPages",
+    pattern: "**/*.{md,mdx}",
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, ""),
+  }),
+
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    language: z.enum(LANGUAGES),
+    benefits: z.array(z.string()).default([]),
+    seoTitle: z.string().optional(),
+    seoDescription: z.string().optional(),
+  }),
+});
+
+const facilities = defineCollection({
+  loader: glob({
+    base: "./src/content/facilities",
+    pattern: "**/*.{md,mdx}",
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, ""),
+  }),
+
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    language: z.enum(LANGUAGES),
+    slug: z.string(),
+    translationKey: z.string(),
+
+    order: z.number().default(0),
+    cardTitle: z.string().optional(),
+    cardDescription: z.string().optional(),
+
+    heroImageKey: z.string().optional(),
+    heroImageAlt: z.string().optional(),
+    heroImagePosition: z.string().default("object-center"),
+
+    featureCards: z
+      .array(
+        z.object({
+          title: z.string(),
+          description: z.string(),
+          imageKey: z.string(),
+          imageAlt: z.string(),
+        }),
+      )
+      .default([]),
+
+    seoTitle: z.string().optional(),
+    seoDescription: z.string().optional(),
+  }),
+});
+
 export const collections = {
-  projects
+  projects,
+  facilitiesPages,
+  facilities,
 };

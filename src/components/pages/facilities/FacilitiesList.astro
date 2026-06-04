@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { Language } from "../../../config/i18n/i18n";
+
+type FacilityEntry = CollectionEntry<"facilities">;
+
+type Props = {
+  language: Language;
+  facilities: FacilityEntry[];
+};
+
+const { language, facilities } = Astro.props as Props;
+
+function getFacilityHref(facility: FacilityEntry) {
+  if (language === "bg") {
+    return `/suorazhenia/${facility.data.slug}`;
+  }
+
+  return `/en/facilities/${facility.data.slug}`;
+}
+
+const sectionTitle =
+  language === "bg" ? "Видове съоръжения" : "Facility Types";
+
+const viewLabel =
+  language === "bg" ? "Разгледай" : "View";
+---
+
+<section class="mx-auto max-w-6xl px-6 py-16">
+  <header class="mb-10 max-w-3xl">
+    <h2 class="text-4xl font-libertinus font-semibold">
+      {sectionTitle}
+    </h2>
+  </header>
+
+  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    {
+      facilities.map((facility) => (
+        <article class="rounded-2xl border border-gray-800 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-blue-400/50 hover:bg-white/10">
+          <a href={getFacilityHref(facility)} class="block space-y-4">
+            <h3 class="text-2xl font-libertinus font-semibold text-white">
+              {facility.data.cardTitle ?? facility.data.title}
+            </h3>
+
+            <p class="text-gray-300 leading-relaxed">
+              {facility.data.cardDescription ?? facility.data.description}
+            </p>
+
+            <span class="inline-flex text-sm font-semibold text-blue-300">
+              {viewLabel} →
+            </span>
+          </a>
+        </article>
+      ))
+    }
+  </div>
+</section>

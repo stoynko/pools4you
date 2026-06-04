@@ -1,22 +1,55 @@
 ---
+import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../layouts/MainLayout.astro";
 import type { PageKey } from "../config/pages/pageDefinitions";
 import type { Language } from "../config/i18n/i18n";
+
+import FacilitiesHero from "../components/pages/facilities/FacilitiesHero.astro";
+import FacilitiesIntro from "../components/pages/facilities/FacilitiesIntro.astro";
+import FacilitiesList from "../components/pages/facilities/FacilitiesList.astro";
 
 type Props = {
   language: Language;
   pageKey: PageKey;
 };
 
+type FacilitiesPageEntry = CollectionEntry<"facilitiesPages">;
+
 const { language, pageKey } = Astro.props as Props;
+
+const pages = await getCollection("facilitiesPages", ({ data }) => {
+  return data.language === language;
+});
+
+const page = pages[0] as FacilitiesPageEntry | undefined;
+
+if (!page) {
+  throw new Error(`Missing facilities overview content for language: ${language}`);
+}
+
+const facilities = await getCollection("facilities", ({ data }) => {
+  return data.language === language;
+});
+
+const sortedFacilities = facilities.sort((a, b) => {
+  return a.data.order - b.data.order;
+});
+
+const pageSeo = {
+  title: page.data.seoTitle ?? page.data.title,
+  description: page.data.seoDescription ?? page.data.description,
+  canonical: language === "bg" ? "/suorazhenia" : "/en/facilities",
+  alternates: {
+    bg: "/suorazhenia",
+    en: "/en/facilities",
+  },
+};
 ---
 
-<Layout language={language} pageKey={pageKey}>
-
-  <section class="max-w-6xl mx-auto px-6 py-20 text-center space-y-6">
-    <h1 class="text-6xl font-libertinus font-bold leading-tight">
-      Facilities .. coming soon
-    </h1>
-  </section>
-
+<Layout language={language} pageKey={pageKey} seo={pageSeo}>
+  <main>
+    <FacilitiesHero page={page} />
+    <FacilitiesIntro page={page} />
+    <FacilitiesList language={language} facilities={sortedFacilities} />
+  </main>
 </Layout>

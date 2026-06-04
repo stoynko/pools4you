@@ -1,0 +1,89 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import MainLayout from "../../layouts/MainLayout.astro";
+import PageHero from "../../components/shared/PageHero.astro";
+import FacilityFeatureCards from "../../components/pages/facilities/FacilityFeatureCard.astro";
+import type { Language } from "../../config/i18n/i18n";
+import { getFacilityImage } from "../../lib/facilities/facilityImages";
+
+type FacilityEntry = CollectionEntry<"facilities">;
+
+const { facility, language } = Astro.props as {
+  facility: FacilityEntry;
+  language: Language;
+};
+
+const translatedFacilities = await getCollection("facilities", ({ data }) => {
+  return data.translationKey === facility.data.translationKey;
+});
+
+const bgFacility = translatedFacilities.find((entry) => {
+  return entry.data.language === "bg";
+});
+
+const enFacility = translatedFacilities.find((entry) => {
+  return entry.data.language === "en";
+});
+
+function getFacilityHref(entry: FacilityEntry) {
+  if (entry.data.language === "bg") {
+    return `/suorazhenia/${entry.data.slug}`;
+  }
+
+  return `/en/facilities/${entry.data.slug}`;
+}
+
+const alternates = {
+  bg: bgFacility ? getFacilityHref(bgFacility) : undefined,
+  en: enFacility ? getFacilityHref(enFacility) : undefined,
+};
+
+const canonical = getFacilityHref(facility);
+
+const pageSeo = {
+  title: facility.data.seoTitle ?? `${facility.data.title} | Pools4You`,
+  description: facility.data.seoDescription ?? facility.data.description,
+  canonical,
+  alternates,
+};
+
+const heroImage = getFacilityImage(
+  facility.data.translationKey,
+  facility.data.heroImageKey,
+);
+
+const { Content } = await render(facility);
+---
+
+<MainLayout
+  language={language}
+  pageKey="facilities"
+  seo={pageSeo}
+  alternates={alternates}
+>
+  <main>
+    <PageHero
+      title={facility.data.title}
+      body={facility.data.description}
+      image={heroImage}
+      imageAlt={facility.data.heroImageAlt ?? facility.data.title}
+      imagePositionClass={facility.data.heroImagePosition}
+      align="left"
+      divider="short"
+      frostedPanel={Boolean(heroImage)}
+    />
+
+    <section class="section-shell section-spacing-md">
+      <div class="section-container">
+        <FacilityFeatureCards
+          facilityKey={facility.data.translationKey}
+          cards={facility.data.featureCards}
+        />
+
+        <article class="facility-content">
+          <Content />
+        </article>
+      </div>
+    </section>
+  </main>
+</MainLayout>

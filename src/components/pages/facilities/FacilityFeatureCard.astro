@@ -1,0 +1,51 @@
+---
+import { Image } from "astro:assets";
+import { getFacilityImage } from "../../../lib/facilities/facilityImages";
+
+type FeatureCard = {
+  title: string;
+  description: string;
+  imageKey: string;
+  imageAlt: string;
+};
+
+type Props = {
+  facilityKey: string;
+  cards: FeatureCard[];
+};
+
+const { facilityKey, cards } = Astro.props as Props;
+---
+
+{
+  cards.length > 0 && (
+    <section class="facility-feature-cards">
+      <div class="facility-feature-cards__grid">
+        {cards.map((card) => {
+          const image = getFacilityImage(facilityKey, card.imageKey);
+
+          return (
+            <article class="facility-feature-card">
+              {image && (
+                <div class="facility-feature-card__image-wrap">
+                  <Image
+                    src={image}
+                    alt={card.imageAlt}
+                    class="facility-feature-card__image"
+                    widths={[480, 720, 960]}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  />
+                </div>
+              )}
+
+              <div class="facility-feature-card__body">
+                <h3>{card.title}</h3>
+                <p>{card.description}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  )
+}

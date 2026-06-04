@@ -1,0 +1,37 @@
+@layer components {
+  .facility-feature-cards {
+    @apply mt-12;
+  }
+
+  .facility-feature-cards__grid {
+    @apply grid gap-6 md:grid-cols-2 xl:grid-cols-3;
+  }
+
+.facility-feature-card {
+  @apply overflow-hidden rounded-2xl border border-brand-gold  shadow-lg;
+}
+
+.facility-feature-card__image-wrap {
+  @apply aspect-[4/3] overflow-hidden;
+}
+
+  .facility-feature-card__image {
+    @apply h-full w-full object-cover transition duration-500;
+  }
+
+  .facility-feature-card:hover .facility-feature-card__image {
+    @apply scale-105;
+  }
+
+  .facility-feature-card__body {
+    @apply p-6;
+  }
+
+  .facility-feature-card__body h3 {
+    @apply font-libertinus text-2xl font-semibold leading-tight text-brand-gold;
+  }
+
+  .facility-feature-card__body p {
+    @apply mt-4 text-base leading-7 text-text;
+  }
+}
