@@ -19,39 +19,78 @@ function getFacilityHref(facility: FacilityEntry) {
   return `/en/facilities/${facility.data.slug}`;
 }
 
-const sectionTitle =
-  language === "bg" ? "Видове съоръжения" : "Facility Types";
+function getFacilityTitle(facility: FacilityEntry) {
+  return facility.data.cardTitle ?? facility.data.title;
+}
 
-const viewLabel =
-  language === "bg" ? "Разгледай" : "View";
+function getFacilityDescription(facility: FacilityEntry) {
+  return facility.data.description;
+}
+
+function getFacilityVisualClass(facility: FacilityEntry) {
+  const key = facility.data.translationKey;
+
+  if (key === "spa") return "facilities-vertical-card__visual--spa";
+  if (key === "saunas") return "facilities-vertical-card__visual--sauna";
+  if (key === "aquaparks") return "facilities-vertical-card__visual--aqua";
+
+  return "facilities-vertical-card__visual--pool";
+}
+
+const sectionTitle = language === "bg" ? "Видове съоръжения" : "Facility Types";
+
+const sectionDescription =
+  language === "bg"
+    ? "Разгледайте основните типове водни и уелнес съоръжения, които Pools4You проектира и изгражда."
+    : "Explore the main types of aquatic and wellness facilities designed and built by Pools4You.";
+
+const viewLabel = language === "bg" ? "Разгледай" : "View";
 ---
 
-<section class="mx-auto max-w-6xl px-6 py-16">
-  <header class="mb-10 max-w-3xl">
-    <h2 class="text-4xl font-libertinus font-semibold">
-      {sectionTitle}
-    </h2>
-  </header>
-
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-    {
-      facilities.map((facility) => (
-        <article class="rounded-2xl border border-gray-800 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-blue-400/50 hover:bg-white/10">
-          <a href={getFacilityHref(facility)} class="block space-y-4">
-            <h3 class="text-2xl font-libertinus font-semibold text-white">
-              {facility.data.cardTitle ?? facility.data.title}
-            </h3>
-
-            <p class="text-gray-300 leading-relaxed">
-              {facility.data.description}
+{
+  facilities.length > 0 && (
+    <section
+      class="facilities-vertical section"
+      aria-labelledby="facilities-vertical-title"
+    >
+      <div class="site-container-wide">
+        <header class="facilities-card-header">
+          <div>
+            <p class="eyebrow">
+              {language === "bg" ? "Съоръжения" : "Facilities"}
             </p>
 
-            <span class="inline-flex text-sm font-semibold text-blue-300">
-              {viewLabel} →
-            </span>
-          </a>
-        </article>
-      ))
-    }
-  </div>
-</section>
+            <h2 id="facilities-vertical-title">{sectionTitle}</h2>
+          </div>
+
+          <p>{sectionDescription}</p>
+        </header>
+
+        <div class="facilities-vertical__list">
+          {facilities.map((facility) => (
+            <article class="facilities-vertical-card">
+              <a
+                href={getFacilityHref(facility)}
+                class="facilities-vertical-card__link"
+              >
+                <div
+                  class={`facilities-vertical-card__visual ${getFacilityVisualClass(facility)}`}
+                ></div>
+
+                <div class="facilities-vertical-card__content">
+                  <h3>{getFacilityTitle(facility)}</h3>
+
+                  <p>{getFacilityDescription(facility)}</p>
+
+                  <span class="facilities-vertical-card__cta">
+                    {viewLabel} →
+                  </span>
+                </div>
+              </a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
