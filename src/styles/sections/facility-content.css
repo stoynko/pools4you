@@ -1,47 +1,183 @@
-@layer components {
-  .facility-content {
-    @apply max-w-4xl font-inter text-base leading-8 text-text-muted;
+.facility-page {
+  background:
+    radial-gradient(circle at 15% 12%, rgb(120 198 216 / 8%), transparent 32rem),
+    radial-gradient(circle at 86% 22%, rgb(206 180 118 / 10%), transparent 34rem),
+    var(--color-bg);
+}
+
+.facility-page .hero-section {
+  min-height: clamp(620px, 74vh, 860px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.facility-page .hero-container {
+  max-width: 1440px;
+  padding-inline: clamp(1.25rem, 5vw, 5.5rem);
+}
+
+.facility-page .hero-title {
+  max-width: 760px;
+  font-size: clamp(3.7rem, 8.5vw, 8.4rem);
+  line-height: 0.92;
+  letter-spacing: -0.075em;
+}
+
+.facility-page .hero-lead {
+  max-width: 760px;
+  font-size: clamp(1.08rem, 1.55vw, 1.34rem);
+  line-height: 1.85;
+}
+
+.facility-section {
+  padding: clamp(4.5rem, 8vw, 8.5rem) clamp(1.25rem, 5vw, 5.5rem);
+}
+
+.facility-section--cards {
+  position: relative;
+}
+
+.facility-section--content {
+  border-top: 1px solid var(--color-border);
+  background:
+    linear-gradient(
+      90deg,
+      rgb(255 255 255 / 3.5%),
+      transparent 45%,
+      rgb(206 180 118 / 4%)
+    ),
+    var(--color-bg-secondary);
+}
+
+.facility-container {
+  width: min(100%, 1440px);
+  margin-inline: auto;
+}
+
+.facility-content-container {
+  display: grid;
+  grid-template-columns: minmax(0, 900px);
+  justify-content: center;
+}
+
+.facility-content {
+  color: var(--color-text-secondary);
+  font-family: var(--font-inter);
+  font-size: 1.06rem;
+  line-height: 1.9;
+}
+
+.facility-content > * + * {
+  margin-top: 1.15rem;
+}
+
+.facility-content h2 {
+  margin: 0 0 1.1rem;
+  color: var(--color-gold);
+  font-family: var(--font-libertinus);
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.facility-content h2:not(:first-child) {
+  margin-top: 3.75rem;
+}
+
+.facility-content h2::after {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  margin-top: 1.15rem;
+  background: var(--color-gold);
+}
+
+.facility-content h3 {
+  margin-top: 2.5rem;
+  color: var(--color-text);
+  font-family: var(--font-libertinus);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.facility-content p {
+  margin: 0 0 1.15rem;
+  color: var(--color-text-secondary);
+  font-size: 1.06rem;
+  line-height: 1.9;
+}
+
+.facility-content strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.facility-content ul,
+.facility-content ol {
+  margin: 1.25rem 0 0 1.35rem;
+  padding: 0;
+}
+
+.facility-content ul {
+  list-style: disc;
+}
+
+.facility-content ol {
+  list-style: decimal;
+}
+
+.facility-content li + li {
+  margin-top: 0.75rem;
+}
+
+.facility-content-sections {
+  display: grid;
+  gap: clamp(3.5rem, 6vw, 5.5rem);
+}
+
+.facility-content-block {
+  display: grid;
+}
+
+.facility-content-block :global(.mb-14),
+.facility-content-block :global(.sm\:mb-16) {
+  margin-bottom: 1.25rem;
+}
+
+.facility-content-text {
+  width: min(100%, 900px);
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-inter);
+  font-size: 1.06rem;
+  line-height: 1.9;
+}
+
+[data-theme="dark"] .facility-section--content {
+  background:
+    linear-gradient(
+      90deg,
+      rgb(255 255 255 / 3.5%),
+      transparent 45%,
+      rgb(206 180 118 / 4%)
+    ),
+    rgb(255 255 255 / 1.8%);
+}
+
+@media (max-width: 1120px) {
+  .facility-section-head {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .facility-page .hero-title {
+    font-size: clamp(3rem, 16vw, 5rem);
   }
 
-  .facility-content > * + * {
-    @apply mt-6;
-  }
-
-  .facility-content h2 {
-    @apply mt-16 font-libertinus text-4xl font-semibold leading-tight text-brand-gold sm:text-5xl;
-  }
-
-  .facility-content h2:first-child {
-    @apply mt-0;
-  }
-
-  .facility-content h2::after {
-    content: "";
-    @apply mt-5 block h-px w-full bg-brand-gold;
-  }
-
-  .facility-content h3 {
-    @apply mt-10 font-libertinus text-2xl font-semibold leading-tight text-text;
-  }
-
-  .facility-content p {
-    @apply text-text-muted;
-  }
-
-  .facility-content strong {
-    @apply font-semibold text-text;
-  }
-
-  .facility-content ul,
-  .facility-content ol {
-    @apply ml-6 space-y-3;
-  }
-
-  .facility-content ul {
-    @apply list-disc;
-  }
-
-  .facility-content ol {
-    @apply list-decimal;
+  .facility-section {
+    padding-inline: 1.25rem;
   }
 }

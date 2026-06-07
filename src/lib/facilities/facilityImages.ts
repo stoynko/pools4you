@@ -1,20 +1,20 @@
 import poolsHero from "../../content/facilities/pools/images/hero.png";
-import privatePool from "../../content/facilities/pools/images/private-pool.png";
-import hotelPool from "../../content/facilities/pools/images/hotel-pool.png";
-import infinityPool from "../../content/facilities/pools/images/infinity-pool.png";
-import sportsPool from "../../content/facilities/pools/images/sports-pool.png";
-import childrenPool from "../../content/facilities/pools/images/children-pool.png";
-import jacuzzi from "../../content/facilities/pools/images/jacuzzi.png";
+import residentialPool from "../../content/facilities/pools/images/residential-pool.jpg";
+import hotelPool from "../../content/facilities/pools/images/hotel-pool.jpg";
+import infinityPool from "../../content/facilities/pools/images/infinity-pool.jpg";
+import sportsPool from "../../content/facilities/pools/images/sports-pool.jpg";
+import childrenPool from "../../content/facilities/pools/images/children-pool.jpg";
+import hydroMassage from "../../content/facilities/pools/images/hydro-massage.jpg";
 
 export const facilityImages = {
   pools: {
     hero: poolsHero,
-    "private-pool": privatePool,
+    "residential-pool": residentialPool,
     "hotel-pool": hotelPool,
     "infinity-pool": infinityPool,
     "sports-pool": sportsPool,
     "children-pool": childrenPool,
-    jacuzzi,
+    "hydro-massage": hydroMassage,
   },
 } as const;
 

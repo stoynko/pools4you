@@ -1,37 +1,101 @@
-@layer components {
-  .facility-feature-cards {
-    @apply mt-12;
-  }
+.facility-feature-cards {
+  margin-top: 3rem;
+}
 
-  .facility-feature-cards__grid {
-    @apply grid gap-6 md:grid-cols-2 xl:grid-cols-3;
-  }
+.facility-feature-cards__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
 
 .facility-feature-card {
-  @apply overflow-hidden rounded-2xl border border-brand-gold  shadow-lg;
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: var(--color-surface);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 10%);
+
+  transform: scale(1);
+  transform-origin: center center;
+  transition:
+    transform 420ms ease,
+    box-shadow 420ms ease;
+}
+
+.facility-feature-card:hover,
+.facility-feature-card:focus-within {
+  transform: scale(1.018);
+  box-shadow: 0 24px 64px rgb(0 0 0 / 16%);
 }
 
 .facility-feature-card__image-wrap {
-  @apply aspect-[4/3] overflow-hidden;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-bg-secondary);
 }
 
-  .facility-feature-card__image {
-    @apply h-full w-full object-cover transition duration-500;
-  }
+.facility-feature-card__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  transition: opacity 420ms ease;
+}
 
-  .facility-feature-card:hover .facility-feature-card__image {
-    @apply scale-105;
-  }
+.facility-feature-card:hover .facility-feature-card__image,
+.facility-feature-card:focus-within .facility-feature-card__image {
+  opacity: 1;
+}
 
-  .facility-feature-card__body {
-    @apply p-6;
-  }
+.facility-feature-card__body {
+  padding: 1.5rem;
+  background: var(--color-surface);
+  border-top: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+}
 
-  .facility-feature-card__body h3 {
-    @apply font-libertinus text-2xl font-semibold leading-tight text-brand-gold;
-  }
+.facility-feature-card__body h3 {
+  margin: 0;
+  color: var(--color-gold);
+  font-family: var(--font-libertinus, serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
 
-  .facility-feature-card__body p {
-    @apply mt-4 text-base leading-7 text-text;
+.facility-feature-card__body p {
+  margin: 1rem 0 0;
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+[data-theme="dark"] .facility-feature-card {
+  background: var(--color-surface);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 24%);
+}
+
+[data-theme="dark"] .facility-feature-card:hover,
+[data-theme="dark"] .facility-feature-card:focus-within {
+  box-shadow: 0 24px 64px rgb(0 0 0 / 32%);
+}
+
+[data-theme="dark"] .facility-feature-card__image-wrap {
+  background: var(--color-bg-secondary);
+}
+
+[data-theme="dark"] .facility-feature-card__body {
+  background: var(--color-surface);
+}
+
+@media (min-width: 768px) {
+  .facility-feature-cards__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .facility-feature-cards__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

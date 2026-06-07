@@ -69,7 +69,6 @@ const facilities = defineCollection({
 
     order: z.number().default(0),
     cardTitle: z.string().optional(),
-    cardDescription: z.string().optional(),
 
     heroImageKey: z.string().optional(),
     heroImageAlt: z.string().optional(),
@@ -85,6 +84,16 @@ const facilities = defineCollection({
         }),
       )
       .default([]),
+
+    contentSections: z
+    .array(
+      z.object({
+        type: z.enum(["cards", "text"]),
+        title: z.string(),
+        text: z.string().optional(),
+      }),
+    )
+    .default([]),
 
     seoTitle: z.string().optional(),
     seoDescription: z.string().optional(),

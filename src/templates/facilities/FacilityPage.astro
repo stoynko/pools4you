@@ -2,6 +2,7 @@
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import PageHero from "../../components/shared/PageHero.astro";
+import SectionHeader from "../../components/shared/SectionHeader.astro";
 import FacilityFeatureCards from "../../components/pages/facilities/FacilityFeatureCard.astro";
 import type { Language } from "../../config/i18n/i18n";
 import { getFacilityImage } from "../../lib/facilities/facilityImages";
@@ -53,6 +54,8 @@ const heroImage = getFacilityImage(
 );
 
 const { Content } = await render(facility);
+
+const hasContentSections = facility.data.contentSections.length > 0;
 ---
 
 <MainLayout
@@ -61,7 +64,7 @@ const { Content } = await render(facility);
   seo={pageSeo}
   alternates={alternates}
 >
-  <main>
+  <main class="facility-page">
     <PageHero
       title={facility.data.title}
       body={facility.data.description}
@@ -73,17 +76,70 @@ const { Content } = await render(facility);
       frostedPanel={Boolean(heroImage)}
     />
 
-    <section class="section-shell section-spacing-md">
-      <div class="section-container">
-        <FacilityFeatureCards
-          facilityKey={facility.data.translationKey}
-          cards={facility.data.featureCards}
-        />
+    {
+      hasContentSections && (
+        <section class="facility-section facility-section--content-sections">
+          <div class="facility-container facility-content-sections">
+            {facility.data.contentSections.map((section) => {
+              if (section.type === "cards") {
+                return (
+                  facility.data.featureCards.length > 0 && (
+                    <section class="facility-content-block facility-content-block--cards">
+                      <SectionHeader title={section.title} />
 
-        <article class="facility-content">
-          <Content />
-        </article>
-      </div>
-    </section>
+                      <FacilityFeatureCards
+                        facilityKey={facility.data.translationKey}
+                        cards={facility.data.featureCards}
+                      />
+                    </section>
+                  )
+                );
+              }
+
+              return (
+                <section class="facility-content-block facility-content-block--text">
+                  <SectionHeader title={section.title} />
+
+                  {section.text && (
+                    <p class="facility-content-text">
+                      {section.text}
+                    </p>
+                  )}
+                </section>
+              );
+            })}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      !hasContentSections && (
+        <>
+          {
+            facility.data.featureCards.length > 0 && (
+              <section class="facility-section facility-section--cards">
+                <div class="facility-container">
+                  <SectionHeader title={facility.data.title} />
+
+                  <FacilityFeatureCards
+                    facilityKey={facility.data.translationKey}
+                    cards={facility.data.featureCards}
+                  />
+                </div>
+              </section>
+            )
+          }
+
+          <section class="facility-section facility-section--content">
+            <div class="facility-container facility-content-container">
+              <article class="facility-content">
+                <Content />
+              </article>
+            </div>
+          </section>
+        </>
+      )
+    }
   </main>
 </MainLayout>
