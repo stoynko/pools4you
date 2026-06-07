@@ -1,5 +1,15 @@
 .site-container {
-  width: min(100% - 3rem, 1280px);
+  width: min(100% - clamp(2rem, 6vw, 7rem), 1440px);
+  margin-inline: auto;
+}
+
+.site-container-narrow {
+  width: min(100% - clamp(2rem, 6vw, 7rem), 1120px);
+  margin-inline: auto;
+}
+
+.site-container-wide {
+  width: min(100% - clamp(2rem, 6vw, 7rem), 1600px);
   margin-inline: auto;
 }
 
