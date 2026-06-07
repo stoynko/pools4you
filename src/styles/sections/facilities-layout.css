@@ -45,33 +45,6 @@
     border-radius: 1.75rem;
     background: var(--color-surface);
     box-shadow: 0 16px 44px rgb(17 17 17 / 8%);
-    transition:
-        transform 240ms ease,
-        border-color 240ms ease,
-        box-shadow 240ms ease;
-}
-
-.facilities-vertical-card:nth-child(even) .facilities-vertical-card__link {
-    grid-template-columns: minmax(0, 0.58fr) minmax(280px, 0.42fr);
-}
-
-.facilities-vertical-card:nth-child(even) .facilities-vertical-card__visual {
-    order: 2;
-}
-
-.facilities-vertical-card:nth-child(even) .facilities-vertical-card__content {
-    order: 1;
-}
-
-.facilities-vertical-card__link {
-    display: grid;
-    grid-template-columns: minmax(280px, 0.42fr) minmax(0, 0.58fr);
-    min-height: clamp(260px, 24vw, 340px);
-    overflow: hidden;
-    border: 1px solid var(--color-border);
-    border-radius: 1.75rem;
-    background: var(--color-surface);
-    box-shadow: 0 16px 44px rgb(17 17 17 / 8%);
     transform: scale(1);
     transform-origin: center center;
     transition:
@@ -84,6 +57,18 @@
     transform: scale(1.01);
     border-color: color-mix(in srgb, var(--color-gold) 58%, transparent);
     box-shadow: 0 22px 56px rgb(17 17 17 / 13%);
+}
+
+.facilities-vertical-card:nth-child(even) .facilities-vertical-card__link {
+    grid-template-columns: minmax(0, 0.58fr) minmax(280px, 0.42fr);
+}
+
+.facilities-vertical-card:nth-child(even) .facilities-vertical-card__visual {
+    order: 2;
+}
+
+.facilities-vertical-card:nth-child(even) .facilities-vertical-card__content {
+    order: 1;
 }
 
 .facilities-vertical-card__visual {
@@ -100,6 +85,8 @@
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 1;
+    pointer-events: none;
     background:
         linear-gradient(180deg,
             rgb(9 12 16 / 4%) 0%,
@@ -113,7 +100,9 @@
     left: -18%;
     right: -18%;
     bottom: -28%;
+    z-index: 1;
     height: 64%;
+    pointer-events: none;
     border-radius: 50%;
     background:
         radial-gradient(circle at 50% 0%, rgb(255 255 255 / 24%), transparent 58%),
@@ -121,56 +110,41 @@
     transform: rotate(-4deg);
 }
 
-.facilities-vertical-card__visual--spa {
-    background:
-        radial-gradient(circle at 70% 20%, rgb(255 255 255 / 44%), transparent 10rem),
-        linear-gradient(135deg, #3b2e42, #8f6c7d 52%, var(--color-gold-subtle));
+.facilities-vertical-card__visual--has-image {
+    background: none;
 }
 
-.facilities-vertical-card__visual--sauna {
-    background:
-        radial-gradient(circle at 25% 22%, rgb(255 255 255 / 34%), transparent 9rem),
-        linear-gradient(135deg, #25120c, #8c5536 54%, var(--color-gold));
+.facilities-vertical-card__visual--has-image::before,
+.facilities-vertical-card__visual--has-image::after {
+    display: none;
 }
 
-.facilities-vertical-card__visual--aqua {
-    background:
-        radial-gradient(circle at 72% 24%, rgb(255 255 255 / 52%), transparent 10rem),
-        linear-gradient(135deg, #062c47, #0d86aa 56%, var(--color-gold));
+.facilities-vertical-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    object-fit: cover;
 }
 
-.facilities-vertical-card__number {
-    position: absolute;
-    top: 1.35rem;
-    left: 1.35rem;
-    z-index: 2;
-    display: inline-flex;
-    border: 1px solid rgb(255 255 255 / 32%);
-    border-radius: 999px;
-    padding: 0.45rem 0.75rem;
-    color: #fff;
-    background: rgb(255 255 255 / 15%);
-    backdrop-filter: blur(10px);
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+.object-center {
+    object-position: center;
 }
 
-.facilities-vertical-card__symbol {
-    position: absolute;
-    right: 1.35rem;
-    bottom: 1.35rem;
-    z-index: 2;
-    width: clamp(58px, 5vw, 72px);
-    height: clamp(58px, 5vw, 72px);
-    display: grid;
-    place-items: center;
-    border-radius: 999px;
-    color: #fff;
-    background: rgb(255 255 255 / 17%);
-    backdrop-filter: blur(12px);
-    font-size: clamp(1.8rem, 2.5vw, 2.4rem);
-    font-weight: 900;
+.object-top {
+    object-position: top;
+}
+
+.object-bottom {
+    object-position: bottom;
+}
+
+.object-left {
+    object-position: left;
+}
+
+.object-right {
+    object-position: right;
 }
 
 .facilities-vertical-card__content {

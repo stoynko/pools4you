@@ -5,6 +5,7 @@ language: "bg"
 slug: "spa"
 translationKey: "spa"
 order: 2
+heroImageKey: "spa-hero"
 cardTitle: "СПА"
 cardDescription: "Хидромасажни вани, флоатинг зони, парни бани, солни стаи и цялостни уелнес пространства."
 seoTitle: "СПА | Pools4You"

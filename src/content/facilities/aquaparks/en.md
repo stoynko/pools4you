@@ -5,6 +5,7 @@ language: "en"
 slug: "aquaparks"
 translationKey: "aquaparks"
 order: 4
+heroImageKey: "aquapark-hero"
 cardTitle: "Aquaparks"
 cardDescription: "Speed slides, lazy rivers, wave pools, children’s aqua zones and splash pads."
 seoTitle: "Aquaparks | Pools4You"

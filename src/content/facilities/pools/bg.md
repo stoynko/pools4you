@@ -5,7 +5,7 @@ language: "bg"
 slug: "baseyni"
 translationKey: "pools"
 order: 1
-heroImageKey: "hero"
+heroImageKey: "pool-hero"
 heroImageAlt: "Модерен външен басейн с чиста вода и луксозна зона за почивка"
 heroImagePosition: "object-center"
 

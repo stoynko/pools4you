@@ -5,6 +5,7 @@ language: "en"
 slug: "saunas"
 translationKey: "saunas"
 order: 3
+heroImageKey: "sauna-hero"
 cardTitle: "Saunas"
 cardDescription: "Finnish, bio, infrared, panoramic, glass and outdoor saunas designed to measure."
 seoTitle: "Saunas | Pools4You"

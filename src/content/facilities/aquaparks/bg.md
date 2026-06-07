@@ -5,6 +5,7 @@ language: "bg"
 slug: "akvaparkove"
 translationKey: "aquaparks"
 order: 4
+heroImageKey: "aquapark-hero"
 cardTitle: "Аквапаркове"
 cardDescription: "Скоростни пързалки, lazy river, вълнови басейни, детски аквазони и splash pads."
 seoTitle: "Аквапаркове | Pools4You"

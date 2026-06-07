@@ -5,7 +5,7 @@ language: "en"
 slug: "pools"
 translationKey: "pools"
 order: 1
-heroImageKey: "hero"
+heroImageKey: "pool-hero"
 heroImageAlt: "Modern outdoor swimming pool with clear water and a refined relaxation area"
 heroImagePosition: "object-center"
 

@@ -5,6 +5,7 @@ language: "en"
 slug: "spa"
 translationKey: "spa"
 order: 2
+heroImageKey: "spa-hero"
 cardTitle: "Spa"
 cardDescription: "Hydrotherapy pools, floatation pools, steam rooms, salt rooms and complete wellness spaces."
 seoTitle: "Spa | Pools4You"

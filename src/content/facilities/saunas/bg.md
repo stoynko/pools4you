@@ -5,6 +5,7 @@ language: "bg"
 slug: "sauni"
 translationKey: "saunas"
 order: 3
+heroImageKey: "sauna-hero"
 cardTitle: "Сауни"
 cardDescription: "Финландски, био, инфрачервени, панорамни, стъклени и външни сауни по мярка."
 seoTitle: "Сауни | Pools4You"
