@@ -1,0 +1,54 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import type { Language } from "../../../config/i18n/i18n";
+
+type ProjectEntry = CollectionEntry<"projects">;
+
+type Props = {
+  project: ProjectEntry;
+  href: string;
+  language: Language;
+  viewProjectLabel: string;
+};
+
+const { project, href, language, viewProjectLabel } = Astro.props as Props;
+
+const formattedDate = project.data.date.toLocaleDateString(
+  language === "bg" ? "bg-BG" : "en-GB",
+);
+---
+
+<article class="project-list-card">
+  <a href={href} class="project-list-card__link">
+    <div class="project-list-card__media">
+      <Image
+        src={project.data.thumbnailImage}
+        alt={project.data.title}
+        loading="lazy"
+        decoding="async"
+        class="project-list-card__image"
+        widths={[480, 720, 960, 1280]}
+        sizes="(min-width: 1200px) 33vw, (min-width: 768px) 50vw, 100vw"
+      />
+    </div>
+
+    <div class="project-list-card__content">
+      <div class="project-list-card__meta">
+        <span>{project.data.location}</span>
+        <span aria-hidden="true">•</span>
+        <time datetime={project.data.date.toISOString()}>
+          {formattedDate}
+        </time>
+      </div>
+
+      <h2>{project.data.title}</h2>
+
+      <p>{project.data.description}</p>
+
+      <span class="project-list-card__cta">
+        {viewProjectLabel} →
+      </span>
+    </div>
+  </a>
+</article>

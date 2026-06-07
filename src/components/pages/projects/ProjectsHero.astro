@@ -1,0 +1,19 @@
+---
+import PageHero from "../../shared/PageHero.astro";
+
+type Props = {
+  translation: {
+    title: string;
+    subtitle: string;
+  };
+};
+
+const { translation } = Astro.props as Props;
+---
+
+<PageHero
+  title={translation.title}
+  body={translation.subtitle}
+  align="left"
+  divider="short"
+/>

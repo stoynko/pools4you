@@ -1,5 +1,4 @@
 export const projects = {
-  
   hero: {
     title: "Our Projects",
     subtitle:
@@ -9,6 +8,8 @@ export const projects = {
   card: {
     viewProject: "View project",
   },
-
+  list: {
+    title: "Completed projects",
+  },
   empty: "No projects have been added yet.",
 } as const;
