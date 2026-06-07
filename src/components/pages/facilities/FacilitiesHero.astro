@@ -1,20 +1,21 @@
 ---
-import type { CollectionEntry } from "astro:content";
 import PageHero from "../../shared/PageHero.astro";
 
-type FacilitiesPageEntry = CollectionEntry<"facilitiesPages">;
-
 type Props = {
-  page: FacilitiesPageEntry;
+  translation: {
+    title: string;
+    description: string;
+    benefits: readonly string[];
+  };
 };
 
-const { page } = Astro.props as Props;
+const { translation } = Astro.props as Props;
 ---
 
 <PageHero
-  title={page.data.title}
-  body={page.data.description}
-  benefits={page.data.benefits}
+  title={translation.title}
+  body={translation.description}
+  benefits={translation.benefits}
   align="left"
   divider="short"
 />

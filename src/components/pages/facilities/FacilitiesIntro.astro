@@ -1,18 +1,17 @@
 ---
-import { render, type CollectionEntry } from "astro:content";
-
-type FacilitiesPageEntry = CollectionEntry<"facilitiesPages">;
-
 type Props = {
-  page: FacilitiesPageEntry;
+  translation: {
+    title: string;
+    text: string;
+  };
 };
 
-const { page } = Astro.props as Props;
-const { Content } = await render(page);
+const { translation } = Astro.props as Props;
 ---
 
-<section class="mx-auto max-w-6xl px-6 py-12">
-  <article class="max-w-4xl space-y-6 text-gray-300 leading-8">
-    <Content />
-  </article>
+<section class="facilities-intro section">
+  <div class="site-container-wide">
+    <h2>{translation.title}</h2>
+    <p>{translation.text}</p>
+  </div>
 </section>

@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import type { Language } from "../../../config/i18n/i18n";
+import { getPagePath } from "../../../config/pages/pagePaths";
 import { getFacilityImage } from "../../../lib/facilities/facilityImages";
 
 type FacilityEntry = CollectionEntry<"facilities">;
@@ -9,36 +10,19 @@ type FacilityEntry = CollectionEntry<"facilities">;
 type Props = {
   language: Language;
   facilities: FacilityEntry[];
+  translation: {
+    title: string;
+    viewLabel: string;
+  };
 };
 
-const { language, facilities } = Astro.props as Props;
+const { language, facilities, translation } = Astro.props as Props;
+
+const facilitiesBasePath = getPagePath("facilities", language);
 
 function getFacilityHref(facility: FacilityEntry) {
-  if (language === "bg") {
-    return `/suorazhenia/${facility.data.slug}`;
-  }
-
-  return `/en/facilities/${facility.data.slug}`;
+  return `${facilitiesBasePath}/${facility.data.slug}`;
 }
-
-function getFacilityTitle(facility: FacilityEntry) {
-  return facility.data.cardTitle ?? facility.data.title;
-}
-
-function getFacilityDescription(facility: FacilityEntry) {
-  return facility.data.description;
-}
-
-function getFacilityCardImage(facility: FacilityEntry) {
-  return getFacilityImage(
-    facility.data.translationKey,
-    facility.data.heroImageKey,
-  );
-}
-
-const sectionTitle = language === "bg" ? "Видове съоръжения" : "Facility Types";
-
-const viewLabel = language === "bg" ? "Разгледай" : "View";
 ---
 
 {
@@ -50,13 +34,16 @@ const viewLabel = language === "bg" ? "Разгледай" : "View";
       <div class="site-container-wide">
         <header class="facilities-card-header">
           <div>
-            <h2 id="facilities-vertical-title">{sectionTitle}</h2>
+            <h2 id="facilities-vertical-title">{translation.title}</h2>
           </div>
         </header>
 
         <div class="facilities-vertical__list">
           {facilities.map((facility) => {
-            const cardImage = getFacilityCardImage(facility);
+            const cardImage = getFacilityImage(
+              facility.data.translationKey,
+              facility.data.heroImageKey,
+            );
 
             return (
               <article class="facilities-vertical-card">
@@ -75,19 +62,19 @@ const viewLabel = language === "bg" ? "Разгледай" : "View";
                       <Image
                         src={cardImage}
                         alt={facility.data.heroImageAlt ?? facility.data.title}
-                        class={`facilities-vertical-card__image ${facility.data.heroImagePosition ?? ""}`}
+                        class={`facilities-vertical-card__image ${facility.data.heroImagePosition ?? "object-center"}`}
                         loading="lazy"
                       />
                     )}
                   </div>
 
                   <div class="facilities-vertical-card__content">
-                    <h3>{getFacilityTitle(facility)}</h3>
+                    <h3>{facility.data.cardTitle ?? facility.data.title}</h3>
 
-                    <p>{getFacilityDescription(facility)}</p>
+                    <p>{facility.data.description}</p>
 
                     <span class="facilities-vertical-card__cta">
-                      {viewLabel} →
+                      {translation.viewLabel} →
                     </span>
                   </div>
                 </a>

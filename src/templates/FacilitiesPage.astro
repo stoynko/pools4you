@@ -1,8 +1,10 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
 import Layout from "../layouts/MainLayout.astro";
 import type { PageKey } from "../config/pages/pageDefinitions";
 import type { Language } from "../config/i18n/i18n";
+import { getPageTranslations } from "../lib/i18n";
+import { getPagePath } from "../config/pages/pagePaths";
 
 import FacilitiesHero from "../components/pages/facilities/FacilitiesHero.astro";
 import FacilitiesIntro from "../components/pages/facilities/FacilitiesIntro.astro";
@@ -13,19 +15,9 @@ type Props = {
   pageKey: PageKey;
 };
 
-type FacilitiesPageEntry = CollectionEntry<"facilitiesPages">;
-
 const { language, pageKey } = Astro.props as Props;
 
-const pages = await getCollection("facilitiesPages", ({ data }) => {
-  return data.language === language;
-});
-
-const page = pages[0] as FacilitiesPageEntry | undefined;
-
-if (!page) {
-  throw new Error(`Missing facilities overview content for language: ${language}`);
-}
+const translation = getPageTranslations(language, "facilities");
 
 const facilities = await getCollection("facilities", ({ data }) => {
   return data.language === language;
@@ -35,21 +27,27 @@ const sortedFacilities = facilities.sort((a, b) => {
   return a.data.order - b.data.order;
 });
 
+const canonical = getPagePath("facilities", language);
+
 const pageSeo = {
-  title: page.data.seoTitle ?? page.data.title,
-  description: page.data.seoDescription ?? page.data.description,
-  canonical: language === "bg" ? "/suorazhenia" : "/en/facilities",
+  title: translation.hero.title,
+  description: translation.hero.description,
+  canonical,
   alternates: {
-    bg: "/suorazhenia",
-    en: "/en/facilities",
+    bg: getPagePath("facilities", "bg"),
+    en: getPagePath("facilities", "en"),
   },
 };
 ---
 
 <Layout language={language} pageKey={pageKey} seo={pageSeo}>
   <main>
-    <FacilitiesHero page={page} />
-    <FacilitiesIntro page={page} />
-    <FacilitiesList language={language} facilities={sortedFacilities} />
+    <FacilitiesHero translation={translation.hero} />
+    <FacilitiesIntro translation={translation.intro} />
+    <FacilitiesList
+      language={language}
+      facilities={sortedFacilities}
+      translation={translation.list}
+    />
   </main>
 </Layout>
