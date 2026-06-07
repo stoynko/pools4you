@@ -17,6 +17,26 @@
   padding-block: clamp(5rem, 8vw, 7rem);
 }
 
+.object-center {
+    object-position: center;
+}
+
+.object-top {
+    object-position: top;
+}
+
+.object-bottom {
+    object-position: bottom;
+}
+
+.object-left {
+    object-position: left;
+}
+
+.object-right {
+    object-position: right;
+}
+
 .eyebrow {
   font-family: var(--font-inter);
   font-size: 0.75rem;

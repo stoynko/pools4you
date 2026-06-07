@@ -2,9 +2,9 @@
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import MainLayout from "../../layouts/MainLayout.astro";
 import PageHero from "../../components/shared/PageHero.astro";
-import SectionHeader from "../../components/shared/SectionHeader.astro";
-import FacilityFeatureCards from "../../components/pages/facilities/FacilityFeatureCard.astro";
+import FacilityContentSections from "../../components/pages/facilities/FacilityContentSections.astro";
 import type { Language } from "../../config/i18n/i18n";
+import { getPagePath } from "../../config/pages/pagePaths";
 import { getFacilityImage } from "../../lib/facilities/facilityImages";
 
 type FacilityEntry = CollectionEntry<"facilities">;
@@ -26,20 +26,18 @@ const enFacility = translatedFacilities.find((entry) => {
   return entry.data.language === "en";
 });
 
-function getFacilityHref(entry: FacilityEntry) {
-  if (entry.data.language === "bg") {
-    return `/suorazhenia/${entry.data.slug}`;
-  }
+function getFacilityPath(entry: FacilityEntry) {
+  const basePath = getPagePath("facilities", entry.data.language);
 
-  return `/en/facilities/${entry.data.slug}`;
+  return `${basePath}/${entry.data.slug}`;
 }
 
 const alternates = {
-  bg: bgFacility ? getFacilityHref(bgFacility) : undefined,
-  en: enFacility ? getFacilityHref(enFacility) : undefined,
+  bg: bgFacility ? getFacilityPath(bgFacility) : undefined,
+  en: enFacility ? getFacilityPath(enFacility) : undefined,
 };
 
-const canonical = getFacilityHref(facility);
+const canonical = getFacilityPath(facility);
 
 const pageSeo = {
   title: facility.data.seoTitle ?? `${facility.data.title} | Pools4You`,
@@ -54,8 +52,6 @@ const heroImage = getFacilityImage(
 );
 
 const { Content } = await render(facility);
-
-const hasContentSections = facility.data.contentSections.length > 0;
 ---
 
 <MainLayout
@@ -76,70 +72,6 @@ const hasContentSections = facility.data.contentSections.length > 0;
       frostedPanel={Boolean(heroImage)}
     />
 
-    {
-      hasContentSections && (
-        <section class="facility-section facility-section--content-sections">
-          <div class="facility-container facility-content-sections">
-            {facility.data.contentSections.map((section) => {
-              if (section.type === "cards") {
-                return (
-                  facility.data.featureCards.length > 0 && (
-                    <section class="facility-content-block facility-content-block--cards">
-                      <SectionHeader title={section.title} />
-
-                      <FacilityFeatureCards
-                        facilityKey={facility.data.translationKey}
-                        cards={facility.data.featureCards}
-                      />
-                    </section>
-                  )
-                );
-              }
-
-              return (
-                <section class="facility-content-block facility-content-block--text">
-                  <SectionHeader title={section.title} />
-
-                  {section.text && (
-                    <p class="facility-content-text">
-                      {section.text}
-                    </p>
-                  )}
-                </section>
-              );
-            })}
-          </div>
-        </section>
-      )
-    }
-
-    {
-      !hasContentSections && (
-        <>
-          {
-            facility.data.featureCards.length > 0 && (
-              <section class="facility-section facility-section--cards">
-                <div class="facility-container">
-                  <SectionHeader title={facility.data.title} />
-
-                  <FacilityFeatureCards
-                    facilityKey={facility.data.translationKey}
-                    cards={facility.data.featureCards}
-                  />
-                </div>
-              </section>
-            )
-          }
-
-          <section class="facility-section facility-section--content">
-            <div class="facility-container facility-content-container">
-              <article class="facility-content">
-                <Content />
-              </article>
-            </div>
-          </section>
-        </>
-      )
-    }
+    <FacilityContentSections facility={facility} Content={Content} />
   </main>
 </MainLayout>

@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { Language } from "../../../config/i18n/i18n";
+import { getPagePath } from "../../../config/pages/pagePaths";
+import SectionHeader from "../../shared/SectionHeader.astro";
+import FacilityTypeCard from "./FacilityTypeCard.astro";
+
+type FacilityEntry = CollectionEntry<"facilities">;
+
+type Props = {
+  language: Language;
+  facilities: FacilityEntry[];
+  translation: {
+    title: string;
+  };
+};
+
+const { language, facilities, translation } = Astro.props as Props;
+
+const facilitiesBasePath = getPagePath("facilities", language);
+
+function getFacilityHref(facility: FacilityEntry) {
+  return `${facilitiesBasePath}/${facility.data.slug}`;
+}
+---
+
+{
+  facilities.length > 0 && (
+
+    <section class="facility-type-grid section">
+      
+      <div class="site-container-wide">
+
+        {/* SECTION TITLE - TYPES OF FACILITIES */}
+        <SectionHeader title={translation.title} />
+
+        <div class="facility-type-grid__list">
+          {facilities.map((facility) => (
+            <FacilityTypeCard
+              facility={facility}
+              href={getFacilityHref(facility)}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

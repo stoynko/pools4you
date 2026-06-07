@@ -68,7 +68,8 @@ const facilities = defineCollection({
     translationKey: z.string(),
 
     order: z.number().default(0),
-    cardTitle: z.string().optional(),
+    cardTitle: z.string(),
+    cardDescription: z.string().optional(),
 
     heroImageKey: z.string().optional(),
     heroImageAlt: z.string().optional(),

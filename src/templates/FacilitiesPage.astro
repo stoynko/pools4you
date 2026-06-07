@@ -7,8 +7,7 @@ import { getPageTranslations } from "../lib/i18n";
 import { getPagePath } from "../config/pages/pagePaths";
 
 import FacilitiesHero from "../components/pages/facilities/FacilitiesHero.astro";
-import FacilitiesIntro from "../components/pages/facilities/FacilitiesIntro.astro";
-import FacilitiesList from "../components/pages/facilities/FacilitiesList.astro";
+import FacilitiesTypeList from "../components/pages/facilities/FacilitiesTypeList.astro";
 
 type Props = {
   language: Language;
@@ -42,9 +41,12 @@ const pageSeo = {
 
 <Layout language={language} pageKey={pageKey} seo={pageSeo}>
   <main>
+
+    {/* MAIN HERO ELEMENT */}
     <FacilitiesHero translation={translation.hero} />
-    <FacilitiesIntro translation={translation.intro} />
-    <FacilitiesList
+
+    {/* THE LIST (BUTTONS) OF FACILITIES - POOLS, SPA, SAUNAS, AQUAPARKS */}
+    <FacilitiesTypeList
       language={language}
       facilities={sortedFacilities}
       translation={translation.list}

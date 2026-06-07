@@ -1,0 +1,47 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { getFacilityImage } from "../../../lib/facilities/facilityImages";
+
+type FacilityEntry = CollectionEntry<"facilities">;
+
+type Props = {
+  facility: FacilityEntry;
+  href: string;
+};
+
+const { facility, href } = Astro.props as Props;
+
+const cardImage = getFacilityImage(
+  facility.data.translationKey,
+  facility.data.heroImageKey,
+);
+---
+
+<article class="facility-type-card">
+  <a href={href} class="facility-type-card__link">
+    <div
+      class:list={[
+        "facility-type-card__media",
+        !cardImage && "facility-type-card__media--no-image",
+      ]}
+    >
+      {
+        cardImage && (
+          <Image
+            src={cardImage}
+            alt={facility.data.heroImageAlt ?? facility.data.cardTitle}
+            class={`facility-type-card__image ${facility.data.heroImagePosition ?? "object-center"}`}
+            loading="lazy"
+          />
+        )
+      }
+    </div>
+
+    <div class="facility-type-card__content">
+      <h3>{facility.data.cardTitle}</h3>
+
+      <p>{facility.data.cardDescription ?? facility.data.description}</p>
+    </div>
+  </a>
+</article>

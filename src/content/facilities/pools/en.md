@@ -5,6 +5,8 @@ language: "en"
 slug: "pools"
 translationKey: "pools"
 order: 1
+cardTitle: "Pools"
+cardDescription: "Private, hotel, infinity, sports and children’s pools designed around the site and how it will be used."
 heroImageKey: "pool-hero"
 heroImageAlt: "Modern outdoor swimming pool with clear water and a refined relaxation area"
 heroImagePosition: "object-center"
@@ -46,7 +48,7 @@ contentSections:
 
   - type: "text"
     title: "Construction Methods"
-    text: "We work with proven technologies — shotcrete concrete shells, modular steel pools and composite (fiberglass) shells — selecting the solution that best suits the terrain, climate and budget. Water treatment systems are fully automated: UV sterilisation, ozonation, saltwater or traditional chlorine — your choice."
+    text: "We work with proven technologies - shotcrete concrete shells, modular steel pools and composite (fiberglass) shells — selecting the solution that best suits the terrain, climate and budget. Water treatment systems are fully automated: UV sterilisation, ozonation, saltwater or traditional chlorine — your choice."
 
   - type: "text"
     title: "From Concept to Commissioning"

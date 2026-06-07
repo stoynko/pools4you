@@ -1,0 +1,78 @@
+---
+import type { CollectionEntry } from "astro:content";
+import SectionHeader from "../../shared/SectionHeader.astro";
+import FacilityFeatureCard from "./FacilityFeatureCard.astro";
+
+type FacilityEntry = CollectionEntry<"facilities">;
+
+type Props = {
+  facility: FacilityEntry;
+  Content: any;
+};
+
+const { facility, Content } = Astro.props as Props;
+
+const hasContentSections = facility.data.contentSections.length > 0;
+---
+
+{
+  hasContentSections && (
+    <section class="facility-section facility-section--content-sections">
+      <div class="facility-container facility-content-sections">
+        {facility.data.contentSections.map((section) => {
+          if (section.type === "cards") {
+            return (
+              facility.data.featureCards.length > 0 && (
+                <section class="facility-content-block facility-content-block--cards">
+                  <SectionHeader title={section.title} />
+
+                  <FacilityFeatureCard
+                    facilityKey={facility.data.translationKey}
+                    cards={facility.data.featureCards}
+                  />
+                </section>
+              )
+            );
+          }
+
+          return (
+            <section class="facility-content-block facility-content-block--text">
+              <SectionHeader title={section.title} />
+
+              {section.text && (
+                <p class="facility-content-text">{section.text}</p>
+              )}
+            </section>
+          );
+        })}
+      </div>
+    </section>
+  )
+}
+
+{
+  !hasContentSections && (
+    <>
+      {facility.data.featureCards.length > 0 && (
+        <section class="facility-section facility-section--cards">
+          <div class="facility-container">
+            <SectionHeader title={facility.data.title} />
+
+            <FacilityFeatureCard
+              facilityKey={facility.data.translationKey}
+              cards={facility.data.featureCards}
+            />
+          </div>
+        </section>
+      )}
+
+      <section class="facility-section facility-section--content">
+        <div class="facility-container facility-content-container">
+          <article class="facility-content">
+            <Content />
+          </article>
+        </div>
+      </section>
+    </>
+  )
+}
