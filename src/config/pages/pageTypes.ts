@@ -46,6 +46,7 @@ export type TemplateKey =
   | "services"
   | "projects"
   | "facilities"
+  | "contacts"
   | "about"
   | "notFound";
 

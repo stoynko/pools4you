@@ -1,0 +1,100 @@
+---
+import Layout from "../layouts/MainLayout.astro";
+import SectionHeader from "../components/shared/SectionHeader.astro";
+import DropdownButton from "../components/ui/DropdownButton.astro";
+import ContactCategoryCard from "../components/pages/contacts/ContactCategoryCard.astro";
+import ContactStrip from "../components/pages/contacts/ContactStrip.astro";
+
+import { getSiteContacts } from "../config/site/contacts";
+import { getPageTranslations } from "../lib/i18n";
+
+import type { PageKey } from "../config/pages/pageDefinitions";
+import type { Language } from "../config/i18n/i18n";
+
+type Props = {
+  language: Language;
+  pageKey: PageKey;
+};
+
+const { language, pageKey } = Astro.props as Props;
+
+const translation = getPageTranslations(language, "contacts");
+const contact = getSiteContacts(language);
+---
+
+<script>
+  import "../scripts/components/accordion";
+</script>
+
+<Layout language={language} pageKey={pageKey}>
+  <main class="contact-page">
+  
+    <section class="about-methods section">
+      <div class="site-container-wide about-methods__grid">
+        <ContactCategoryCard
+          icon="service"
+          title={translation.methods.items[0].title}
+          text={translation.methods.items[0].text}
+          button={translation.methods.items[0].button}
+          href={`mailto:${contact.email}`}
+        />
+
+        <ContactCategoryCard
+          icon="project"
+          title={translation.methods.items[1].title}
+          text={translation.methods.items[1].text}
+          button={translation.methods.items[1].button}
+          href={`mailto:${contact.email}`}
+        />
+
+        <ContactCategoryCard
+          icon="message"
+          title={translation.methods.items[2].title}
+          text={translation.methods.items[2].text}
+          button={translation.methods.items[2].button}
+          href={`mailto:${contact.email}`}
+        />
+      </div>
+    </section>
+
+    <section class="about-faq section-shell section-spacing-md bg-site-secondary">
+      <div class="section-container">
+        <SectionHeader title={translation.faq.title} />
+
+        <div data-accordion class="relative before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-border">
+          {translation.faq.items.map((item) => (
+            <details
+              data-accordion-item
+              data-accordion-state="closed"
+              class="group relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-border"
+            >
+              <summary
+                data-accordion-summary
+                class="flex cursor-pointer list-none items-center justify-between gap-4 py-7 marker:hidden"
+              >
+                <h3 class="min-w-0 flex-1 font-libertinus text-2xl font-semibold leading-tight">
+                  <span data-label={item.question} 
+                  class="page-text-reveal-effect max-[620px]:inline max-[620px]:whitespace-normal max-[620px]:before:hidden max-[620px]:group-data-[accordion-state=open]:text-brand-gold"
+                  >
+                    {item.question}
+                  </span>
+                </h3>
+
+                <DropdownButton />
+                
+              </summary>
+
+              <div data-accordion-panel class="h-0 overflow-hidden">
+                <div class="w-full pb-8 pl-2 md:w-11/12 md:pl-4 lg:w-5/6 lg:pl-6">
+                  <p class="font-inter text-[1.0625rem] leading-relaxed text-text-secondary md:text-lg">
+                    {item.answer}
+                  </p>
+                </div>
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

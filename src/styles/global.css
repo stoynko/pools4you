@@ -6,6 +6,7 @@
 @import "./utilities.css";
 
 @import "./components/buttons.css";
+@import "./components/icons.css";
 @import "./components/section-divider.css";
 @import "./components/sections.css";
 @import "./components/hero.css";
@@ -16,6 +17,9 @@
 @import "./sections/projects-layout.css";
 @import "./sections/facility-content.css";
 @import "./sections/facilities-layout.css";
+@import "./sections/about-layout.css";
+@import "./sections/contact-strip.css";
+@import "./sections/contact-map.css";
 
 @import "./effects/header-effects.css";
 @import "./effects/page-effects.css";

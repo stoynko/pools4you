@@ -4,6 +4,7 @@ export const header = {
   services: "Услуги",
   facilities: "Съоръжения",
   about: "За нас",
+  contacts: "Контакти",
   language: "EN",
   enquire: "Поискай оферта",
   mobileNavPreferencesRegion: "Език и тема",

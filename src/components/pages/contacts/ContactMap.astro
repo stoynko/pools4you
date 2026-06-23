@@ -1,0 +1,69 @@
+---
+type Props = {
+  mapSrc: string;
+  addressTitle: string;
+  addresses: string[];
+  hoursTitle: string;
+  hours: string[];
+  directions: {
+    title: string;
+    lines: string[];
+  }[];
+};
+
+const {
+  mapSrc,
+  addressTitle,
+  addresses,
+  hoursTitle,
+  hours,
+  directions,
+} = Astro.props as Props;
+---
+
+<section class="contact-map section">
+  <div class="site-container-wide contact-map__grid">
+    <div class="contact-map__media">
+      <iframe
+        class="contact-map__iframe"
+        src={mapSrc}
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+        title="Google map"
+      ></iframe>
+    </div>
+
+    <div class="contact-map__content">
+      <div class="contact-map__top">
+        <article class="contact-map__info-card">
+          <h2>{addressTitle}</h2>
+
+          {addresses.map((address) => (
+            <p>{address}</p>
+          ))}
+        </article>
+
+        <article class="contact-map__info-card">
+          <h2>{hoursTitle}</h2>
+
+          {hours.map((line) => (
+            <p>{line}</p>
+          ))}
+        </article>
+      </div>
+
+      <div class="contact-map__directions">
+        {directions.map((item) => (
+          <article class="contact-map__direction">
+            <h3>{item.title}</h3>
+
+            {item.lines.map((line) => (
+              <p set:html={line} />
+            ))}
+          </article>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

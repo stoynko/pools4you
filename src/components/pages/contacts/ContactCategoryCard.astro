@@ -1,0 +1,32 @@
+---
+import Icon from "../../ui/icons/Icon.astro";
+import type { IconName } from "../../ui/icons/iconPaths";
+
+type Props = {
+  icon: IconName;
+  title: string;
+  text: string;
+  button: string;
+  href: string;
+};
+
+const { icon, title, text, button, href } = Astro.props as Props;
+---
+
+<article class="about-method-card">
+  <div class="about-method-card__icon" aria-hidden="true">
+    <Icon name={icon} />
+  </div>
+
+  <h2 class="about-method-card__title">
+    {title}
+  </h2>
+
+  <p class="about-method-card__text">
+    {text}
+  </p>
+
+  <a class="button-primary about-method-card__button" href={href}>
+    {button}
+  </a>
+</article>

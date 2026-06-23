@@ -1,0 +1,40 @@
+---
+import Icon from "../../ui/icons/Icon.astro";
+
+type Props = {
+  email: string;
+  phone: string;
+  phoneHref: string;
+  hours: string;
+};
+
+const { email, phone, phoneHref, hours } = Astro.props as Props;
+---
+
+<section class="contact-strip" aria-label="Contact information">
+  <div class="site-container-wide contact-strip__inner">
+    <a class="contact-strip__item" href={`mailto:${email}`}>
+      <span class="contact-strip__icon" aria-hidden="true">
+        <Icon name="email" />
+      </span>
+
+      <span class="contact-strip__value">{email}</span>
+    </a>
+
+    <a class="contact-strip__item" href={`tel:${phoneHref}`}>
+      <span class="contact-strip__icon" aria-hidden="true">
+        <Icon name="phone" />
+      </span>
+
+      <span class="contact-strip__value">{phone}</span>
+    </a>
+
+    <div class="contact-strip__item">
+      <span class="contact-strip__icon" aria-hidden="true">
+        <Icon name="clock" />
+      </span>
+
+      <span class="contact-strip__value">{hours}</span>
+    </div>
+  </div>
+</section>

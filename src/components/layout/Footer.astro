@@ -15,6 +15,7 @@ const servicesPath = getPagePath("services", language);
 const projectsPath = getPagePath("projects", language);
 const facilitiesPath = getPagePath("facilities", language);
 const aboutPath = getPagePath("about", language);
+const contactsPath = getPagePath("contacts", language);
 
 const poolsPath =
   language === "bg" ? "/suorazhenia/baseyni" : "/en/facilities/pools";
@@ -223,7 +224,7 @@ const socialLinks = [
           </li>
           <li>
             <a
-              href={fallbackPath}
+              href={contactsPath}
               data-label={translation.subCompanyContacts}
               class="footer-link-effect"
             >

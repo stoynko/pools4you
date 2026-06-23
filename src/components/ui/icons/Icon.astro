@@ -1,0 +1,18 @@
+---
+import { iconPaths, type IconName } from "./iconPaths";
+
+type Props = {
+  name: IconName;
+  class?: string;
+};
+
+const { name, class: className } = Astro.props as Props;
+
+const icon = iconPaths[name];
+---
+
+<span class:list={["ui-icon", className]} aria-hidden="true">
+  <svg viewBox={icon.viewBox} focusable="false">
+    <path d={icon.path} fill="currentColor" />
+  </svg>
+</span>

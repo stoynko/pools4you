@@ -3,5 +3,6 @@ export const primaryNav = [
   "services",
   "projects",
   "facilities",
-  "about"
+  "about",
+  "contacts"
 ] as const;

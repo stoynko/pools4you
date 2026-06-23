@@ -4,6 +4,8 @@ import { home } from "./home";
 import { services } from "./services";
 import { projects } from "./projects";
 import { facilities } from "./facilities";
+import { contacts } from "./contacts";
+import { about } from "./about"
 import { notFound } from "./notFound";
 
 export const bg = {
@@ -11,7 +13,9 @@ export const bg = {
   footer,
   home,
   services,
-  facilities,
   projects,
+  facilities,
+  contacts,
+  about,
   notFound,
 } as const;

@@ -3,6 +3,7 @@ import { homePage } from "./core/home";
 import { servicesPage } from "./core/services";
 import { projectsPage } from "./core/projects";
 import { facilitiesPage } from "./core/facilities";
+import { contactsPage } from "./core/contacts";
 import { aboutPage } from "./core/about";
 import { notFoundPage } from "./core/404";
 
@@ -11,6 +12,7 @@ export const pageDefinitions = {
   services: servicesPage,
   projects: projectsPage,
   facilities: facilitiesPage,
+  contacts: contactsPage,
   about: aboutPage,
   notFound: notFoundPage,
 } as const;

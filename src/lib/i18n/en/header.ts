@@ -4,6 +4,7 @@ export const header = {
   services: "Services",
   facilities: "Facilities",
   about: "About Us",
+  contacts: "Contacts",
   language: "BG",
   enquire: "Enquire",
   mobileNavPreferencesRegion: "Language and theme",
