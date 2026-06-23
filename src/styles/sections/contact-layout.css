@@ -1,0 +1,110 @@
+.contact-page {
+  background: var(--color-bg);
+}
+
+.contact-methods {
+  background: var(--color-bg);
+  padding-top: clamp(3rem, 6vw, 5rem);
+}
+
+.contact-methods__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.contact-method-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  justify-items: center;
+  min-height: 24rem;
+  padding: clamp(2rem, 3vw, 3rem);
+  text-align: center;
+}
+
+.contact-method-card + .contact-method-card {
+  border-left: 1px solid color-mix(in srgb, var(--color-gold) 45%, transparent);
+}
+
+.contact-method-card__icon {
+  display: grid;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  margin-bottom: 2rem;
+  color: var(--color-gold);
+}
+
+.contact-method-card__icon .ui-icon {
+  width: 2.65rem;
+  height: 2.65rem;
+}
+
+.contact-method-card__title {
+  max-width: 24rem;
+  margin: 0 0 1.75rem;
+  color: var(--color-text);
+  font-family: var(--font-libertinus);
+  font-size: clamp(1.15rem, 1.5vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.contact-method-card__text {
+  max-width: 360px;
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: clamp(0.98rem, 1.15vw, 1.1rem);
+  line-height: 1.65;
+}
+
+.contact-method-card__button {
+  align-self: end;
+  margin-top: 2.25rem;
+}
+
+.contact-method-card .button-primary {
+  align-self: end;
+  margin-top: 2.25rem;
+}
+
+.contact-faq {
+  background: var(--color-bg);
+}
+
+@media (max-width: 1024px) {
+  .contact-methods__grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .contact-method-card {
+    min-height: auto;
+    padding-block: 2.5rem;
+  }
+
+  .contact-method-card + .contact-method-card {
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-gold) 45%, transparent);
+  }
+}
+
+@media (max-width: 640px) {
+  .contact-method-card {
+    padding-block: 2rem;
+  }
+
+  .contact-method-card__icon {
+    margin-bottom: 1.5rem;
+  }
+
+  .contact-method-card__title {
+    margin-bottom: 1.25rem;
+  }
+
+  .contact-method-card__button,
+  .contact-method-card .button-primary {
+    margin-top: 1.75rem;
+  }
+}

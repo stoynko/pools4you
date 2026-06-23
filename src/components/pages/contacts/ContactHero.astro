@@ -1,0 +1,56 @@
+---
+import Icon from "../../ui/icons/Icon.astro";
+
+type Props = {
+  title: string;
+  text: string;
+  email: string;
+  phone: string;
+  phoneHref: string;
+  hours: string;
+};
+
+const { title, text, email, phone, phoneHref, hours } =
+  Astro.props as Props;
+---
+
+<section class="contact-hero">
+  <div class="site-container-wide contact-hero__inner">
+    <div class="contact-hero__content">
+
+      <h1 class="contact-hero__title">
+        {title}
+      </h1>
+
+      <p class="contact-hero__text">
+        {text}
+      </p>
+    </div>
+
+    <aside class="contact-hero__panel" aria-label="Contact information">
+      <a class="contact-hero__item" href={`mailto:${email}`}>
+        <span class="contact-hero__icon" aria-hidden="true">
+          <Icon name="email" />
+        </span>
+
+        <span>{email}</span>
+      </a>
+
+      <a class="contact-hero__item" href={`tel:${phoneHref}`}>
+        <span class="contact-hero__icon" aria-hidden="true">
+          <Icon name="phone" />
+        </span>
+
+        <span>{phone}</span>
+      </a>
+
+      <div class="contact-hero__item">
+        <span class="contact-hero__icon" aria-hidden="true">
+          <Icon name="clock" />
+        </span>
+
+        <span>{hours}</span>
+      </div>
+    </aside>
+  </div>
+</section>

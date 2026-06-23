@@ -3,6 +3,9 @@ import "../styles/global.css";
 import Head from "./MainHead.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
+import ContactStrip from "../components/pages/contacts/ContactStrip.astro";
+
+import { getSiteContacts } from "../config/site/contacts";
 
 import type { PageKey } from "../config/pages/pageDefinitions";
 import type { Language } from "../config/i18n/i18n";
@@ -14,67 +17,77 @@ const { language, pageKey, seo, alternates } = Astro.props as {
   seo?: Partial<PageSeo>;
   alternates?: Partial<Record<Language, string>>;
 };
+
+const contact = getSiteContacts(language);
 ---
 
 <html lang={language}>
-
   <Head language={language} pageKey={pageKey} seo={seo} />
 
   <script>
-  const rootElement = document.documentElement;
+    const rootElement = document.documentElement;
 
-  const getStoredTheme = () => {
-    try {
-      return localStorage.getItem("theme");
-    } catch {
-      return null;
-    }
-  };
+    const getStoredTheme = () => {
+      try {
+        return localStorage.getItem("theme");
+      } catch {
+        return null;
+      }
+    };
 
-  const setStoredTheme = (theme: "light" | "dark") => {
-    try {
-      localStorage.setItem("theme", theme);
-    } catch { }
-  };
+    const setStoredTheme = (theme: "light" | "dark") => {
+      try {
+        localStorage.setItem("theme", theme);
+      } catch { }
+    };
 
-  const prefersDark =
-    window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
+    const prefersDark =
+      window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
 
-  const storedTheme = getStoredTheme();
+    const storedTheme = getStoredTheme();
 
-  if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
-    rootElement.setAttribute("data-theme", "dark");
-  }
-
-  document.addEventListener("click", (event) => {
-    const target = event.target;
-
-    if (!(target instanceof Element)) {
-      return;
+    if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
+      rootElement.setAttribute("data-theme", "dark");
     }
 
-    const toggle = target.closest("[data-theme-toggle]");
+    document.addEventListener("click", (event) => {
+      const target = event.target;
 
-    if (!(toggle instanceof HTMLElement)) {
-      return;
-    }
+      if (!(target instanceof Element)) {
+        return;
+      }
 
-    const isDark = rootElement.getAttribute("data-theme") === "dark";
+      const toggle = target.closest("[data-theme-toggle]");
 
-    if (isDark) {
-      rootElement.removeAttribute("data-theme");
-      setStoredTheme("light");
-      return;
-    }
+      if (!(toggle instanceof HTMLElement)) {
+        return;
+      }
 
-    rootElement.setAttribute("data-theme", "dark");
-    setStoredTheme("dark");
-  });
-</script>
+      const isDark = rootElement.getAttribute("data-theme") === "dark";
+
+      if (isDark) {
+        rootElement.removeAttribute("data-theme");
+        setStoredTheme("light");
+        return;
+      }
+
+      rootElement.setAttribute("data-theme", "dark");
+      setStoredTheme("dark");
+    });
+  </script>
 
   <body class="font-inter">
+    <ContactStrip
+      email={contact.email}
+      phone={contact.phone}
+      phoneHref={contact.phoneHref}
+      hours={contact.hours}
+    />
+
     <Header language={language} pageKey={pageKey} alternates={alternates} />
+
     <slot />
+
     <Footer language={language} pageKey={pageKey} alternates={alternates} />
   </body>
 </html>

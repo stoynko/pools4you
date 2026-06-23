@@ -1,19 +1,10 @@
 export const contacts = {
   hero: {
-    eyebrow: "About Us",
-    title: "Aquatic solutions with a clear engineering approach",
-    paragraphs: [
-      "Pools4You designs, builds, renovates, and maintains pools, spa spaces, saunas, aquaparks, and technical water systems for private, hospitality, and commercial projects.",
-      "Our work covers the full process — from the first idea and technical planning to construction, equipment integration, seasonal service, and long-term maintenance.",
-      "We focus on practical engineering decisions, reliable execution, clean visual results, and systems that remain easy to operate and maintain over time.",
-    ],
-  },
-
-  map: {
-    title: "Pools4You location map",
-    heading: "Contact us",
-    openButton: "Open in Google Maps",
-  },
+  eyebrow: "Contact",
+  title: "How can we help you?",
+  text:
+    "Send us a message or give us a call for service, a new project, or a general enquiry. We will review the details and guide you through the next steps.",
+},
 
   methods: {
     items: [

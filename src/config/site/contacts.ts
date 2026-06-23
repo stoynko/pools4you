@@ -14,8 +14,8 @@ export const contacts = {
   },
 
   hours: {
-    bg: "Пон-Пет 08:00 - 17:00",
-    en: "Mon-Fri 08:00 - 17:00",
+    bg: "Понеделник - Петък 08:00 - 17:00",
+    en: "Monday - Friday 08:00 - 17:00",
   },
 
   map: {

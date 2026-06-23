@@ -13,20 +13,20 @@ type Props = {
 const { icon, title, text, button, href } = Astro.props as Props;
 ---
 
-<article class="about-method-card">
-  <div class="about-method-card__icon" aria-hidden="true">
+<article class="contact-method-card">
+  <div class="contact-method-card__icon" aria-hidden="true">
     <Icon name={icon} />
   </div>
 
-  <h2 class="about-method-card__title">
+  <h2 class="contact-method-card__title">
     {title}
   </h2>
 
-  <p class="about-method-card__text">
+  <p class="contact-method-card__text">
     {text}
   </p>
 
-  <a class="button-primary about-method-card__button" href={href}>
+  <a class="button-primary contact-method-card__button" href={href}>
     {button}
   </a>
 </article>

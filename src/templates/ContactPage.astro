@@ -1,9 +1,9 @@
 ---
 import Layout from "../layouts/MainLayout.astro";
+import ContactHero from "../components/pages/contacts/ContactHero.astro";
+import ContactCategoryCard from "../components/pages/contacts/ContactCategoryCard.astro";
 import SectionHeader from "../components/shared/SectionHeader.astro";
 import DropdownButton from "../components/ui/DropdownButton.astro";
-import ContactCategoryCard from "../components/pages/contacts/ContactCategoryCard.astro";
-import ContactStrip from "../components/pages/contacts/ContactStrip.astro";
 
 import { getSiteContacts } from "../config/site/contacts";
 import { getPageTranslations } from "../lib/i18n";
@@ -28,9 +28,18 @@ const contact = getSiteContacts(language);
 
 <Layout language={language} pageKey={pageKey}>
   <main class="contact-page">
-  
-    <section class="about-methods section">
-      <div class="site-container-wide about-methods__grid">
+
+    <ContactHero
+      title={translation.hero.title}
+      text={translation.hero.text}
+      email={contact.email}
+      phone={contact.phone}
+      phoneHref={contact.phoneHref}
+      hours={contact.hours}
+    />
+
+    <section class="contact-methods section">
+      <div class="site-container-wide contact-methods__grid">
         <ContactCategoryCard
           icon="service"
           title={translation.methods.items[0].title}
@@ -57,11 +66,14 @@ const contact = getSiteContacts(language);
       </div>
     </section>
 
-    <section class="about-faq section-shell section-spacing-md bg-site-secondary">
+    <section class="contact-faq section-shell section-spacing-md bg-site-secondary">
       <div class="section-container">
         <SectionHeader title={translation.faq.title} />
 
-        <div data-accordion class="relative before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-border">
+        <div
+          data-accordion
+          class="relative before:absolute before:left-0 before:right-0 before:top-0 before:h-px before:bg-border"
+        >
           {translation.faq.items.map((item) => (
             <details
               data-accordion-item
@@ -73,15 +85,15 @@ const contact = getSiteContacts(language);
                 class="flex cursor-pointer list-none items-center justify-between gap-4 py-7 marker:hidden"
               >
                 <h3 class="min-w-0 flex-1 font-libertinus text-2xl font-semibold leading-tight">
-                  <span data-label={item.question} 
-                  class="page-text-reveal-effect max-[620px]:inline max-[620px]:whitespace-normal max-[620px]:before:hidden max-[620px]:group-data-[accordion-state=open]:text-brand-gold"
+                  <span
+                    data-label={item.question}
+                    class="page-text-reveal-effect max-[620px]:inline max-[620px]:whitespace-normal max-[620px]:before:hidden max-[620px]:group-data-[accordion-state=open]:text-brand-gold"
                   >
                     {item.question}
                   </span>
                 </h3>
 
                 <DropdownButton />
-                
               </summary>
 
               <div data-accordion-panel class="h-0 overflow-hidden">
