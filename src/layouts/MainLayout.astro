@@ -24,58 +24,6 @@ const contact = getSiteContacts(language);
 <html lang={language}>
   <Head language={language} pageKey={pageKey} seo={seo} />
 
-  <script>
-    const rootElement = document.documentElement;
-
-    const getStoredTheme = () => {
-      try {
-        return localStorage.getItem("theme");
-      } catch {
-        return null;
-      }
-    };
-
-    const setStoredTheme = (theme: "light" | "dark") => {
-      try {
-        localStorage.setItem("theme", theme);
-      } catch { }
-    };
-
-    const prefersDark =
-      window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false;
-
-    const storedTheme = getStoredTheme();
-
-    if (storedTheme === "dark" || (!storedTheme && prefersDark)) {
-      rootElement.setAttribute("data-theme", "dark");
-    }
-
-    document.addEventListener("click", (event) => {
-      const target = event.target;
-
-      if (!(target instanceof Element)) {
-        return;
-      }
-
-      const toggle = target.closest("[data-theme-toggle]");
-
-      if (!(toggle instanceof HTMLElement)) {
-        return;
-      }
-
-      const isDark = rootElement.getAttribute("data-theme") === "dark";
-
-      if (isDark) {
-        rootElement.removeAttribute("data-theme");
-        setStoredTheme("light");
-        return;
-      }
-
-      rootElement.setAttribute("data-theme", "dark");
-      setStoredTheme("dark");
-    });
-  </script>
-
   <body class="font-inter">
     <ContactStrip
       email={contact.email}

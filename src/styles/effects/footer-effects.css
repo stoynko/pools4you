@@ -5,10 +5,6 @@
   color: var(--color-text-secondary);
 }
 
-[data-theme="dark"] .site-footer {
-  color: var(--color-dark-text-secondary);
-}
-
 .footer-inner {
   padding-block: 8rem 4rem;
 }
@@ -53,15 +49,12 @@
   max-width: none;
 }
 
+/* Dark mode is now the only mode, so always show the dark logo. */
+.footer-logo-image-light {
+  display: none;
+}
+
 .footer-logo-image-dark {
-  display: none;
-}
-
-[data-theme="dark"] .footer-logo-image-light {
-  display: none;
-}
-
-[data-theme="dark"] .footer-logo-image-dark {
   display: block;
 }
 
@@ -81,10 +74,6 @@
   color: var(--color-text);
 }
 
-[data-theme="dark"] .footer-heading {
-  color: var(--color-dark-text);
-}
-
 .footer-link-effect {
   position: relative;
   display: inline-flex;
@@ -96,10 +85,6 @@
   white-space: nowrap;
   text-decoration: none;
   transition: color 180ms ease;
-}
-
-[data-theme="dark"] .footer-link-effect {
-  color: var(--color-dark-text-secondary);
 }
 
 .footer-link-effect::before {
@@ -118,12 +103,7 @@
 
 .footer-link-effect:hover,
 .footer-link-effect:focus-visible {
-  color: var(--color-gold-hover);
-}
-
-[data-theme="dark"] .footer-link-effect:hover,
-[data-theme="dark"] .footer-link-effect:focus-visible {
-  color: var(--color-dark-text);
+  color: var(--color-text);
 }
 
 .footer-link-effect:hover::before,
@@ -168,10 +148,6 @@
   transition: color 180ms ease;
 }
 
-[data-theme="dark"] .footer-social-link {
-  color: var(--color-dark-text);
-}
-
 .footer-social-link:hover,
 .footer-social-link:focus-visible {
   color: var(--color-gold);
@@ -193,14 +169,10 @@
 .footer-legal {
   position: relative;
   margin-top: 1rem;
-  border-top: 1px solid var(--color-brand-gold);
+  border-top: 1px solid var(--color-gold);
   padding-top: 1rem;
   font-size: 0.875rem;
   color: var(--color-text-secondary);
-}
-
-[data-theme="dark"] .footer-legal {
-  color: var(--color-dark-text-secondary);
 }
 
 @media (max-width: 1024px) {

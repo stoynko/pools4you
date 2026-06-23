@@ -1,69 +1,32 @@
 ---
-import type { Language } from "../../config/i18n/i18n.ts";
-import { getPagePath } from "../../config/pages/pagePaths.ts";
+import type { Language } from "../../config/i18n/i18n";
+import { getPagePath } from "../../config/pages/pagePaths";
 
-const { language, variant = "adaptive" } = Astro.props as {
+const { language, variant = "color" } = Astro.props as {
   language: Language;
-  variant?: "adaptive" | "color" | "black";
+  variant?: "color" | "black";
 };
 
 const homePath = getPagePath("home", language);
 
 const logoImageClass = "block h-logo w-auto max-w-none";
+
+const logoSrc =
+  variant === "black"
+    ? "/images/brand/pools4you-logo-text-black.svg"
+    : "/images/brand/pools4you-logo-text-color.svg";
 ---
 
-<a href={homePath} class="inline-flex shrink-0 items-center" aria-label="Pools4You home">
-  {
-    variant === "adaptive" && (
-      <>
-        <img
-          src="/images/brand/pools4you-logo-text-black.svg"
-          alt="Pools4You Ltd."
-          class:list={[
-            logoImageClass,
-            "[[data-theme='dark']_&]:hidden",
-          ]}
-          loading="eager"
-          decoding="async"
-        />
-
-        <img
-          src="/images/brand/pools4you-logo-text-color.svg"
-          alt=""
-          class:list={[
-            logoImageClass,
-            "hidden",
-            "[[data-theme='dark']_&]:block",
-          ]}
-          loading="eager"
-          decoding="async"
-          aria-hidden="true"
-        />
-      </>
-    )
-  }
-
-  {
-    variant === "black" && (
-      <img
-        src="/images/brand/pools4you-logo-text-black.svg"
-        alt="Pools4You Ltd."
-        class={logoImageClass}
-        loading="eager"
-        decoding="async"
-      />
-    )
-  }
-
-  {
-    variant === "color" && (
-      <img
-        src="/images/brand/pools4you-logo-text-color.svg"
-        alt="Pools4You Ltd."
-        class={logoImageClass}
-        loading="eager"
-        decoding="async"
-      />
-    )
-  }
+<a
+  href={homePath}
+  class="inline-flex shrink-0 items-center"
+  aria-label="Pools4You home"
+>
+  <img
+    src={logoSrc}
+    alt="Pools4You Ltd."
+    class={logoImageClass}
+    loading="eager"
+    decoding="async"
+  />
 </a>

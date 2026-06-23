@@ -9,7 +9,6 @@ import { primaryNav } from "../../config/navigation/navigationItems";
 import HeaderLink from "./HeaderLink.astro";
 import HeaderLogo from "../brand/HeaderLogo.astro";
 import HeaderMobileMenu from "./HeaderMobileMenu.astro";
-import ThemeToggleIcon from "../ui/ThemeToggle.astro";
 import LanguageDropdown from "../ui/LanguageDropdown.astro";
 
 const { language, pageKey, alternates } = Astro.props as {
@@ -52,14 +51,6 @@ const translation = getPageTranslations(language, "header");
       aria-label="Header actions"
     >
       <div class="header-actions-icons flex flex-none shrink-0 items-center gap-3 text-base leading-none">
-        <button
-          type="button"
-          data-theme-toggle
-          class="group box-border inline-flex h-10 w-10 flex-none shrink-0 items-center justify-center p-0 leading-none text-text-secondary transition-colors duration-150 hover:text-brand-gold focus-visible:text-brand-gold"
-          aria-label="Theme Toggle"
-        >
-          <ThemeToggleIcon />
-        </button>
 
         <LanguageDropdown language={language} pageKey={pageKey} alternates={alternates} />
       </div>

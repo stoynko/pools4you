@@ -10,8 +10,4 @@
   .button-ghost {
     @apply button-base border-brand-gold bg-transparent text-brand-gold hover:border-brand-goldHover hover:bg-brand-goldHover hover:text-[var(--color-text-cta)];
   }
-
-  [data-theme="dark"] .button-ghost {
-    @apply border-brand-gold text-brand-gold hover:border-brand-goldHover hover:bg-brand-goldHover hover:text-[var(--color-text-cta)];
-  }
 }

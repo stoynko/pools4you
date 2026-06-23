@@ -5,7 +5,6 @@ import { getPagePath } from "../../config/pages/pagePaths";
 import { getPageTranslations } from "../../lib/i18n";
 import { primaryNav } from "../../config/navigation/navigationItems";
 import HeaderLogo from "../brand/HeaderLogo.astro";
-import ThemeToggleIcon from "../ui/ThemeToggle.astro";
 
 const { language, pageKey, alternates } = Astro.props as {
   language: Language;
@@ -17,9 +16,6 @@ const translation = getPageTranslations(language, "header");
 
 const bgPath = alternates?.bg ?? getPagePath(pageKey, "bg");
 const enPath = alternates?.en ?? getPagePath(pageKey, "en");
-
-const themeToggleLabel =
-  language === "bg" ? "Превключване на тема" : "Toggle theme";
 ---
 
 <div class="relative ml-auto block lg:hidden" data-mobile-menu>
@@ -45,7 +41,7 @@ const themeToggleLabel =
   </button>
 
   <div
-    class="pointer-events-none fixed inset-0 z-[55] bg-[color-mix(in_srgb,var(--color-text)_20%,transparent)] opacity-0 backdrop-blur-2xl transition-[opacity,backdrop-filter] duration-300 ease-out max-[699px]:backdrop-blur-[3rem] [html[data-theme='dark']_&]:bg-[color-mix(in_srgb,#000_55%,transparent)]"
+    class="pointer-events-none fixed inset-0 z-[55] bg-[color-mix(in_srgb,#000_55%,transparent)] opacity-0 backdrop-blur-2xl transition-[opacity,backdrop-filter] duration-300 ease-out max-[699px]:backdrop-blur-[3rem]"
     data-mobile-nav-backdrop
     aria-hidden="true"
   >
@@ -91,10 +87,8 @@ const themeToggleLabel =
         class="shrink-0 border-t border-brand-gold px-6 py-6 sm:px-10 sm:py-7"
         aria-label={translation.mobileNavPreferencesRegion}
       >
-        <div class="flex w-full flex-nowrap items-center justify-between gap-4">
-          <div
-            class="flex min-w-0 flex-nowrap items-center gap-5 font-inter text-lg font-semibold sm:gap-6 sm:text-xl"
-          >
+        <div class="flex w-full items-center justify-center">
+          <div class="flex items-center gap-5 font-inter text-lg font-semibold sm:gap-6 sm:text-xl">
             <span
               class="inline-flex shrink-0 items-center text-text-secondary"
               aria-hidden="true"
@@ -111,6 +105,7 @@ const themeToggleLabel =
                 ></path>
               </svg>
             </span>
+
             <div class="flex shrink-0 items-center gap-3">
               <a
                 href={bgPath}
@@ -126,6 +121,7 @@ const themeToggleLabel =
               </a>
 
               <span class="shrink-0 text-border" aria-hidden="true"> / </span>
+
               <a
                 href={enPath}
                 class:list={[
@@ -140,15 +136,6 @@ const themeToggleLabel =
               </a>
             </div>
           </div>
-
-          <button
-            type="button"
-            data-theme-toggle
-            class="group inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md p-0 text-text-secondary transition-colors duration-150 hover:text-brand-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-gold sm:h-14 sm:w-14"
-            aria-label={themeToggleLabel}
-          >
-            <ThemeToggleIcon iconClass="h-7 w-7 sm:h-8 sm:w-8" />
-          </button>
         </div>
       </div>
     </div>
