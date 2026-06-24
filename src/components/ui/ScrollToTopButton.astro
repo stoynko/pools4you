@@ -1,0 +1,60 @@
+<button
+  type="button"
+  class="scroll-to-top"
+  data-scroll-to-top
+  aria-label="Scroll to top"
+>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M6 15l6 -6l6 6" />
+  </svg>
+</button>
+
+<script>
+  const scrollToTopButton = document.querySelector<HTMLButtonElement>(
+    "[data-scroll-to-top]",
+  );
+
+  const visibleScrollDistance = 420;
+
+  const getScrollTop = () => {
+    return window.scrollY || document.documentElement.scrollTop || 0;
+  };
+
+  const updateScrollToTopVisibility = () => {
+    if (!scrollToTopButton) return;
+
+    const shouldShow = getScrollTop() > visibleScrollDistance;
+
+    scrollToTopButton.classList.toggle("is-visible", shouldShow);
+  };
+
+  scrollToTopButton?.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
+  });
+
+  updateScrollToTopVisibility();
+
+  window.addEventListener("scroll", updateScrollToTopVisibility, {
+    passive: true,
+  });
+
+  window.addEventListener("resize", updateScrollToTopVisibility);
+</script>

@@ -4,6 +4,7 @@ import Head from "./MainHead.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
 import ContactStrip from "../components/pages/contacts/ContactStrip.astro";
+import ScrollToTopButton from "../components/ui/ScrollToTopButton.astro";
 
 import { getSiteContacts } from "../config/site/contacts";
 
@@ -37,5 +38,7 @@ const contact = getSiteContacts(language);
     <slot />
 
     <Footer language={language} pageKey={pageKey} alternates={alternates} />
+
+    <ScrollToTopButton />
   </body>
 </html>

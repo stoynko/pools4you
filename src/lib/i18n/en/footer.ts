@@ -11,7 +11,6 @@ export const footer = {
   subSolutionsSaunas: "Saunas",
   subSolutionsSpa: "Spa",
   subSolutionsAquaparks: "Aquaparks",
-  subSolutionsTechnical: "Technical Solutions",
 
   categoryProjects: "Projects",
   subProjectsHospitality: "Hospitality & Resorts",

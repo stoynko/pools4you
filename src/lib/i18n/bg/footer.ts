@@ -11,7 +11,6 @@ export const footer = {
   subSolutionsSaunas: "Сауни",
   subSolutionsSpa: "Спа",
   subSolutionsAquaparks: "Аквапаркове",
-  subSolutionsTechnical: "Технически решения",
 
   categoryProjects: "Проекти",
   subProjectsHospitality: "Хотели и курорти",

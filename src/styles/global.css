@@ -5,18 +5,20 @@
 @import "./typography.css";
 @import "./utilities.css";
 
+@import "./components/hero.css";
+@import "./components/sections.css";
+@import "./components/section-divider.css";
 @import "./components/buttons.css";
 @import "./components/icons.css";
-@import "./components/section-divider.css";
-@import "./components/sections.css";
-@import "./components/hero.css";
-@import "./components/facility-feature-card.css";
+
+@import "./components/scroll-to-top-button.css";
 
 @import "./sections/featured-projects.css";
 @import "./sections/home-cta.css";
 @import "./sections/projects-layout.css";
-@import "./sections/facility-content.css";
 @import "./sections/facilities-layout.css";
+@import "./sections/facility-content.css";
+@import "./sections/facility-feature-card.css";
 @import "./sections/about-layout.css";
 @import "./sections/contact-layout.css";
 @import "./sections/contact-hero.css";
