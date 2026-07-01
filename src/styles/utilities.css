@@ -46,6 +46,22 @@
   color: var(--color-gold);
 }
 
+.u-no-select,
+.u-no-select * {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.u-selectable,
+.u-selectable * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.u-cursor-default {
+  cursor: default;
+}
+
 [data-animate] {
   opacity: 0;
   transform: translateY(20px);

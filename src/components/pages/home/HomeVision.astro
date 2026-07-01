@@ -16,7 +16,7 @@ const { language } = Astro.props as Props;
 const translation = getPageTranslations(language, "home");
 ---
 
-<section class="section-shell section-spacing-lg">
+<section class="section-shell section-spacing-lg u-no-select">
   <div class="section-container">
     <div class="w-full">
       <SectionHeader title={translation.vision.title} size="large" />

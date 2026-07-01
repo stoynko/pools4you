@@ -25,7 +25,7 @@ const translation = getPageTranslations(language, "header");
   <div class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 lg:grid-cols-[240px_minmax(0,1fr)_320px] xl:gap-8">
 
     <!-- LEFT: LOGO -->
-    <div class="col-start-1 flex items-center justify-self-start">
+    <div class="col-start-1 flex items-center justify-self-start u-no-select">
       <HeaderLogo language={language} />
     </div>
 
@@ -47,7 +47,7 @@ const translation = getPageTranslations(language, "header");
 
     <!-- RIGHT: DESKTOP ACTIONS -->
     <div
-      class="col-start-3 hidden w-[320px] shrink-0 items-center justify-end gap-3 lg:flex"
+      class="col-start-3 hidden w-[320px] shrink-0 items-center justify-end gap-3 lg:flex u-no-select"
       aria-label="Header actions"
     >
       <div class="header-actions-icons flex flex-none shrink-0 items-center gap-3 text-base leading-none">

@@ -10,7 +10,7 @@ const { href, label, isActive = false } = Astro.props as {
   href={href}
   data-label={label}
   class:list={[
-    "header-link-effect",
+    "header-link-effect u-no-select",
     { "header-link-effect-active": isActive },
   ]}
   aria-current={isActive ? "page" : undefined}

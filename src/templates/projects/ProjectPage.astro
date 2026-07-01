@@ -78,7 +78,7 @@ const galleryTitle = language === "bg" ? "Галерия" : "Gallery";
 
 <MainLayout language={language} pageKey="projects" alternates={alternates} seo={pageSeo}>
   <main>
-    <section class="max-w-6xl mx-auto px-6 py-20 space-y-12">
+    <section class="max-w-6xl mx-auto px-6 py-20 space-y-12 u-no-select">
       <header class="max-w-4xl space-y-6">
         <p class="text-sm uppercase tracking-[0.25em] text-blue-300">
           {location}
@@ -111,13 +111,13 @@ const galleryTitle = language === "bg" ? "Галерия" : "Gallery";
         class="w-full rounded-2xl object-cover border border-gray-800 shadow-2xl"
       />
 
-      <article class="max-w-4xl text-gray-300 leading-8 space-y-6">
+      <article class="max-w-4xl text-gray-300 leading-8 space-y-6 u-no-select">
         <Content />
       </article>
 
       {
         gallery.length > 0 && (
-          <section class="pt-12 border-t border-gray-800">
+          <section class="pt-12 border-t border-gray-800 u-no-select">
             <h2 class="mb-8 text-3xl font-libertinus font-semibold">
               {galleryTitle}
             </h2>

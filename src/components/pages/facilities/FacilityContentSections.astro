@@ -17,7 +17,7 @@ const hasContentSections = facility.data.contentSections.length > 0;
 
 {
   hasContentSections && (
-    <section class="facility-section facility-section--content-sections">
+    <section class="facility-section facility-section--content-sections u-no-select">
       <div class="facility-container facility-content-sections">
         {facility.data.contentSections.map((section) => {
           if (section.type === "cards") {

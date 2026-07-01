@@ -34,10 +34,10 @@ const isCentered = align === "center";
 const hasDivider = divider !== "none";
 ---
 
-<section class:list={["hero-section", hasImage && "hero-section-with-image"]}>
+<section class:list={["hero-section u-no-select", hasImage && "hero-section-with-image"]}>
   {
     hasImage && image && (
-      <div class="hero-media" aria-hidden="true">
+      <div class="hero-media " aria-hidden="true">
         <Image
           src={image}
           alt={imageAlt}
@@ -64,7 +64,7 @@ const hasDivider = divider !== "none";
         frostedPanel && "hero-blur-panel",
       ]}
     >
-      <h1 class="hero-title">
+      <h1 class="hero-title u-no-select">
         {title}
       </h1>
 
@@ -84,7 +84,7 @@ const hasDivider = divider !== "none";
         body && (
           <p
             class:list={[
-              "hero-lead",
+              "hero-lead u-no-select",
               hasImage ? "hero-lead-on-image" : "hero-lead-on-page",
               hasDivider ? "hero-lead-after-divider" : "hero-lead-no-divider",
             ]}

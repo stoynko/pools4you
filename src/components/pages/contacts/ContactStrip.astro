@@ -11,7 +11,7 @@ const { email, phone, phoneHref} = Astro.props as Props;
 ---
 
 <section class="contact-strip" aria-label="Contact information">
-  <div class="site-container-wide contact-strip__inner">
+  <div class="site-container-wide contact-strip__inner u-no-select">
     <a class="contact-strip__item" href={`mailto:${email}`}>
       <span class="contact-strip__icon" aria-hidden="true">
         <Icon name="email" />
