@@ -10,6 +10,7 @@
 @import "./components/section-divider.css";
 @import "./components/buttons.css";
 @import "./components/icons.css";
+@import "./components/pagination.css";
 
 @import "./components/scroll-to-top-button.css";
 
@@ -28,8 +29,6 @@
 @import "./effects/header-effects.css";
 @import "./effects/page-effects.css";
 @import "./effects/footer-effects.css";
-
-
 
 @tailwind base;
 @tailwind components;

@@ -87,14 +87,51 @@ const facilities = defineCollection({
       .default([]),
 
     contentSections: z
-    .array(
-      z.object({
-        type: z.enum(["cards", "text"]),
-        title: z.string(),
-        text: z.string().optional(),
-      }),
-    )
-    .default([]),
+      .array(
+        z.object({
+          type: z.enum(["cards", "text"]),
+          title: z.string(),
+          text: z.string().optional(),
+        }),
+      )
+      .default([]),
+
+    seoTitle: z.string().optional(),
+    seoDescription: z.string().optional(),
+  }),
+});
+
+const supplierCategoryKeys = [
+  "design",
+  "equipment",
+  "finish",
+  "water",
+  "wellness",
+  "maintenance",
+] as const;
+
+const suppliers = defineCollection({
+  loader: glob({
+    base: "./src/content/suppliers",
+    pattern: "**/*.{md,mdx}",
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, ""),
+  }),
+
+  schema: z.object({
+    language: z.enum(LANGUAGES),
+    slug: z.string(),
+    translationKey: z.string(),
+
+    name: z.string(),
+    logoText: z.string().optional(),
+    categoryKeys: z.array(z.enum(supplierCategoryKeys)).min(1),
+
+    summary: z.string(),
+
+    website: z.string().optional(),
+
+    order: z.number().default(999),
+    featured: z.boolean().default(true),
 
     seoTitle: z.string().optional(),
     seoDescription: z.string().optional(),
@@ -105,4 +142,5 @@ export const collections = {
   projects,
   facilitiesPages,
   facilities,
+  suppliers,
 };

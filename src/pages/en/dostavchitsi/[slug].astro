@@ -1,0 +1,59 @@
+---
+import { getCollection, render, type CollectionEntry } from "astro:content";
+
+import MainLayout from "../../../layouts/MainLayout.astro";
+import PageHero from "../../../components/shared/PageHero.astro";
+
+type SupplierEntry = CollectionEntry<"suppliers">;
+
+export async function getStaticPaths() {
+  const suppliers = await getCollection("suppliers", ({ data }) => {
+    return data.language === "en";
+  });
+
+  return suppliers.map((supplier) => ({
+    params: {
+      slug: supplier.data.slug,
+    },
+    props: {
+      supplier,
+    },
+  }));
+}
+
+const { supplier } = Astro.props as {
+  supplier: SupplierEntry;
+};
+
+const { Content } = await render(supplier);
+
+const pageTitle = supplier.data.seoTitle ?? supplier.data.name;
+const pageDescription = supplier.data.seoDescription ?? supplier.data.summary;
+---
+
+<MainLayout title={pageTitle} description={pageDescription}>
+  <PageHero
+    title={supplier.data.name}
+  />
+
+  <section class="supplier-detail section">
+    <div class="site-container">
+      <div class="supplier-detail__content">
+        <Content />
+      </div>
+
+      {
+        supplier.data.website && (
+          <a
+            class="supplier-detail__website"
+            href={supplier.data.website}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit website
+          </a>
+        )
+      }
+    </div>
+  </section>
+</MainLayout>

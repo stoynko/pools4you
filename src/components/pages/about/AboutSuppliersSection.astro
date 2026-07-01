@@ -1,0 +1,149 @@
+---
+import type { CollectionEntry } from "astro:content";
+import SectionHeader from "../../shared/SectionHeader.astro";
+import { getSupplierPath } from "../../../lib/suppliers/supplierPaths";
+import {
+  SUPPLIER_CATEGORY_KEYS,
+  getSupplierCategoryLabel,
+  getSupplierCategoryLabels,
+  type SupplierCategoryKey,
+} from "../../../lib/suppliers/supplierCategories";
+
+type SupplierEntry = CollectionEntry<"suppliers">;
+
+type Props = {
+  title: string;
+  suppliers: SupplierEntry[];
+};
+
+const { title, suppliers } = Astro.props as Props;
+
+const sortedSuppliers = [...suppliers].sort((a, b) => {
+  return a.data.order - b.data.order;
+});
+
+const language = sortedSuppliers[0]?.data.language ?? "bg";
+
+const categoryCounts = new Map<SupplierCategoryKey, number>();
+
+SUPPLIER_CATEGORY_KEYS.forEach((categoryKey) => {
+  const count = sortedSuppliers.filter((supplier) => {
+    return supplier.data.categoryKeys.includes(categoryKey);
+  }).length;
+
+  categoryCounts.set(categoryKey, count);
+});
+
+const visibleCategoryKeys = SUPPLIER_CATEGORY_KEYS.filter((categoryKey) => {
+  return (categoryCounts.get(categoryKey) ?? 0) > 0;
+});
+
+const emptyText =
+  language === "bg"
+    ? "Няма доставчици в тази категория."
+    : "There are no suppliers in this category.";
+
+const pagePrompt =
+  language === "bg"
+    ? "Въведете номер на страница от 1 до"
+    : "Enter page number from 1 to";
+---
+
+<section
+  class="about-suppliers section"
+  data-supplier-filter-root
+  data-items-per-page="4"
+  data-page-prompt={pagePrompt}
+>
+  <div class="site-container-wide">
+    <SectionHeader title={title}/>
+
+    {
+      visibleCategoryKeys.length > 0 && (
+        <div
+          class="about-supplier-filter"
+          aria-label={
+            language === "bg" ? "Категории доставчици" : "Supplier categories"
+          }
+        >
+          <button
+            class="about-supplier-filter__chip is-active"
+            type="button"
+            data-supplier-filter="all"
+            aria-pressed="true"
+          >
+            {language === "bg" ? "Всички" : "All"}
+          </button>
+
+          {visibleCategoryKeys.map((categoryKey) => (
+            <button
+              class="about-supplier-filter__chip"
+              type="button"
+              data-supplier-filter={categoryKey}
+              aria-pressed="false"
+            >
+              {getSupplierCategoryLabel(categoryKey, language)}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <div class="about-suppliers__stack">
+      {
+        sortedSuppliers.map((supplier) => {
+          const href = getSupplierPath(supplier);
+
+          const categoryLabels = getSupplierCategoryLabels(
+            supplier.data.categoryKeys,
+            supplier.data.language,
+          );
+
+          return (
+            <a
+              class="about-supplier-card"
+              href={href}
+              data-supplier-card
+              data-category-keys={supplier.data.categoryKeys.join(" ")}
+            >
+              <div class="about-supplier-card__logo" aria-hidden="true">
+                <img
+                  src="/images/brand/pools4you-logo-icon-color.svg"
+                  alt=""
+                  loading="lazy"
+                />
+              </div>
+
+              <div class="about-supplier-card__content">
+                <div class="about-supplier-card__categories">
+                  {categoryLabels.map((categoryLabel) => (
+                    <span>{categoryLabel}</span>
+                  ))}
+                </div>
+
+                <h3>{supplier.data.name}</h3>
+
+                <p>{supplier.data.summary}</p>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+
+    <p class="about-supplier-empty" data-supplier-empty hidden>
+      {emptyText}
+    </p>
+
+    <nav
+      class="pagination about-supplier-pagination"
+      aria-label={language === "bg"
+        ? "Страници с доставчици"
+        : "Supplier pages"}
+      data-supplier-pagination
+      hidden
+    >
+      <div class="pagination__items" data-pagination-items></div>
+    </nav>
+  </div>
+</section>

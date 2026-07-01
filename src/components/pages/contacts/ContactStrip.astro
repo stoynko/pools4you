@@ -5,10 +5,9 @@ type Props = {
   email: string;
   phone: string;
   phoneHref: string;
-  hours: string;
 };
 
-const { email, phone, phoneHref, hours } = Astro.props as Props;
+const { email, phone, phoneHref} = Astro.props as Props;
 ---
 
 <section class="contact-strip" aria-label="Contact information">
@@ -29,12 +28,6 @@ const { email, phone, phoneHref, hours } = Astro.props as Props;
       <span class="contact-strip__value">{phone}</span>
     </a>
 
-    <div class="contact-strip__item">
-      <span class="contact-strip__icon" aria-hidden="true">
-        <Icon name="clock" />
-      </span>
-
-      <span class="contact-strip__value">{hours}</span>
-    </div>
+    
   </div>
 </section>

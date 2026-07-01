@@ -30,7 +30,6 @@ const contact = getSiteContacts(language);
       email={contact.email}
       phone={contact.phone}
       phoneHref={contact.phoneHref}
-      hours={contact.hours}
     />
 
     <Header language={language} pageKey={pageKey} alternates={alternates} />
@@ -40,5 +39,9 @@ const contact = getSiteContacts(language);
     <Footer language={language} pageKey={pageKey} alternates={alternates} />
 
     <ScrollToTopButton />
+
+    <script>
+      import "../scripts/main";
+    </script>
   </body>
 </html>

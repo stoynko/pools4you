@@ -1,0 +1,34 @@
+---
+import SectionHeader from "../../shared/SectionHeader.astro";
+
+type Props = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  imageAlt: string;
+  paragraphs: readonly string[];
+};
+
+const { eyebrow, title, description, imageAlt, paragraphs } =
+  Astro.props as Props;
+---
+
+<section class="about-thinking section">
+  <div class="site-container-wide">
+    <div class="about-thinking__grid">
+      <div class="about-thinking__content">
+        <span class="about-section-eyebrow">{eyebrow}</span>
+
+        <SectionHeader title={title} description={description} introAlign="left" />
+
+        <div class="about-thinking__paragraphs">
+          {paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+        </div>
+      </div>
+
+      <div class="about-thinking__media">
+        
+      </div>
+    </div>
+  </div>
+</section>

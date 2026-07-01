@@ -1,0 +1,41 @@
+---
+import SectionHeader from "../../shared/SectionHeader.astro";
+
+type PrincipleItem = {
+  title: string;
+  description: string;
+};
+
+type Props = {
+  eyebrow: string;
+  title: string;
+  description: string;
+  items: readonly PrincipleItem[];
+};
+
+const { eyebrow, title, description, items } = Astro.props as Props;
+---
+
+<section class="about-principles section">
+  <div class="site-container-wide">
+    <span class="about-section-eyebrow">{eyebrow}</span>
+
+    <SectionHeader title={title} description={description} />
+
+    <div class="about-principles__grid">
+      {
+        items.map((item, index) => (
+          <article class="about-principle-card">
+            <span class="about-principle-card__number">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+
+            <h3>{item.title}</h3>
+
+            <p>{item.description}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

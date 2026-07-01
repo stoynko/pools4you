@@ -1,8 +1,19 @@
 ---
+import { getCollection, type CollectionEntry } from "astro:content";
+
 import Layout from "../layouts/MainLayout.astro";
+import PageHero from "../components/shared/PageHero.astro";
+
+import AboutThinkingSection from "../components/pages/about/AboutThinkingSection.astro";
+import AboutPrinciplesSection from "../components/pages/about/AboutPrinciplesSection.astro";
+import AboutSuppliersSection from "../components/pages/about/AboutSuppliersSection.astro";
+
+import { getPageTranslations } from "../lib/i18n";
 
 import type { PageKey } from "../config/pages/pageDefinitions";
 import type { Language } from "../config/i18n/i18n";
+
+type SupplierEntry = CollectionEntry<"suppliers">;
 
 type Props = {
   language: Language;
@@ -10,14 +21,43 @@ type Props = {
 };
 
 const { language, pageKey } = Astro.props as Props;
+
+const translation = getPageTranslations(language, "about");
+
+const suppliers = await getCollection("suppliers", ({ data }) => {
+  return data.language === language && data.featured;
+});
+
+const sortedSuppliers: SupplierEntry[] = suppliers.sort((a, b) => {
+  return a.data.order - b.data.order;
+});
 ---
 
 <Layout language={language} pageKey={pageKey}>
+  <PageHero
+    title={translation.title}
+    body={translation.description}
+    align="left"
+    divider="short"
+  />
 
-  <section class="max-w-6xl mx-auto px-6 py-20 text-center space-y-6">
-    <h1 class="text-6xl font-libertinus font-bold leading-tight">
-      About us .. coming soon
-    </h1>
-  </section>
+  <!-- <AboutThinkingSection
+    eyebrow={translation.thinking.eyebrow}
+    title={translation.thinking.title}
+    description={translation.thinking.description}
+    imageAlt={translation.thinking.imageAlt}
+    paragraphs={translation.thinking.paragraphs}
+  />
 
+  <AboutPrinciplesSection
+    eyebrow={translation.principles.eyebrow}
+    title={translation.principles.title}
+    description={translation.principles.description}
+    items={translation.principles.items}
+  /> -->
+
+  <AboutSuppliersSection
+    title={translation.suppliers.title}
+    suppliers={sortedSuppliers}
+  />
 </Layout>

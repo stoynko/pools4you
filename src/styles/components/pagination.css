@@ -1,0 +1,77 @@
+.pagination {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.pagination[hidden] {
+  display: none;
+}
+
+.pagination__items {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 1.6vw, 1.25rem);
+}
+
+.pagination__button,
+.pagination__ellipsis {
+  width: 2.65rem;
+  height: 2.65rem;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 850;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.pagination__button:not(.is-active):hover,
+.pagination__button:not(.is-active):focus-visible,
+.pagination__ellipsis:hover,
+.pagination__ellipsis:focus-visible {
+  border-color: var(--color-gold);
+  background: transparent;
+  color: var(--color-gold);
+  outline: none;
+}
+
+.pagination__button.is-active {
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: var(--color-text-cta);
+  box-shadow: 0 14px 34px rgb(0 0 0 / 18%);
+}
+
+.pagination__button.is-active:hover,
+.pagination__button.is-active:focus-visible {
+  border-color: var(--color-gold);
+  background: var(--color-gold);
+  color: var(--color-text-cta);
+  outline: none;
+}
+
+.pagination__ellipsis {
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 640px) {
+  .pagination__items {
+    gap: 0.45rem;
+  }
+
+  .pagination__button,
+  .pagination__ellipsis {
+    width: 2.35rem;
+    height: 2.35rem;
+    font-size: 0.82rem;
+  }
+}
