@@ -46,12 +46,8 @@ const pageSeo = {
   <main class="projects-page">
     <ProjectsHero translation={translation.hero} />
 
-    <ProjectsList
-      language={language}
-      projects={sortedProjects}
-      translation={{
+    <ProjectsList language={language} projects={sortedProjects} translation={{
         title: translation.list?.title ?? translation.hero.title,
-        viewProject: translation.card.viewProject,
         empty: translation.empty,
       }}
     />
