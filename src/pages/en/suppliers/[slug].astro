@@ -5,18 +5,18 @@ import {
   type CollectionEntry,
 } from "astro:content";
 
-import MainLayout from "../../layouts/MainLayout.astro";
-import PageHero from "../../components/shared/PageHero.astro";
+import MainLayout from "../../../layouts/MainLayout.astro";
+import PageHero from "../../../components/shared/PageHero.astro";
 
-import { getSupplierPath } from "../../lib/suppliers/supplierPaths";
+import { getSupplierPath } from "../../../lib/suppliers/supplierPaths";
 
-import type { Language } from "../../config/i18n/i18n";
+import type { Language } from "../../../config/i18n/i18n";
 
 type SupplierEntry = CollectionEntry<"suppliers">;
 
 export async function getStaticPaths() {
   const suppliers = await getCollection("suppliers", ({ data }) => {
-    return data.language === "bg";
+    return data.language === "en";
   });
 
   return suppliers.map((supplier) => ({
@@ -69,7 +69,7 @@ const pageDescription =
 ---
 
 <MainLayout
-  language="bg"
+  language="en"
   pageKey="about"
   seo={{
     title: pageTitle,
@@ -95,7 +95,7 @@ const pageDescription =
             target="_blank"
             rel="noopener noreferrer"
           >
-            Към сайта
+            Visit website
           </a>
         )
       }
