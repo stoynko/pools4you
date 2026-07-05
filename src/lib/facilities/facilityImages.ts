@@ -1,7 +1,7 @@
-import poolsHero from "../../content/facilities/pools/images/hero.png";
-import spaHero from "../../content/facilities/spa/images/hero.png";
-import saunaHero from "../../content/facilities/saunas/images/hero.png";
-import aquaparkHero from "../../content/facilities/aquaparks/images/hero.png";
+import poolsHero from "../../content/facilities/pools/images/hero.jpg";
+import spaHero from "../../content/facilities/spa/images/hero.jpg";
+import saunaHero from "../../content/facilities/saunas/images/hero.jpg";
+import aquaparksHero from "../../content/facilities/aquaparks/images/hero.jpg";
 
 import residentialPool from "../../content/facilities/pools/images/residential-pool.jpg";
 import hotelPool from "../../content/facilities/pools/images/hotel-pool.jpg";
@@ -30,7 +30,7 @@ export const facilityImages = {
   },
 
   aquaparks: {
-    "aquapark-hero": aquaparkHero,
+    "aquapark-hero": aquaparksHero,
   },
 } as const;
 

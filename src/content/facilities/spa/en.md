@@ -1,14 +1,14 @@
 ---
-title: "Spa"
+title: "Spa & Wellness"
 description: "Spa facilities combine therapeutic effectiveness with refined aesthetics."
 language: "en"
 slug: "spa"
 translationKey: "spa"
 order: 2
 heroImageKey: "spa-hero"
-cardTitle: "Spa"
+cardTitle: "Spa & Wellness"
 cardDescription: "Hydrotherapy pools, floatation pools, steam rooms, salt rooms and complete wellness spaces."
-seoTitle: "Spa | Pools4You"
+seoTitle: "Spa & Wellness | Pools4You"
 seoDescription: "Pools4You designs and builds spa zones, hydrotherapy pools, steam rooms, salt rooms and wellness complexes."
 ---
 

@@ -14,7 +14,8 @@
 .facility-type-card__link {
   display: grid;
   grid-template-columns: minmax(280px, 0.42fr) minmax(0, 0.58fr);
-  min-height: clamp(260px, 24vw, 340px);
+  height: clamp(260px, 24vw, 340px);
+  min-height: 0;
   overflow: hidden;
   border: 1px solid var(--color-border);
   border-radius: 1.75rem;
@@ -37,7 +38,8 @@
 
 .facility-type-card__media {
   position: relative;
-  min-height: 100%;
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
   isolation: isolate;
 }
