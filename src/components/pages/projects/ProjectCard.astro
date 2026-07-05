@@ -9,10 +9,9 @@ type Props = {
   project: ProjectEntry;
   href: string;
   language: Language;
-  viewProjectLabel: string;
 };
 
-const { project, href, language, viewProjectLabel } = Astro.props as Props;
+const { project, href, language } = Astro.props as Props;
 
 const formattedDate = project.data.date.toLocaleDateString(
   language === "bg" ? "bg-BG" : "en-GB",
@@ -20,7 +19,7 @@ const formattedDate = project.data.date.toLocaleDateString(
 ---
 
 <article class="project-list-card u-no-select">
-  <a href={href} class="project-list-card__link">
+  <a href={href} class="project-list-card__link card-hover">
     <div class="project-list-card__media">
       <Image
         src={project.data.thumbnailImage}
@@ -37,6 +36,7 @@ const formattedDate = project.data.date.toLocaleDateString(
       <div class="project-list-card__meta">
         <span>{project.data.location}</span>
         <span aria-hidden="true">•</span>
+
         <time datetime={project.data.date.toISOString()}>
           {formattedDate}
         </time>
@@ -45,10 +45,6 @@ const formattedDate = project.data.date.toLocaleDateString(
       <h2>{project.data.title}</h2>
 
       <p>{project.data.description}</p>
-
-      <span class="project-list-card__cta">
-        {viewProjectLabel} →
-      </span>
     </div>
   </a>
 </article>

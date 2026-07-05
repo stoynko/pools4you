@@ -19,7 +19,7 @@ const cardImage = getFacilityImage(
 ---
 
 <article class="facility-type-card">
-  <a href={href} class="facility-type-card__link">
+  <a href={href} class="facility-type-card__link card-hover">
     <div
       class:list={[
         "facility-type-card__media",
@@ -28,9 +28,7 @@ const cardImage = getFacilityImage(
     >
       {
         cardImage && (
-          <Image
-            src={cardImage}
-            alt={facility.data.heroImageAlt ?? facility.data.cardTitle}
+          <Image src={cardImage} alt={facility.data.heroImageAlt ?? facility.data.cardTitle}
             class={`facility-type-card__image ${facility.data.heroImagePosition ?? "object-center"}`}
             loading="lazy"
           />

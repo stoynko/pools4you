@@ -1,6 +1,6 @@
 ---
 title: "Hotel Sunrise"
-description: "Construction of an outdoor infinity pool for a 5-star hotel."
+description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 date: "2025-01-10"
 location: "Sunny Beach, Bulgaria"
 client: "Hotel Alallala"
@@ -21,8 +21,8 @@ seoTitle: "Hotel Sunrise Pool Project | Pools4You"
 seoDescription: "See the completed Hotel Sunrise pool project by Pools4You, including design, construction, and final execution details."
 
 isFeatured: true
-featuredQuote: "A masterpiece of fluid dynamics."
-featuredExcerpt: "We reimagined the resort into a modern one."
+featuredQuote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+featuredExcerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 ---
 
 ## Overview
@@ -36,3 +36,4 @@ The pool was built using high-quality materials and a modern filtration system. 
 ## Result
 
 The final result is a premium facility that enhances the guest experience and increases the overall value of the property.
+p

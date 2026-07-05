@@ -1,6 +1,6 @@
 ---
 title: "Хотел Найтфол"
-description: "Реновация на външен инфинити басейн за 5-звезден хотел."
+description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 date: "2026-04-07"
 location: "Слънчев бряг, България"
 client: "Hotel Nightfall"
@@ -17,6 +17,6 @@ seoTitle: "Басейн за Хотел Найтфол | Pools4You"
 seoDescription: "Разгледайте реализирания проект за басейн към Хотел Найтфол, включително дизайн, изграждане и финално изпълнение."
 
 isFeatured: true
-featuredQuote: "Шедиовър от каскади"
-featuredExcerpt: "Преобразихме водния център на резорта като серия от каскадни нива наподобяващи натурален извор."
+featuredQuote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+featuredExcerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 ---

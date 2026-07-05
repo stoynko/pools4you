@@ -62,33 +62,17 @@
   grid-template-columns: auto minmax(0, 1fr);
   gap: clamp(1.5rem, 3vw, 2.5rem);
   align-items: center;
+  overflow: hidden;
   border-radius: 1.25rem;
   background: var(--color-surface);
   padding: clamp(1.35rem, 2.5vw, 2rem);
   padding-left: clamp(1.6rem, 3vw, 2.6rem);
   color: inherit;
   text-decoration: none;
-  overflow: hidden;
-  transition:
-    background-color 220ms ease,
-    transform 220ms ease,
-    box-shadow 220ms ease;
 }
 
 .about-supplier-card[hidden] {
   display: none;
-}
-
-.about-supplier-card:hover,
-.about-supplier-card:focus-visible {
-  background: color-mix(
-    in srgb,
-    var(--color-surface) 94%,
-    var(--color-gold) 6%
-  );
-  transform: scale(1.006);
-  box-shadow: 0 22px 52px rgb(0 0 0 / 12%);
-  outline: none;
 }
 
 .about-supplier-card__logo {

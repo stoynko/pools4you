@@ -29,6 +29,7 @@
 @import "./effects/header-effects.css";
 @import "./effects/page-effects.css";
 @import "./effects/footer-effects.css";
+@import "./effects/card-hover.css";
 
 @tailwind base;
 @tailwind components;

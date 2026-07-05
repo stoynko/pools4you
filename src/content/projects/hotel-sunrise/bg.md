@@ -1,6 +1,6 @@
 ---
 title: "Хотел Сънрайз"
-description: "Изграждане на външен инфинити басейн за 5-звезден хотел."
+description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 date: 2025-01-10
 location: "Слънчев бряг, България"
 client: "Hotel Sunrise"
@@ -21,8 +21,8 @@ seoTitle: "Басейн за Хотел Сънрайз | Pools4You"
 seoDescription: "Разгледайте реализирания проект за басейн към Хотел Сънрайз, включително дизайн, изграждане и финално изпълнение."
 
 isFeatured: true
-featuredQuote: "Шедиовър на флуидната динамика."
-featuredExcerpt: "Преобразихме басейна на хотела в модерен такъв."
+featuredQuote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+featuredExcerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
 ---
 
 ## Общ преглед
