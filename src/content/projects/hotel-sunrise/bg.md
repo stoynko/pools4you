@@ -1,38 +1,49 @@
 ---
 title: "Хотел Сънрайз"
-description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-date: 2025-01-10
+description: "Проектиране и изграждане на модерен инфинити басейн с морска гледка, енергийно ефективни системи и минималистичен дизайн."
+date: "2025-01-10"
 location: "Слънчев бряг, България"
 client: "Hotel Sunrise"
+area: 510
+
 language: "bg"
 slug: "hotel-izgrev"
 translationKey: "hotel-sunrise"
 
 heroImage: "./images/hero.jpg"
-thumbnailImage : "./images/hero.jpg"
+thumbnailImage: "./images/hero.jpg"
+
 gallery:
-   - "./images/gallery-01.jpg"
-   - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
 
 relatedProjects:
   - "hotel-nightfall"
-  
+
 seoTitle: "Басейн за Хотел Сънрайз | Pools4You"
 seoDescription: "Разгледайте реализирания проект за басейн към Хотел Сънрайз, включително дизайн, изграждане и финално изпълнение."
 
 isFeatured: true
-featuredQuote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-featuredExcerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+featuredQuote: "Инфинити басейн с изчистена архитектурна линия и директна визуална връзка с морския хоризонт."
+featuredExcerpt: "Проектът за Хотел Сънрайз комбинира минималистичен дизайн, висококачествени материали и енергийно ефективни системи за отопление и циркулация."
 ---
 
 ## Общ преглед
 
-Проектът включваше проектиране и изграждане на модерен инфинити басейн с изглед към морето. Основният фокус беше върху минималистичен дизайн, висока издръжливост и лесна поддръжка.
+Проектът включваше проектиране и изграждане на модерен инфинити басейн с изглед към морето.
+
+Основният фокус беше върху минималистичния дизайн, високата издръжливост и лесната поддръжка, без да се нарушава визуалната връзка между басейна и околната среда.
 
 ## Изпълнение
 
-Басейнът е изграден с висококачествени материали и модерна филтрационна система. Интегрирани са енергийно ефективни решения за отопление и циркулация на водата.
+Басейнът е изграден с висококачествени материали и модерна филтрационна система.
+
+Интегрирани са енергийно ефективни решения за отопление, обработка и циркулация на водата. Конструкцията и техническото оборудване са подбрани с оглед на интензивната хотелска експлоатация.
 
 ## Резултат
 
-Крайният резултат е луксозно съоръжение, което подобрява цялостното изживяване на гостите и увеличава стойността на обекта.
+Крайният резултат е луксозно и функционално съоръжение, което подобрява цялостното изживяване на гостите и увеличава стойността на обекта.

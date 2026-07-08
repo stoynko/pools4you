@@ -1,0 +1,70 @@
+---
+import { Image } from "astro:assets";
+
+import Carousel from "../../shared/Carousel.astro";
+
+import type { ImageMetadata } from "astro";
+
+type Props = {
+  images: ImageMetadata[];
+};
+
+const { images } = Astro.props as Props;
+---
+
+<section
+  class="project-gallery u-no-select"
+  aria-label="Gallery of project images"
+>
+  <Carousel
+    id="project-gallery-wide"
+    mode="manual"
+    scrollBy="page"
+    loop={false}
+    draggable={true}
+    showControls={images.length > 1}
+    trackDataPhotoswipe={true}
+    previousLabel="Previous images"
+    nextLabel="Next images"
+    class="project-gallery__carousel"
+    frameClass="project-gallery__frame"
+    controlsClass="project-gallery__control"
+    viewportClass="project-gallery__viewport"
+    trackClass="project-gallery__track"
+  >
+    {
+      images.map((image, index) => (
+        <a
+          class="project-gallery__slide"
+          href={image.src}
+          data-carousel-slide
+          data-photoswipe-item
+          data-pswp-width={image.width}
+          data-pswp-height={image.height}
+          data-cropped="true"
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`Project image ${index + 1}`}
+        >
+          <Image
+            src={image}
+            alt=""
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            draggable="false"
+            widths={[400, 600, 800, 1000]}
+            sizes="
+              (max-width: 560px) 80vw,
+              (max-width: 900px) 44vw,
+              (max-width: 1450px) 30vw,
+              (max-width: 1850px) 23vw,
+              18vw
+            "
+            class="project-gallery__image"
+            data-photoswipe-thumbnail
+          />
+        </a>
+      ))
+    }
+  </Carousel>
+</section>

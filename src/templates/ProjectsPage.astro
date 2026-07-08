@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 
 import Layout from "../layouts/MainLayout.astro";
 
-import ProjectsHero from "../components/pages/projects/ProjectsHero.astro";
+import PageHero from "../components/shared/PageHero.astro";
 import ProjectsList from "../components/pages/projects/ProjectsList.astro";
 
 import { getPageTranslations } from "../lib/i18n";
@@ -25,7 +25,7 @@ const projects = await getCollection("projects", ({ data }) => {
   return data.language === language;
 });
 
-const sortedProjects = projects.sort((a, b) => {
+const sortedProjects = [...projects].sort((a, b) => {
   return b.data.date.getTime() - a.data.date.getTime();
 });
 
@@ -42,11 +42,23 @@ const pageSeo = {
 };
 ---
 
-<Layout language={language} pageKey={pageKey} seo={pageSeo}>
+<Layout
+  language={language}
+  pageKey={pageKey}
+  seo={pageSeo}
+>
   <main class="projects-page">
-    <ProjectsHero translation={translation.hero} />
+    <PageHero
+      title={translation.hero.title}
+      body={translation.hero.subtitle}
+      align="left"
+      divider="short"
+    />
 
-    <ProjectsList language={language} projects={sortedProjects} translation={{
+    <ProjectsList
+      language={language}
+      projects={sortedProjects}
+      translation={{
         title: translation.list?.title ?? translation.hero.title,
         empty: translation.empty,
       }}

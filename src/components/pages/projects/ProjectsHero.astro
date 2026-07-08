@@ -1,19 +1,110 @@
 ---
-import PageHero from "../../shared/PageHero.astro";
+import { Image } from "astro:assets";
+
+import Icon from "../../ui/icons/Icon.astro";
+
+import type { ImageMetadata } from "astro";
+import type { Language } from "../../../config/i18n/i18n";
 
 type Props = {
-  translation: {
-    title: string;
-    subtitle: string;
-  };
+  language: Language;
+  title: string;
+  location: string;
+  area?: number;
+  date: Date;
+  heroImage: ImageMetadata;
 };
 
-const { translation } = Astro.props as Props;
+const {
+  language,
+  title,
+  location,
+  area,
+  date,
+  heroImage,
+} = Astro.props as Props;
+
+const locale = language === "bg" ? "bg-BG" : "en-GB";
+
+const formattedDate = date.toLocaleDateString(locale, {
+  month: "long",
+  year: "numeric",
+});
+
+const labels =
+  language === "bg"
+    ? {
+        location: "Локация",
+        area: "Площ",
+        date: "Завършен",
+      }
+    : {
+        location: "Location",
+        area: "Area",
+        date: "Completed",
+      };
 ---
 
-<PageHero
-  title={translation.title}
-  body={translation.subtitle}
-  align="left"
-  divider="short"
-/>
+<section class="project-detail-hero u-no-select">
+  <div class="site-container-full project-detail-hero__media">
+    <Image
+      src={heroImage}
+      alt={title}
+      loading="eager"
+      decoding="async"
+      widths={[960, 1280, 1600, 1920, 2400]}
+      sizes="100vw"
+      class="project-detail-hero__image"
+    />
+
+    <div
+      class="project-detail-hero__gradient"
+      aria-hidden="true"
+    ></div>
+
+    <div class="site-container-wide project-detail-hero__content">
+      <div class="project-detail-hero__summary">
+        <div class="project-detail-hero__heading">
+          <h1>{title}</h1>
+        </div>
+
+        <dl class="project-detail-hero__facts">
+          <div class="project-detail-hero__fact">
+            <dt>
+              <Icon name="location" />
+              <span>{labels.location}</span>
+            </dt>
+
+            <dd>{location}</dd>
+          </div>
+
+          {
+            area !== undefined && (
+              <div class="project-detail-hero__fact">
+                <dt>
+                  <Icon name="area" />
+                  <span>{labels.area}</span>
+                </dt>
+
+                <dd>{area.toLocaleString(locale)} m²</dd>
+              </div>
+            )
+          }
+
+          <div class="project-detail-hero__fact">
+            <dt>
+              <Icon name="clock" />
+              <span>{labels.date}</span>
+            </dt>
+
+            <dd>
+              <time datetime={date.toISOString()}>
+                {formattedDate}
+              </time>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,169 @@
+---
+type CarouselMode = "manual" | "autoplay" | "continuous";
+type CarouselScrollBy = "slide" | "page";
+
+type Props = {
+  id: string;
+
+  mode?: CarouselMode;
+  scrollBy?: CarouselScrollBy;
+  loop?: boolean;
+  draggable?: boolean;
+  showControls?: boolean;
+
+  autoplayInterval?: number;
+  continuousSpeed?: number;
+
+  pauseOnHover?: boolean;
+  pauseOnFocus?: boolean;
+
+  trackDataPhotoswipe?: boolean;
+
+  previousLabel?: string;
+  nextLabel?: string;
+
+  class?: string;
+  headerClass?: string;
+  frameClass?: string;
+  controlsClass?: string;
+  viewportClass?: string;
+  trackClass?: string;
+};
+
+const {
+  id,
+
+  mode = "manual",
+  scrollBy = "slide",
+  loop = false,
+  draggable = true,
+  showControls = true,
+
+  autoplayInterval = 4500,
+  continuousSpeed = 28,
+
+  pauseOnHover = true,
+  pauseOnFocus = true,
+
+  trackDataPhotoswipe = false,
+
+  previousLabel = "Previous slide",
+  nextLabel = "Next slide",
+
+  class: className,
+  headerClass,
+  frameClass,
+  controlsClass,
+  viewportClass,
+  trackClass,
+} = Astro.props as Props;
+
+const viewportId = `${id}-viewport`;
+const hasHeader = Astro.slots.has("header");
+---
+
+<section
+  id={id}
+  class:list={["carousel", className]}
+  aria-label="Image preview"
+  data-carousel
+  data-carousel-mode={mode}
+  data-carousel-scroll-by={scrollBy}
+  data-carousel-loop={String(loop)}
+  data-carousel-draggable={String(draggable)}
+  data-carousel-autoplay-interval={autoplayInterval}
+  data-carousel-continuous-speed={continuousSpeed}
+  data-carousel-pause-on-hover={String(pauseOnHover)}
+  data-carousel-pause-on-focus={String(pauseOnFocus)}
+>
+  {
+    hasHeader && (
+      <div class:list={["carousel__header", headerClass]}>
+        <slot name="header" />
+      </div>
+    )
+  }
+
+  <div
+    class:list={[
+      "carousel__frame",
+      frameClass,
+      {
+        "carousel__frame--without-controls": !showControls,
+      },
+    ]}
+  >
+    {
+      showControls && (
+        <button
+          class:list={[
+            "carousel__control",
+            "carousel__control--previous",
+            controlsClass,
+          ]}
+          type="button"
+          data-carousel-previous
+          aria-controls={viewportId}
+          aria-label={previousLabel}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="m15 18-6-6 6-6"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+            />
+          </svg>
+        </button>
+      )
+    }
+
+    <div
+      id={viewportId}
+      class:list={["carousel__viewport", viewportClass]}
+      data-carousel-viewport
+      tabindex="0"
+    >
+      <div
+        class:list={["carousel__track", trackClass]}
+        data-carousel-track
+        data-photoswipe-gallery={
+          trackDataPhotoswipe
+            ? ""
+            : undefined
+        }
+      >
+        <slot />
+      </div>
+    </div>
+
+    {
+      showControls && (
+        <button
+          class:list={[
+            "carousel__control",
+            "carousel__control--next",
+            controlsClass,
+          ]}
+          type="button"
+          data-carousel-next
+          aria-controls={viewportId}
+          aria-label={nextLabel}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="m9 18 6-6-6-6"
+              fill="none"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+            />
+          </svg>
+        </button>
+      )
+    }
+  </div>
+</section>

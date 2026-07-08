@@ -1,22 +1,39 @@
 ---
 title: "Хотел Найтфол"
-description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+description: "Проектиране и изграждане на модерен хотелски басейн с устойчиви материали, ефективна филтрация и изчистена архитектурна визия."
 date: "2026-04-07"
 location: "Слънчев бряг, България"
 client: "Hotel Nightfall"
+area: 420
+
 language: "bg"
 slug: "hotel-nightfall"
 translationKey: "hotel-nightfall"
+
 heroImage: "./images/hero.jpg"
 thumbnailImage: "./images/hero.jpg"
+
 gallery:
   - "./images/gallery-01.jpg"
-relatedProjects: []
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+  - "./images/gallery-01.jpg"
+
+relatedProjects:
+  - "hotel-sunrise"
 
 seoTitle: "Басейн за Хотел Найтфол | Pools4You"
 seoDescription: "Разгледайте реализирания проект за басейн към Хотел Найтфол, включително дизайн, изграждане и финално изпълнение."
 
 isFeatured: true
-featuredQuote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-featuredExcerpt: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+featuredQuote: "Модерен хотелски басейн, проектиран като естествено продължение на архитектурата и зоните за отдих."
+featuredExcerpt: "Проектът за Хотел Найтфол съчетава изчистен дизайн, надеждна техническа инфраструктура и устойчиви решения за поддръжка и експлоатация."
 ---
+
+Проектът включваше проектиране и изграждане на модерен закрит хотелски басейн, съобразен с архитектурата на сградата и начина, по който гостите използват прилежащите зони за почивка.
+
+Основната цел беше да се създаде спокойно и функционално пространство с ясна визуална връзка между басейна, естествената светлина и околната среда.
+
+Басейнът е изграден с висококачествени материали и съвременна система за филтрация и циркулация на водата. Особено внимание беше отделено на надеждността на техническите системи, енергийната ефективност и лесната ежедневна поддръжка на съоръжението.
