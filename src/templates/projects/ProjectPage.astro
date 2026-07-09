@@ -33,6 +33,7 @@ const {
   location,
   area,
   heroImage,
+  heroImagePosition,
   gallery,
   seoTitle,
   seoDescription,
@@ -130,7 +131,8 @@ const { Content } = await render(project);
       area={area}
       date={date}
       heroImage={heroImage}
-    />
+      heroImagePosition={heroImagePosition}
+/>
 
     {
       gallery.length > 0 && (

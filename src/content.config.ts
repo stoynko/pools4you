@@ -23,6 +23,7 @@ const projects = defineCollection({
       translationKey: z.string(),
 
       heroImage: image(),
+      heroImagePosition: z.string().default("center center"),
       thumbnailImage: image(),
       gallery: z.array(image()).default([]),
 

@@ -11,6 +11,7 @@ slug: "hotel-sunrise"
 translationKey: "hotel-sunrise"
 
 heroImage: "./images/hero.jpg"
+heroImagePosition: "center 100%"
 thumbnailImage: "./images/hero.jpg"
 
 gallery:

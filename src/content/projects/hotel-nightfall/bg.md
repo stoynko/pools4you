@@ -11,6 +11,7 @@ slug: "hotel-nightfall"
 translationKey: "hotel-nightfall"
 
 heroImage: "./images/hero.jpg"
+heroImagePosition: "center 70%"
 thumbnailImage: "./images/hero.jpg"
 
 gallery:

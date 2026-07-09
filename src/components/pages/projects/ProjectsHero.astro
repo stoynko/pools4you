@@ -13,6 +13,7 @@ type Props = {
   area?: number;
   date: Date;
   heroImage: ImageMetadata;
+  heroImagePosition?: string;
 };
 
 const {
@@ -22,6 +23,7 @@ const {
   area,
   date,
   heroImage,
+  heroImagePosition = "center center",
 } = Astro.props as Props;
 
 const locale = language === "bg" ? "bg-BG" : "en-GB";
@@ -55,7 +57,8 @@ const labels =
       widths={[960, 1280, 1600, 1920, 2400]}
       sizes="100vw"
       class="project-detail-hero__image"
-    />
+      style={`--project-hero-image-position: ${heroImagePosition};`}
+/>
 
     <div
       class="project-detail-hero__gradient"
