@@ -32,18 +32,8 @@ featuredQuote: "An infinity pool with a clean architectural profile and a direct
 featuredExcerpt: "The Hotel Sunrise project combines minimalist design, high-quality materials, and energy-efficient systems for water heating and circulation."
 ---
 
-## Overview
-
 The project involved the design and construction of a modern infinity pool overlooking the sea.
 
 The primary focus was on a minimalist aesthetic, high durability, and straightforward maintenance while preserving the visual relationship between the pool and its surroundings.
 
-## Execution
-
-The pool was built using high-quality materials and a modern filtration system.
-
 Energy-efficient solutions for water heating, treatment, and circulation were integrated into the design. The structure and technical equipment were selected to withstand intensive hotel operation.
-
-## Result
-
-The completed project is a premium and functional facility that enhances the guest experience and increases the overall value of the property.
