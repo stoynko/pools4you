@@ -11,5 +11,8 @@ export const projects = {
   list: {
     title: "Completed projects",
   },
+  related: {
+    title: "Related projects",
+  },
   empty: "No projects have been added yet.",
 } as const;

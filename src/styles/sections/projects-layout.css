@@ -156,6 +156,12 @@
   padding-bottom: clamp(2.5rem, 4vw, 4rem);
 }
 
+.project-related-section {
+  background: var(--color-bg);
+  padding-top: clamp(4rem, 7vw, 7rem);
+  padding-bottom: clamp(5rem, 9vw, 9rem);
+}
+
 .project-detail-hero__summary {
   --details-width: 29rem;
   --heading-width: 34rem;

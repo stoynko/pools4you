@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { Language } from "../../../config/i18n/i18n";
+
+import SectionHeader from "../../shared/SectionHeader.astro";
+import ProjectsListCard from "./ProjectsListCard.astro";
+import { getPagePath } from "../../../config/pages/pagePaths";
+
+type ProjectEntry = CollectionEntry<"projects">;
+
+type Props = {
+  language: Language;
+  projects: ProjectEntry[];
+  title: string;
+  viewProjectLabel: string;
+};
+
+const {
+  language,
+  projects,
+  title,
+  viewProjectLabel,
+} = Astro.props as Props;
+
+const projectsBasePath = getPagePath("projects", language);
+
+function getProjectHref(project: ProjectEntry) {
+  return `${projectsBasePath}/${project.data.slug}`;
+}
+---
+
+{
+  projects.length > 0 && (
+    <section class="project-related-section section">
+      <div class="site-container-wide">
+        <SectionHeader title={title} />
+
+        <div class="projects-list">
+          {projects.map((project) => (
+            <ProjectsListCard
+              project={project}
+              href={getProjectHref(project)}
+              language={language}
+              viewProjectLabel={viewProjectLabel}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}

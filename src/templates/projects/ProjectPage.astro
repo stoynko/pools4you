@@ -8,6 +8,8 @@ import {
 import MainLayout from "../../layouts/MainLayout.astro";
 import ProjectHero from "../../components/pages/projects/ProjectsHero.astro";
 import ProjectGallery from "../../components/pages/projects/ProjectGallery.astro";
+import RelatedProjects from "../../components/pages/projects/RelatedProjects.astro";
+import { getPageTranslations } from "../../lib/i18n";
 
 import { createProjectStructuredData } from "../../lib/seo/projectData";
 import {
@@ -35,6 +37,7 @@ const {
   heroImage,
   heroImagePosition,
   gallery,
+  relatedProjects,
   seoTitle,
   seoDescription,
   slug,
@@ -86,6 +89,19 @@ const alternates = {
     ? `/en/projects/${enProject.data.slug}`
     : undefined,
 };
+
+const projectsTranslation = getPageTranslations(language, "projects");
+
+const languageProjects = await getCollection("projects", ({ data }) => {
+  return data.language === language;
+});
+
+const relatedProjectEntries = languageProjects.filter(({ data }) => {
+  return (
+    data.translationKey !== translationKey &&
+    relatedProjects.includes(data.translationKey)
+  );
+});
 
 const structuredData = createProjectStructuredData({
   project,
@@ -151,5 +167,12 @@ const { Content } = await render(project);
         </article>
       </div>
     </section>
+
+    <RelatedProjects
+  language={language}
+  projects={relatedProjectEntries}
+  title={projectsTranslation.related.title}
+  viewProjectLabel={projectsTranslation.card.viewProject}
+/>
   </main>
 </MainLayout>

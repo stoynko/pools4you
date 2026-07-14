@@ -7,6 +7,9 @@ export const projects = {
   list: {
     title: "Реализирани проекти",
   },
+  related: {
+    title: "Свързани проекти",
+  },
   card: {
     viewProject: "Виж проекта",
   },
