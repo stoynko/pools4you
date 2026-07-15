@@ -13,8 +13,9 @@
       • Lighthouse
 
 3. ToDo:
-   2. dark mode setup
-   3. adding cookies for storing language/dark mode preferences
+   
+   1. Вместо sticky header да се прибира плавно както на https://evoscapes.com/
+   2. Анимация със 
 
 Color scheme - https://coolors.co/tailwind/d0be6f
 

@@ -16,7 +16,7 @@ export const home = {
       {
         id: "experience",
         title: "Experience",
-        body: "Years of practical expertise in pool planning, construction, renovation, and technical execution.",
+        body: "More than 15 years of practical expertise in pool planning, construction, renovation, and technical execution.",
       },
       {
         id: "efficiency",
