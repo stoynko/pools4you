@@ -61,6 +61,7 @@ export const home = {
 
   featuredProjects: {
     title: "Избрани проекти",
+    intro: "Подбрани проекти, които демонстрират нашия опит и внимание към детайла.",
     ctaLabel: "Вижте всички проекти",
     projectCtaLabel: "Виж проекта",
   },

@@ -9,10 +9,19 @@ type Props = {
 const { name, class: className } = Astro.props as Props;
 
 const icon = iconPaths[name];
+const isStrokeIcon = "mode" in icon && icon.mode === "stroke";
 ---
 
 <span class:list={["ui-icon", className]} aria-hidden="true">
-  <svg viewBox={icon.viewBox} focusable="false">
-    <path d={icon.path} fill="currentColor" />
+  <svg
+    viewBox={icon.viewBox}
+    fill={isStrokeIcon ? "none" : "currentColor"}
+    stroke={isStrokeIcon ? "currentColor" : "none"}
+    stroke-width={isStrokeIcon ? "1" : undefined}
+    stroke-linecap={isStrokeIcon ? "round" : undefined}
+    stroke-linejoin={isStrokeIcon ? "round" : undefined}
+    focusable="false"
+  >
+    <path d={icon.path} />
   </svg>
 </span>

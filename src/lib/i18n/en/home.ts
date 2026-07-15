@@ -62,6 +62,7 @@ export const home = {
 
   featuredProjects: {
     title: "Featured Projects",
+    intro: "A glimpse into our completed projects, demonstrating our experience and attention to detail.",
     ctaLabel: "See all projects",
     projectCtaLabel: "View project",
   },

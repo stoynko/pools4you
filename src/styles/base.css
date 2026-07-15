@@ -3,10 +3,12 @@ html {
   color: var(--color-text);
   font-family: var(--font-inter);
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
-  font-size: 1rem;
+  font-size: clamp(1rem, 0.18vw + 0.94rem, 1.15rem);
   min-height: 100vh;
   margin: 0;
   background: var(--color-bg);
@@ -48,7 +50,7 @@ p {
   margin: 0;
   color: var(--color-text-secondary);
   font-family: var(--font-inter);
-  font-size: 1rem;
+  font-size: 1em;
   line-height: 1.7;
 }
 

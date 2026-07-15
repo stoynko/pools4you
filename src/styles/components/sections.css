@@ -16,11 +16,11 @@
   }
 
   .section-container {
-    @apply site-container;
+    @apply site-container-wide;
   }
 
   .section-header {
-    @apply mb-14 sm:mb-16;
+    @apply mb-14 sm:mb-18 lg:mb-20 2xl:mb-24;
   }
 
   .section-header-row {

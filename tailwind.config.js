@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./src/**/*.{astro,html,js,ts}"],
+
   theme: {
     extend: {
       colors: {
@@ -50,6 +51,7 @@ export default {
       },
 
       spacing: {
+        18: "4.5rem",
         "btn-x": "28px",
       },
 
@@ -58,5 +60,6 @@ export default {
       },
     },
   },
+
   plugins: [],
 };

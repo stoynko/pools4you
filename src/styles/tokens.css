@@ -1,4 +1,9 @@
 :root {
+
+  /*
+   * Color styles
+   */
+
   --color-gold: #d3b368;
   --color-gold-hover: #a8925f;
   --color-gold-subtle: #d9c48a;
@@ -28,20 +33,62 @@
   --font-inter: "Inter", sans-serif;
   --font-libertinus: "Libertinus Serif", serif;
 
-  --header-height: clamp(80px, 6vw, 96px);
-  --header-logo-height: clamp(36px, 4vw, 48px);
+  /*
+   * Header
+   */
+
+  --header-height: clamp(5rem, 6vw, 6rem);
+  --header-logo-height: clamp(2.25rem, 4vw, 3rem);
+
+  /*
+   * Layout
+   */
+
+  --container-narrow-max: 70rem;
+  --container-default-max: 90rem;
+  --container-wide-max: 115rem;
+
+  --container-gutter: clamp(2rem, 6vw, 7rem);
+  --container-wide-gutter: clamp(1.5rem, 3vw, 4rem);
+
+  /*
+   * Section spacing
+   */
+
+  --section-space-default: clamp(5rem, 8vw, 7rem);
 }
 
-@media (max-width: 1023px) {
+/*
+ * Large desktop
+ */
+
+@media (min-width: 120rem) {
   :root {
-    --header-height: 64px;
-    --header-logo-height: 42px;
+    --container-narrow-max: 80rem;
+    --container-default-max: 112rem;
+    --container-wide-max: 132rem;
+
+    --container-gutter: clamp(4rem, 5vw, 8rem);
+    --container-wide-gutter: clamp(3rem, 4vw, 6rem);
+
+    --section-space-default: clamp(6rem, 7vw, 9rem);
   }
 }
 
-@media (max-width: 1023px) {
+/*
+ * Very large desktop / 4K
+ */
+
+@media (min-width: 160rem) {
   :root {
-    --header-height: 64px;
-    --header-logo-height: 42px;
+    --container-default-max: 120rem;
+    --container-wide-max: 144rem;
+  }
+}
+
+@media (max-width: 63.9375rem) {
+  :root {
+    --header-height: 4rem;
+    --header-logo-height: 2.625rem;
   }
 }

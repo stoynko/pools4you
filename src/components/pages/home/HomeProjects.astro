@@ -30,6 +30,7 @@ const featuredProjects = allProjects
 
 function getProjectHref(project: CollectionEntry<"projects">) {
   const basePath = language === "en" ? "/en/projects" : "/proekti";
+
   return `${basePath}/${project.data.slug}`;
 }
 ---
@@ -37,11 +38,13 @@ function getProjectHref(project: CollectionEntry<"projects">) {
 {
   featuredProjects.length > 0 && (
     <section class="featured-projects u-no-select">
-      <div class="site-container">
+      <div class="site-container-wide">
         <SectionHeader
           title={translation.featuredProjects.title}
-          buttonLabel={translation.featuredProjects.ctaLabel}
-          buttonHref={projectsHref}
+          description={translation.featuredProjects.intro}
+          size="large"
+          introSize="large"
+          introAlign="right"
         />
 
         <div class="featured-projects-list">
@@ -54,6 +57,12 @@ function getProjectHref(project: CollectionEntry<"projects">) {
               eager={index === 0}
             />
           ))}
+        </div>
+
+        <div class="featured-projects-footer">
+          <a href={projectsHref} class="button-primary w-fit">
+            {translation.featuredProjects.ctaLabel}
+          </a>
         </div>
       </div>
     </section>

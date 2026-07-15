@@ -1,25 +1,20 @@
-.site-container {
-  width: min(
-    100% - clamp(2rem, 6vw, 7rem),
-    1440px
-  );
+.site-container,
+.site-container-narrow,
+.site-container-wide {
+  width: calc(100% - (2 * clamp(1.25rem, 3vw, 4rem)));
   margin-inline: auto;
+}
+
+.site-container {
+  max-width: 1600px;
 }
 
 .site-container-narrow {
-  width: min(
-    100% - clamp(2rem, 6vw, 7rem),
-    1120px
-  );
-  margin-inline: auto;
+  max-width: 1280px;
 }
 
 .site-container-wide {
-  width: min(
-    100% - clamp(1.5rem, 3vw, 4rem),
-    1840px
-  );
-  margin-inline: auto;
+  max-width: 2160px;
 }
 
 .site-container-full {
@@ -27,8 +22,46 @@
   margin-inline: auto;
 }
 
+.content-width-compact {
+  width: 100%;
+  max-width: 58ch;
+}
+
+.content-width-readable {
+  width: 100%;
+  max-width: 72ch;
+}
+
+.content-width-relaxed {
+  width: 100%;
+  max-width: 84ch;
+}
+
+.content-panel-compact {
+  width: 100%;
+  max-width: 36rem;
+}
+
+.content-panel {
+  width: 100%;
+  max-width: 46rem;
+}
+
+.content-panel-wide {
+  width: 100%;
+  max-width: 56rem;
+}
+
+.heading-width {
+  max-width: 22ch;
+}
+
+.heading-width-wide {
+  max-width: 30ch;
+}
+
 .section {
-  padding-block: clamp(5rem, 8vw, 7rem);
+  padding-block: clamp(4.5rem, 7vw, 8rem);
 }
 
 .object-center {
@@ -52,12 +85,12 @@
 }
 
 .eyebrow {
+  color: var(--color-gold);
   font-family: var(--font-inter);
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-gold);
 }
 
 .u-no-select,
@@ -87,4 +120,52 @@
 [data-animate].is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (min-width: 1920px) {
+  .site-container,
+  .site-container-narrow,
+  .site-container-wide {
+    width: calc(100% - (2 * clamp(3rem, 4vw, 6rem)));
+  }
+
+  .section {
+    padding-block: clamp(6rem, 6vw, 9rem);
+  }
+}
+
+@media (max-width: 1279px) {
+  .site-container,
+  .site-container-narrow,
+  .site-container-wide {
+    width: calc(100% - (2 * clamp(1.5rem, 4vw, 3rem)));
+  }
+
+  .section {
+    padding-block: clamp(4rem, 7vw, 6rem);
+  }
+}
+
+@media (max-width: 767px) {
+  .site-container,
+  .site-container-narrow,
+  .site-container-wide {
+    width: calc(100% - (2 * clamp(1rem, 5vw, 1.5rem)));
+  }
+
+  .section {
+    padding-block: clamp(3.5rem, 12vw, 5rem);
+  }
+
+  [data-animate] {
+    transform: translateY(14px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-animate] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

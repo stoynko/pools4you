@@ -2,6 +2,8 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 
+import Icon from "../../ui/icons/Icon.astro";
+
 type Props = {
   project: CollectionEntry<"projects">;
   href: string;
@@ -25,19 +27,32 @@ const {
     { "featured-project-reversed": isReversed },
   ]}
 >
-  <a href={href} class="featured-project-image-link">
-    <Image
-      src={project.data.thumbnailImage}
-      alt={project.data.title}
-      class="featured-project-image"
-      widths={[480, 768, 1024, 1280]}
-      sizes="(max-width: 900px) 100vw, 55vw"
-      loading={eager ? "eager" : "lazy"}
-    />
+  <a
+    href={href}
+    class="project-list-card__link card-hover featured-project-image-link"
+    aria-label={`${ctaLabel}: ${project.data.title}`}
+  >
+    <div class="project-list-card__media featured-project-image-media">
+      <Image
+        src={project.data.thumbnailImage}
+        width={project.data.thumbnailImage.width}
+        height={project.data.thumbnailImage.height}
+        alt={project.data.title}
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
+        class="project-list-card__image featured-project-image"
+      />
+
+      <span class="featured-project-image-action" aria-hidden="true">
+        <Icon name="externalLink" />
+      </span>
+    </div>
   </a>
 
   <div class="featured-project-content">
-    <h3 class="featured-project-title">{project.data.title}</h3>
+    <h3 class="featured-project-title">
+      {project.data.title}
+    </h3>
 
     {
       project.data.featuredQuote && (
@@ -52,9 +67,9 @@ const {
     </p>
 
     <div class="featured-project-cta">
-  <a href={href} class="button-primary w-fit">
-    {ctaLabel}
-  </a>
-</div>
+      <a href={href} class="button-primary w-fit">
+        {ctaLabel}
+      </a>
+    </div>
   </div>
 </article>

@@ -22,7 +22,7 @@ const translation = getPageTranslations(language, "header");
 
 <header class="site-header bg-site text-text">
 
-  <div class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 lg:grid-cols-[240px_minmax(0,1fr)_320px] xl:gap-8">
+  <div class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 xl:grid-cols-[minmax(190px,240px)_minmax(0,1fr)_minmax(280px,320px)] xl:gap-8">
 
     <!-- LEFT: LOGO -->
     <div class="col-start-1 flex items-center justify-self-start u-no-select">
@@ -30,10 +30,8 @@ const translation = getPageTranslations(language, "header");
     </div>
 
     <!-- CENTER: DESKTOP NAV -->
-    <nav
-      class="col-start-2 hidden min-w-0 items-center justify-start gap-4 overflow-hidden pl-10 lg:flex xl:gap-8 xl:pl-14"
-      aria-label="Main navigation"
-    >
+    <nav class="col-start-2 hidden min-w-0 items-center justify-center gap-4 overflow-hidden px-4 xl:flex xl:gap-6 2xl:gap-8" aria-label="Main navigation">
+
       {
         primaryNav.map((key) => (
           <HeaderLink
@@ -47,9 +45,9 @@ const translation = getPageTranslations(language, "header");
 
     <!-- RIGHT: DESKTOP ACTIONS -->
     <div
-      class="col-start-3 hidden w-[320px] shrink-0 items-center justify-end gap-3 lg:flex u-no-select"
-      aria-label="Header actions"
-    >
+  class="col-start-3 hidden shrink-0 items-center justify-end gap-3 xl:flex u-no-select"
+  aria-label="Header actions"
+>
       <div class="header-actions-icons flex flex-none shrink-0 items-center gap-3 text-base leading-none">
 
         <LanguageDropdown language={language} pageKey={pageKey} alternates={alternates} />
@@ -57,14 +55,14 @@ const translation = getPageTranslations(language, "header");
 
       <a
         href={getPagePath("services", language)}
-        class="button-primary w-header-cta shrink-0 whitespace-nowrap"
+        class="button-primary min-w-[160px] shrink-0 whitespace-nowrap 2xl:min-w-[180px]"
       >
         {translation.enquire}
       </a>
     </div>
 
     <!-- MOBILE HAMBURGER -->
-    <div class="col-start-3 flex items-center justify-end lg:hidden">
+    <div class="col-start-3 flex items-center justify-end xl:hidden">
       <HeaderMobileMenu language={language} pageKey={pageKey} alternates={alternates} />
     </div>
   </div>
