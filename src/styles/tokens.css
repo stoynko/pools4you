@@ -39,7 +39,8 @@
 
   --header-height: clamp(5rem, 6vw, 6rem);
   --header-logo-height: clamp(2.25rem, 4vw, 3rem);
-
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  
   /*
    * Layout
    */

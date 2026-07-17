@@ -145,20 +145,30 @@ const enPath = alternates?.en ?? getPagePath(pageKey, "en");
 <script>
   const mobileMenuRoot =
     document.querySelector<HTMLElement>("[data-mobile-menu]");
-  const toggleButton = document.querySelector<HTMLElement>(
-    "[data-mobile-nav-toggle]",
-  );
+
+  const toggleButton =
+    document.querySelector<HTMLButtonElement>("[data-mobile-nav-toggle]");
+
   const mobileNavigation =
     document.querySelector<HTMLElement>("[data-mobile-nav]");
-  const mobileBackdrop = document.querySelector<HTMLElement>(
-    "[data-mobile-nav-backdrop]",
-  );
+
+  const mobileBackdrop =
+    document.querySelector<HTMLElement>("[data-mobile-nav-backdrop]");
+
+  const dispatchMobileMenuState = (open: boolean) => {
+    document.dispatchEvent(
+      new CustomEvent("mobile-menu-state-change", {
+        detail: { open },
+      }),
+    );
+  };
 
   const setBackdropOpen = (open: boolean) => {
     if (!mobileBackdrop) return;
 
     mobileBackdrop.classList.toggle("opacity-0", !open);
     mobileBackdrop.classList.toggle("pointer-events-none", !open);
+
     mobileBackdrop.classList.toggle("opacity-100", open);
     mobileBackdrop.classList.toggle("pointer-events-auto", open);
   };
@@ -176,6 +186,8 @@ const enPath = alternates?.en ?? getPagePath(pageKey, "en");
 
     document.documentElement.classList.remove("overflow-hidden");
     document.body.classList.remove("overflow-hidden");
+
+    dispatchMobileMenuState(false);
   };
 
   const openMobileMenu = () => {
@@ -191,12 +203,14 @@ const enPath = alternates?.en ?? getPagePath(pageKey, "en");
 
     document.documentElement.classList.add("overflow-hidden");
     document.body.classList.add("overflow-hidden");
+
+    dispatchMobileMenuState(true);
   };
 
   const toggleMobileMenu = () => {
     if (!toggleButton) return;
 
-    const isOpen = toggleButton.classList.contains("open");
+    const isOpen = toggleButton.getAttribute("aria-expanded") === "true";
 
     if (isOpen) {
       closeMobileMenu();
@@ -220,6 +234,10 @@ const enPath = alternates?.en ?? getPagePath(pageKey, "en");
     if (!(target instanceof Element)) return;
     if (!mobileMenuRoot) return;
 
+    const isOpen = toggleButton?.getAttribute("aria-expanded") === "true";
+
+    if (!isOpen) return;
+
     const clickedInsideMobileMenu = mobileMenuRoot.contains(target);
 
     if (!clickedInsideMobileMenu) {
@@ -242,6 +260,11 @@ const enPath = alternates?.en ?? getPagePath(pageKey, "en");
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
 
-    closeMobileMenu();
+    const isOpen = toggleButton?.getAttribute("aria-expanded") === "true";
+
+    if (isOpen) {
+      closeMobileMenu();
+      toggleButton?.focus();
+    }
   });
 </script>

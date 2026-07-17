@@ -3,7 +3,6 @@ import "../styles/global.css";
 import Head from "./MainHead.astro";
 import Header from "../components/layout/Header.astro";
 import Footer from "../components/layout/Footer.astro";
-import ContactStrip from "../components/pages/contacts/ContactStrip.astro";
 import ScrollToTopButton from "../components/ui/ScrollToTopButton.astro";
 
 import { getSiteContacts } from "../config/site/contacts";
@@ -18,21 +17,15 @@ const { language, pageKey, seo, alternates } = Astro.props as {
   seo?: Partial<PageSeo>;
   alternates?: Partial<Record<Language, string>>;
 };
-
-const contact = getSiteContacts(language);
 ---
 
 <html lang={language}>
   <Head language={language} pageKey={pageKey} seo={seo} />
 
   <body class="font-inter">
-    <ContactStrip
-      email={contact.email}
-      phone={contact.phone}
-      phoneHref={contact.phoneHref}
-    />
-
     <Header language={language} pageKey={pageKey} alternates={alternates} />
+
+    <div class="site-header-spacer" aria-hidden="true"></div>
 
     <slot />
 

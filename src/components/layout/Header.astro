@@ -20,7 +20,7 @@ const { language, pageKey, alternates } = Astro.props as {
 const translation = getPageTranslations(language, "header");
 ---
 
-<header class="site-header bg-site text-text">
+<header class="site-header is-at-top text-text" data-site-header>
 
   <div class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 xl:grid-cols-[minmax(190px,240px)_minmax(0,1fr)_minmax(280px,320px)] xl:gap-8">
 
