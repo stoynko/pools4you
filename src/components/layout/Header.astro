@@ -20,18 +20,26 @@ const { language, pageKey, alternates } = Astro.props as {
 const translation = getPageTranslations(language, "header");
 ---
 
-<header class="site-header is-at-top text-text" data-site-header>
-
-  <div class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 xl:grid-cols-[minmax(190px,240px)_minmax(0,1fr)_minmax(280px,320px)] xl:gap-8">
-
+<header
+  class="site-header is-at-top is-booting text-text"
+  data-site-header
+  style="visibility: hidden;"
+>
+  <div
+    class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 xl:grid-cols-[minmax(190px,240px)_minmax(0,1fr)_minmax(280px,320px)] xl:gap-8"
+  >
     <!-- LEFT: LOGO -->
-    <div class="col-start-1 flex items-center justify-self-start u-no-select">
+    <div
+      class="col-start-1 flex items-center justify-self-start u-no-select"
+    >
       <HeaderLogo language={language} />
     </div>
 
     <!-- CENTER: DESKTOP NAV -->
-    <nav class="col-start-2 hidden min-w-0 items-center justify-center gap-4 overflow-hidden px-4 xl:flex xl:gap-6 2xl:gap-8" aria-label="Main navigation">
-
+    <nav
+      class="col-start-2 hidden min-w-0 items-center justify-center gap-4 overflow-hidden px-4 xl:flex xl:gap-6 2xl:gap-8"
+      aria-label="Main navigation"
+    >
       {
         primaryNav.map((key) => (
           <HeaderLink
@@ -45,12 +53,17 @@ const translation = getPageTranslations(language, "header");
 
     <!-- RIGHT: DESKTOP ACTIONS -->
     <div
-  class="col-start-3 hidden shrink-0 items-center justify-end gap-3 xl:flex u-no-select"
-  aria-label="Header actions"
->
-      <div class="header-actions-icons flex flex-none shrink-0 items-center gap-3 text-base leading-none">
-
-        <LanguageDropdown language={language} pageKey={pageKey} alternates={alternates} />
+      class="col-start-3 hidden shrink-0 items-center justify-end gap-3 u-no-select xl:flex"
+      aria-label="Header actions"
+    >
+      <div
+        class="header-actions-icons flex flex-none shrink-0 items-center gap-3 text-base leading-none"
+      >
+        <LanguageDropdown
+          language={language}
+          pageKey={pageKey}
+          alternates={alternates}
+        />
       </div>
 
       <a
@@ -63,7 +76,11 @@ const translation = getPageTranslations(language, "header");
 
     <!-- MOBILE HAMBURGER -->
     <div class="col-start-3 flex items-center justify-end xl:hidden">
-      <HeaderMobileMenu language={language} pageKey={pageKey} alternates={alternates} />
+      <HeaderMobileMenu
+        language={language}
+        pageKey={pageKey}
+        alternates={alternates}
+      />
     </div>
   </div>
 </header>

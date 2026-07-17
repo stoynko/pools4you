@@ -2,7 +2,7 @@ html {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-inter);
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }

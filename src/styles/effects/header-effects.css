@@ -26,6 +26,15 @@
   will-change: transform;
 }
 
+/*
+ * Header.astro initially locks the header with inline visibility:hidden.
+ * This disables movement while smartHeader.ts determines whether the
+ * restored page position requires a visible or hidden header.
+ */
+.site-header.is-booting {
+  transition: none;
+}
+
 .site-header.is-hidden {
   transform: translate3d(0, calc(-100% - 1px), 0);
 }
@@ -81,12 +90,14 @@
   max-height: none;
 }
 
-.header-actions-icons [data-language-dropdown-button] > svg:first-of-type {
+.header-actions-icons [data-language-dropdown-button]
+  > svg:first-of-type {
   width: 20px;
   height: 20px;
 }
 
-.header-actions-icons [data-language-dropdown-button] > svg:last-of-type {
+.header-actions-icons [data-language-dropdown-button]
+  > svg:last-of-type {
   width: 16px;
   height: 16px;
 }
@@ -179,5 +190,9 @@ html[lang="bg"] .mobile-nav-primary-link {
 @media (prefers-reduced-motion: reduce) {
   .site-header {
     transition-duration: 0.01ms;
+  }
+
+  .site-header.is-booting {
+    transition: none;
   }
 }
