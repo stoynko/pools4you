@@ -28,14 +28,14 @@ const translation = getPageTranslations(language, "header");
   <div
     class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 xl:grid-cols-[minmax(190px,240px)_minmax(0,1fr)_minmax(280px,320px)] xl:gap-8"
   >
-    <!-- LEFT: LOGO -->
+    {/* LOGO */}
     <div
       class="col-start-1 flex items-center justify-self-start u-no-select"
     >
       <HeaderLogo language={language} />
     </div>
 
-    <!-- CENTER: DESKTOP NAV -->
+     {/* DESKTOP NAVIGATION */}
     <nav
       class="col-start-2 hidden min-w-0 items-center justify-center gap-4 overflow-hidden px-4 xl:flex xl:gap-6 2xl:gap-8"
       aria-label="Main navigation"
@@ -50,8 +50,8 @@ const translation = getPageTranslations(language, "header");
         ))
       }
     </nav>
-
-    <!-- RIGHT: DESKTOP ACTIONS -->
+    
+    {/* RIGHT: DESKTOP ACTIONS */}
     <div
       class="col-start-3 hidden shrink-0 items-center justify-end gap-3 u-no-select xl:flex"
       aria-label="Header actions"
@@ -74,7 +74,8 @@ const translation = getPageTranslations(language, "header");
       </a>
     </div>
 
-    <!-- MOBILE HAMBURGER -->
+    {/* MOBILE HAMBURGER */}
+
     <div class="col-start-3 flex items-center justify-end xl:hidden">
       <HeaderMobileMenu
         language={language}

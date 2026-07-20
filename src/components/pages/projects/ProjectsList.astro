@@ -20,7 +20,7 @@ type Props = {
 const { language, projects, translation } = Astro.props as Props;
 
 const projectsBasePath = getPagePath("projects", language);
-
+const sectionTitle = translation.title;
 function getProjectHref(project: ProjectEntry) {
   return `${projectsBasePath}/${project.data.slug}`;
 }
@@ -28,7 +28,8 @@ function getProjectHref(project: ProjectEntry) {
 
 <section class="projects-list-section section u-no-select">
   <div class="site-container-wide">
-    <SectionHeader title={translation.title} />
+
+    <SectionHeader title={sectionTitle}/>
 
     {
       projects.length > 0 ? (

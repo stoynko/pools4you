@@ -9,8 +9,13 @@ type Props = {
   paragraphs: readonly string[];
 };
 
-const { eyebrow, title, description, imageAlt, paragraphs } =
-  Astro.props as Props;
+const {
+  eyebrow,
+  title: sectionTitle,
+  description: sectionDescription,
+  imageAlt,
+  paragraphs,
+} = Astro.props as Props;
 ---
 
 <section class="about-thinking section">
@@ -19,7 +24,13 @@ const { eyebrow, title, description, imageAlt, paragraphs } =
       <div class="about-thinking__content">
         <span class="about-section-eyebrow">{eyebrow}</span>
 
-        <SectionHeader title={title} description={description} introAlign="left" />
+        <SectionHeader
+          title={sectionTitle}
+          description={sectionDescription}
+          size="large"
+          descriptionSize="large"
+          descriptionWeight="normal"
+        />
 
         <div class="about-thinking__paragraphs">
           {paragraphs.map((paragraph) => <p>{paragraph}</p>)}

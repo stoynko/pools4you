@@ -14,12 +14,17 @@ type Props = {
 const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "home");
+const sectionTitle = translation.vision.title;
 ---
 
 <section class="section-shell section-spacing-lg u-no-select">
   <div class="section-container">
     <div class="w-full">
-      <SectionHeader title={translation.vision.title} size="large" />
+  
+      <SectionHeader
+          title={sectionTitle}
+          size="large"
+        />
 
       <div class="section-body-stack">
         <p class="section-body-lg">

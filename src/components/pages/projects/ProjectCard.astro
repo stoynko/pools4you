@@ -3,6 +3,8 @@ import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import type { Language } from "../../../config/i18n/i18n";
 
+import Icon from "../../ui/icons/Icon.astro";
+
 type ProjectEntry = CollectionEntry<"projects">;
 
 type Props = {
@@ -30,6 +32,10 @@ const formattedDate = project.data.date.toLocaleDateString(
         decoding="async"
         class="project-list-card__image"
       />
+
+      <span class="project-list-card__action" aria-hidden="true">
+        <Icon name="externalLink" />
+      </span>
     </div>
 
     <div class="project-list-card__content">

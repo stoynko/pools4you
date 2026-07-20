@@ -12,11 +12,6 @@
       • Google PageSpeed Insights
       • Lighthouse
 
-3. ToDo:
-   
-   1. Вместо sticky header да се прибира плавно както на https://evoscapes.com/
-   2. Анимация със 
-
 Color scheme - https://coolors.co/tailwind/d0be6f
 
 | Command                   | Action                                           |

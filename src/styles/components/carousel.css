@@ -21,9 +21,9 @@
   display: block;
 }
 
-/* =========================================================
-   Controls
-   ========================================================= */
+/*
+* Controls
+*/
 
 .carousel__control {
   position: relative;
@@ -84,18 +84,13 @@
   transition: none;
 }
 
-/* =========================================================
-   Viewport and track
-   ========================================================= */
+/*
+* Viewport and track
+*/
 
 .carousel__viewport {
   width: 100%;
   min-width: 0;
-
-  /*
-   * Provides room for the gallery card scale, gold border,
-   * glow, and shadow without changing slide width.
-   */
   padding-block: clamp(0.65rem, 1vw, 0.9rem);
 
   overflow-x: auto;
@@ -122,6 +117,11 @@
   user-select: none;
 }
 
+.carousel__viewport--dragging,
+.carousel__viewport--dragging * {
+  cursor: grabbing !important;
+}
+
 .carousel__track {
   display: flex;
   align-items: center;
@@ -139,9 +139,9 @@
   scroll-snap-stop: always;
 }
 
-/* =========================================================
-   Responsive
-   ========================================================= */
+/*
+* Responsiveness
+*/
 
 @media (max-width: 680px) {
   .carousel__frame {

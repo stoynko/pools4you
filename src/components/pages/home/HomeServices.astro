@@ -20,6 +20,8 @@ type Props = {
 const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "home");
+const sectionTitle = translation.services.title;
+const sectionDescription = translation.services.intro;
 const servicesHref = getPagePath("services", language);
 
 const serviceImages: Record<string, ImageMetadata> = {
@@ -33,11 +35,10 @@ const serviceImages: Record<string, ImageMetadata> = {
 <section class="section-shell section-spacing-md u-no-select">
   <div class="site-container-wide">
     <SectionHeader
-      title={translation.services.title}
-      description={translation.services.intro}
+      title={sectionTitle}
+      descriptionSize="large"
+      description={sectionDescription}
       size="large"
-      introSize="large"
-      introAlign="right"
     />
 
     <div class="card-grid-4">

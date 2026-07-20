@@ -3,58 +3,33 @@ type Props = {
   title: string;
   description?: string;
   size?: "default" | "large";
-  introSize?: "default" | "large";
-  introAlign?: "left" | "right";
-  buttonLabel?: string;
-  buttonHref?: string;
-  buttonVariant?: "primary" | "ghost";
+  descriptionSize?: "default" | "large";
+  descriptionWeight?: "normal" | "semibold";
 };
 
 const {
   title,
   description,
   size = "default",
-  introSize = "default",
-  introAlign = "right",
-  buttonLabel,
-  buttonHref,
-  buttonVariant = "primary",
+  descriptionSize = "default",
+  descriptionWeight = "normal",
 } = Astro.props as Props;
 
 const isLarge = size === "large";
-const isIntroLarge = introSize === "large";
-const isIntroRight = introAlign === "right";
-const hasButton = Boolean(buttonLabel && buttonHref);
-
-const buttonClass =
-  buttonVariant === "ghost" ? "button-ghost w-fit" : "button-primary w-fit";
+const isDescriptionLarge = descriptionSize === "large";
 ---
 
 <div class="mb-14 sm:mb-18 lg:mb-20 2xl:mb-24">
-  <div class="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-    <div>
-      <h2
-        class:list={[
-          "font-libertinus font-semibold leading-tight text-brand-gold",
-          isLarge
-            ? "text-4xl sm:text-5xl"
-            : "text-3xl sm:text-4xl",
-        ]}
-      >
-        {title}
-      </h2>
-    </div>
-
-    {
-      hasButton ? (
-        <a href={buttonHref} class={buttonClass}>
-          {buttonLabel}
-        </a>
-      ) : (
-        <slot name="action" />
-      )
-    }
-  </div>
+  <h2
+    class:list={[
+      "font-libertinus font-semibold leading-tight text-brand-gold",
+      isLarge
+        ? "text-4xl sm:text-5xl"
+        : "text-3xl sm:text-4xl",
+    ]}
+  >
+    {title}
+  </h2>
 
   <div class="mt-5 h-px w-full bg-brand-gold"></div>
 
@@ -62,11 +37,13 @@ const buttonClass =
     description && (
       <p
         class:list={[
-          "mt-4 max-w-[52rem] font-inter font-semibold leading-relaxed text-text-muted",
-          isIntroLarge
-            ? "text-base sm:text-[1.05rem] lg:text-[1.125rem]"
-            : "text-sm sm:text-[0.95rem]",
-          isIntroRight && "ml-auto text-right",
+          "ml-auto mt-4 font-inter text-right leading-relaxed text-text-secondary",
+          descriptionWeight === "semibold"
+            ? "font-semibold"
+            : "font-normal",
+          isDescriptionLarge
+            ? "w-full max-w-none text-lg sm:text-xl"
+            : "max-w-[52rem] text-sm sm:text-[0.95rem]",
         ]}
       >
         {description}

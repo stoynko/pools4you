@@ -10,8 +10,7 @@
   height: var(--header-height);
 
   background: rgb(13 14 17 / 92%);
-  border-bottom: 1px solid var(--color-border);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 8%);
+  box-shadow: none;
 
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -26,11 +25,6 @@
   will-change: transform;
 }
 
-/*
- * Header.astro initially locks the header with inline visibility:hidden.
- * This disables movement while smartHeader.ts determines whether the
- * restored page position requires a visible or hidden header.
- */
 .site-header.is-booting {
   transition: none;
 }
@@ -45,11 +39,10 @@
 
 .site-header.is-at-top {
   background: rgb(13 14 17 / 98%);
-  box-shadow: 0 10px 30px rgb(0 0 0 / 8%);
 }
 
 .site-header:not(.is-at-top) {
-  box-shadow: 0 16px 42px rgb(0 0 0 / 22%);
+  background: rgb(13 14 17 / 98%);
 }
 
 .header-actions-icons {

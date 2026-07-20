@@ -17,6 +17,8 @@ type Props = {
 const { language, limit = 2 } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "home");
+const sectionTitle = translation.featuredProjects.title;
+const sectionDescription = translation.featuredProjects.intro;
 const projectsHref = getPagePath("projects", language);
 
 const allProjects = await getCollection("projects");
@@ -40,11 +42,11 @@ function getProjectHref(project: CollectionEntry<"projects">) {
     <section class="featured-projects u-no-select">
       <div class="site-container-wide">
         <SectionHeader
-          title={translation.featuredProjects.title}
-          description={translation.featuredProjects.intro}
+          title={sectionTitle}
+          description={sectionDescription}
           size="large"
-          introSize="large"
-          introAlign="right"
+          descriptionSize="large"
+          descriptionWeight="normal"
         />
 
         <div class="featured-projects-list">

@@ -1,4 +1,4 @@
-git ---
+---
 import type { CollectionEntry } from "astro:content";
 import type { Language } from "../../../config/i18n/i18n";
 import { getPagePath } from "../../../config/pages/pagePaths";
@@ -18,7 +18,7 @@ type Props = {
 const { language, facilities, translation } = Astro.props as Props;
 
 const facilitiesBasePath = getPagePath("facilities", language);
-
+const sectionTitle = translation.title;
 function getFacilityHref(facility: FacilityEntry) {
   return `${facilitiesBasePath}/${facility.data.slug}`;
 }
@@ -32,7 +32,7 @@ function getFacilityHref(facility: FacilityEntry) {
       <div class="site-container-wide">
 
         {/* SECTION TITLE - TYPES OF FACILITIES */}
-        <SectionHeader title={translation.title} />
+        <SectionHeader title={sectionTitle} />
 
         <div class="facility-type-grid__list">
           {facilities.map((facility) => (

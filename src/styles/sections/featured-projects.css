@@ -35,10 +35,19 @@
     order: 1;
   }
 
-  .featured-project-image-link {
+  .featured-project-image-link.card-hover {
     min-width: 0;
     height: auto;
     color: var(--color-gold);
+    transform: none;
+    transition:
+      box-shadow 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .featured-project-image-link.card-hover:hover,
+  .featured-project-image-link.card-hover:focus-within,
+  .featured-project-image-link.card-hover:focus-visible {
+    transform: none;
   }
 
   .featured-project-image-media {
@@ -49,12 +58,13 @@
   .featured-project-image {
     position: relative;
     z-index: 1;
+    display: block;
+    width: 100%;
     border-radius: inherit;
     filter: saturate(0.9);
-    transform: scale(1);
+    transform: none;
     transition:
-      filter 620ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+      filter 620ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   .featured-project-image-action {
@@ -62,25 +72,32 @@
     top: clamp(1rem, 1.5vw, 1.5rem);
     right: clamp(1rem, 1.5vw, 1.5rem);
     z-index: 3;
+
     display: grid;
     width: clamp(3rem, 3.2vw, 3.75rem);
     height: clamp(3rem, 3.2vw, 3.75rem);
     place-items: center;
+
     border: 1px solid
       color-mix(in srgb, var(--color-gold) 90%, transparent);
     border-radius: 50%;
+
     background:
       color-mix(in srgb, var(--color-bg) 88%, transparent);
     color: var(--color-gold);
+
     opacity: 0;
     pointer-events: none;
     transform: translateY(-0.65rem) scale(0.92);
+
     box-shadow:
       0 0 0 1px
         color-mix(in srgb, var(--color-gold) 8%, transparent),
       0 0.75rem 2rem rgb(0 0 0 / 30%);
+
     backdrop-filter: blur(0.35rem);
     -webkit-backdrop-filter: blur(0.35rem);
+
     transition:
       opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
       transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
@@ -99,12 +116,16 @@
   }
 
   .featured-project-image-link:hover .featured-project-image,
+  .featured-project-image-link:focus-within .featured-project-image,
   .featured-project-image-link:focus-visible .featured-project-image {
     filter: saturate(1);
-    transform: scale(1.012);
+    transform: none;
   }
 
-  .featured-project-image-link:hover .featured-project-image-action,
+  .featured-project-image-link:hover
+    .featured-project-image-action,
+  .featured-project-image-link:focus-within
+    .featured-project-image-action,
   .featured-project-image-link:focus-visible
     .featured-project-image-action {
     opacity: 1;
@@ -280,12 +301,19 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    .featured-project-image-link.card-hover,
     .featured-project-image,
     .featured-project-image-action {
       transition: none;
     }
 
+    .featured-project-image-link.card-hover,
+    .featured-project-image-link.card-hover:hover,
+    .featured-project-image-link.card-hover:focus-within,
+    .featured-project-image-link.card-hover:focus-visible,
     .featured-project-image-link:hover .featured-project-image,
+    .featured-project-image-link:focus-within
+      .featured-project-image,
     .featured-project-image-link:focus-visible
       .featured-project-image {
       transform: none;

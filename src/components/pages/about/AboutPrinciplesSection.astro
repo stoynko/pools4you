@@ -13,14 +13,19 @@ type Props = {
   items: readonly PrincipleItem[];
 };
 
-const { eyebrow, title, description, items } = Astro.props as Props;
+const {
+  eyebrow,
+  title: sectionTitle,
+  description: sectionDescription,
+  items,
+} = Astro.props as Props;
 ---
 
 <section class="about-principles section">
   <div class="site-container-wide">
     <span class="about-section-eyebrow">{eyebrow}</span>
 
-    <SectionHeader title={title} description={description} />
+    <SectionHeader title={sectionTitle} description={sectionDescription} />
 
     <div class="about-principles__grid">
       {

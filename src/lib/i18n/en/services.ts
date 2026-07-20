@@ -14,7 +14,7 @@ export const services = {
   list: {
     eyebrow: "Services",
     title: "How We Can Help",
-    text: "A complete range of services for private and commercial water feature projects.",
+    description: "A complete range of services for private and commercial water feature projects.",
     items: [
       {
         title: "Planning, Technical Design and Budgeting",
@@ -71,7 +71,7 @@ export const services = {
 
   why: {
     title: "Why Pools4You",
-    text: "Concrete advantages, not generic promises.",
+    description: "Concrete advantages, not generic promises.",
     proof: [
       {
         title: "A coordinated process from start to finish",

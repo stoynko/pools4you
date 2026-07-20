@@ -12,6 +12,8 @@ type Props = {
 const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "services");
+const sectionTitle = translation.list.title;
+const sectionDescription = translation.list.description;
 ---
 
 <script>
@@ -20,10 +22,14 @@ const translation = getPageTranslations(language, "services");
 
 <section id="services" class="section-shell section-spacing-md bg-site-secondary u-no-select">
   <div class="section-container">
+
     <SectionHeader
-      title={translation.list.title}
-      description={translation.list.text}
-    />
+          title={sectionTitle}
+          description={sectionDescription}
+          size="large"
+          descriptionSize="large"
+          descriptionWeight="normal"
+        />
 
     <div
       data-accordion

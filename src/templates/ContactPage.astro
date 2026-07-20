@@ -19,6 +19,7 @@ type Props = {
 const { language, pageKey } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "contacts");
+const sectionTitle = translation.faq.title;
 const contact = getSiteContacts(language);
 ---
 
@@ -68,7 +69,7 @@ const contact = getSiteContacts(language);
 
     <section class="contact-faq section-shell section-spacing-md bg-site-secondary u-no-select">
       <div class="section-container">
-        <SectionHeader title={translation.faq.title} />
+        <SectionHeader title={sectionTitle} />
 
         <div
           data-accordion

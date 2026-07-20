@@ -1,9 +1,9 @@
 ---
 import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
 
 import Carousel from "../../shared/Carousel.astro";
-
-import type { ImageMetadata } from "astro";
+import Icon from "../../ui/icons/Icon.astro";
 
 type Props = {
   images: ImageMetadata[];
@@ -37,6 +37,7 @@ const { images } = Astro.props as Props;
         <a
           class="project-gallery__slide"
           href={image.src}
+          draggable="false"
           data-carousel-slide
           data-photoswipe-item
           data-pswp-width={image.width}
@@ -63,6 +64,13 @@ const { images } = Astro.props as Props;
             class="project-gallery__image"
             data-photoswipe-thumbnail
           />
+
+          <span
+            class="project-gallery__action"
+            aria-hidden="true"
+          >
+            <Icon name="galleryExpand" />
+          </span>
         </a>
       ))
     }
