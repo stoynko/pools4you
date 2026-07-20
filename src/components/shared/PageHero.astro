@@ -15,6 +15,7 @@ type Props = {
   align?: HeroAlign;
   divider?: HeroDivider;
   frostedPanel?: boolean;
+  class?: string;
 };
 
 const {
@@ -27,6 +28,7 @@ const {
   align = "left",
   divider = "short",
   frostedPanel = false,
+  class: className,
 } = Astro.props as Props;
 
 const hasImage = Boolean(image);
@@ -34,10 +36,16 @@ const isCentered = align === "center";
 const hasDivider = divider !== "none";
 ---
 
-<section class:list={["hero-section u-no-select", hasImage && "hero-section-with-image"]}>
+<section
+  class:list={[
+    "hero-section u-no-select",
+    hasImage && "hero-section-with-image",
+    className,
+  ]}
+>
   {
     hasImage && image && (
-      <div class="hero-media " aria-hidden="true">
+      <div class="hero-media" aria-hidden="true">
         <Image
           src={image}
           alt={imageAlt}
@@ -49,9 +57,9 @@ const hasDivider = divider !== "none";
           fetchpriority="high"
         />
 
-        <div class="hero-image-overlay" />
-        <div class="hero-fade-top" />
-        <div class="hero-fade-bottom" />
+        <div class="hero-image-overlay"></div>
+        <div class="hero-fade-top"></div>
+        <div class="hero-fade-bottom"></div>
       </div>
     )
   }
@@ -76,7 +84,7 @@ const hasDivider = divider !== "none";
               `hero-divider-${divider}`,
               isCentered && "hero-divider-centered",
             ]}
-          />
+          ></div>
         )
       }
 
@@ -86,7 +94,9 @@ const hasDivider = divider !== "none";
             class:list={[
               "hero-lead u-no-select",
               hasImage ? "hero-lead-on-image" : "hero-lead-on-page",
-              hasDivider ? "hero-lead-after-divider" : "hero-lead-no-divider",
+              hasDivider
+                ? "hero-lead-after-divider"
+                : "hero-lead-no-divider",
             ]}
           >
             {body}
@@ -109,7 +119,11 @@ const hasDivider = divider !== "none";
                   isCentered && "hero-benefit-item-centered",
                 ]}
               >
-                <span class="hero-benefit-marker" aria-hidden="true" />
+                <span
+                  class="hero-benefit-marker"
+                  aria-hidden="true"
+                ></span>
+
                 <span>{benefit}</span>
               </li>
             ))}
@@ -117,5 +131,7 @@ const hasDivider = divider !== "none";
         )
       }
     </div>
+
+    <slot name="overlay" />
   </div>
 </section>

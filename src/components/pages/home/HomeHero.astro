@@ -3,6 +3,8 @@ import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
 
 import PageHero from "../../shared/PageHero.astro";
+import Icon from "../../ui/icons/Icon.astro";
+
 import heroImage from "../../../assets/images/pages/home/hero.png";
 
 type Props = {
@@ -12,7 +14,16 @@ type Props = {
 const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "home");
-const imageAlt = "Luxury swimming pool";
+
+const imageAlt =
+  language === "bg"
+    ? "Луксозен плувен басейн"
+    : "Luxury swimming pool";
+
+const scrollCueLabel =
+  language === "bg"
+    ? "Към следващата секция"
+    : "Go to the next section";
 ---
 
 <PageHero
@@ -23,4 +34,29 @@ const imageAlt = "Luxury swimming pool";
   imagePositionClass="object-[50%_48%]"
   frostedPanel={false}
   divider="none"
-/>
+  class="home-hero"
+>
+  <button
+    slot="overlay"
+    class="home-hero-scroll-cue"
+    type="button"
+    aria-label={scrollCueLabel}
+    data-home-hero-scroll-cue
+  >
+    <Icon
+      name="chevronDown"
+      class="home-hero-scroll-cue__icon"
+    />
+  </button>
+</PageHero>
+
+<script>
+  import { initHomePageAnimations } from "../../../scripts/pages/home";
+
+  initHomePageAnimations();
+
+  document.addEventListener(
+    "astro:page-load",
+    initHomePageAnimations,
+  );
+</script>
