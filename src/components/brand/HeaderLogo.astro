@@ -2,31 +2,38 @@
 import type { Language } from "../../config/i18n/i18n";
 import { getPagePath } from "../../config/pages/pagePaths";
 
-const { language, variant = "color" } = Astro.props as {
+const { language } = Astro.props as {
   language: Language;
-  variant?: "color" | "black";
 };
 
 const homePath = getPagePath("home", language);
-
-const logoImageClass = "block h-logo w-auto max-w-none";
-
-const logoSrc =
-  variant === "black"
-    ? "/images/brand/pools4you-logo-text-black.svg"
-    : "/images/brand/pools4you-logo-text-color.svg";
 ---
 
 <a
   href={homePath}
-  class="inline-flex shrink-0 items-center"
+  class="header-logo-link inline-flex shrink-0 items-center"
   aria-label="Pools4You home"
 >
   <img
-    src={logoSrc}
+    src="/images/brand/pools4you-logo-text-color.svg"
     alt="Pools4You Ltd."
-    class={logoImageClass}
+    class="header-logo-image block h-logo w-auto max-w-none"
     loading="eager"
     decoding="async"
+    draggable="false"
   />
 </a>
+
+<style>
+  .header-logo-link,
+  .header-logo-link *,
+  .header-logo-image {
+    cursor: pointer !important;
+  }
+
+  .header-logo-image {
+    user-select: none;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+</style>

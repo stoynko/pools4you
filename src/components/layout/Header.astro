@@ -3,6 +3,7 @@ import type { PageKey } from "../../config/pages/pageDefinitions.ts";
 import type { Language } from "../../config/i18n/i18n.ts";
 
 import { getPagePath } from "../../config/pages/pagePaths.ts";
+import { getSiteContacts } from "../../config/site/contacts";
 import { getPageTranslations } from "../../lib/i18n";
 import { primaryNav } from "../../config/navigation/navigationItems";
 
@@ -18,6 +19,15 @@ const { language, pageKey, alternates } = Astro.props as {
 };
 
 const translation = getPageTranslations(language, "header");
+const contact = getSiteContacts(language);
+
+const enquirySubject =
+  language === "bg"
+    ? "Запитване"
+    : "Enquiry";
+
+const contactHref =
+  `mailto:${contact.email}?subject=${encodeURIComponent(enquirySubject)}`;
 ---
 
 <header
@@ -35,7 +45,7 @@ const translation = getPageTranslations(language, "header");
       <HeaderLogo language={language} />
     </div>
 
-     {/* DESKTOP NAVIGATION */}
+    {/* DESKTOP NAVIGATION */}
     <nav
       class="col-start-2 hidden min-w-0 items-center justify-center gap-4 overflow-hidden px-4 xl:flex xl:gap-6 2xl:gap-8"
       aria-label="Main navigation"
@@ -50,7 +60,7 @@ const translation = getPageTranslations(language, "header");
         ))
       }
     </nav>
-    
+
     {/* RIGHT: DESKTOP ACTIONS */}
     <div
       class="col-start-3 hidden shrink-0 items-center justify-end gap-3 u-no-select xl:flex"
@@ -67,15 +77,14 @@ const translation = getPageTranslations(language, "header");
       </div>
 
       <a
-        href={getPagePath("services", language)}
-        class="button-primary min-w-[160px] shrink-0 whitespace-nowrap 2xl:min-w-[180px]"
+        href={contactHref}
+        class="button-base header-cta min-w-[160px] shrink-0 whitespace-nowrap 2xl:min-w-[180px]"
       >
         {translation.enquire}
       </a>
     </div>
 
     {/* MOBILE HAMBURGER */}
-
     <div class="col-start-3 flex items-center justify-end xl:hidden">
       <HeaderMobileMenu
         language={language}
