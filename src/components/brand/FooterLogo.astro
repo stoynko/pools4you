@@ -1,24 +1,14 @@
 ---
 import { Image } from "astro:assets";
-import footerLogoColor from "../../../public/images/brand/pool4you-logo-full-color.svg";
-import footerLogoBlack from "../../../public/images/brand/pool4you-logo-full-black.svg";
+import footerLogo from "../../../public/images/brand/pool4you-footer-logo.svg";
 ---
 
 <div class="footer-logo">
   <Image
-    src={footerLogoBlack}
+    src={footerLogo}
     alt=""
     aria-hidden="true"
-    class="footer-logo-image footer-logo-image-light"
-    loading="lazy"
-    decoding="async"
-  />
-
-  <Image
-    src={footerLogoColor}
-    alt=""
-    aria-hidden="true"
-    class="footer-logo-image footer-logo-image-dark"
+    class="footer-logo-image"
     loading="lazy"
     decoding="async"
   />
