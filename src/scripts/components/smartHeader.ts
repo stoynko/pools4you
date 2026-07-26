@@ -4,6 +4,7 @@ const DIRECTION_DEAD_ZONE = 2;
 const HIDE_TRAVEL = 28;
 const SHOW_TRAVEL = 16;
 const REVEAL_BELOW_Y = 200;
+const HEADER_ENTRANCE_FALLBACK_MS = 700;
 
 const SCROLL_STORAGE_PREFIX = "pools4you:scroll-position:";
 
@@ -33,6 +34,7 @@ export function initSmartHeader(): void {
   let direction = 0;
   let travelled = 0;
   let isReady = false;
+  let entranceFallbackTimer: number | undefined;
 
   function getNavigationType(): NavigationType {
     const [navigationEntry] = performance.getEntriesByType(
@@ -62,8 +64,45 @@ export function initSmartHeader(): void {
         String(Math.max(scrollY, 0)),
       );
     } catch {
-      // Storage may be unavailable in restricted browsing modes.
     }
+  }
+
+  function stopHeaderEntrance(): void {
+    header.classList.remove("is-entering");
+
+    if (entranceFallbackTimer !== undefined) {
+      window.clearTimeout(entranceFallbackTimer);
+      entranceFallbackTimer = undefined;
+    }
+  }
+
+  function startHeaderEntrance(): void {
+    if (
+      header.classList.contains("is-hidden") ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    header.classList.add("is-entering");
+
+    entranceFallbackTimer = window.setTimeout(
+      stopHeaderEntrance,
+      HEADER_ENTRANCE_FALLBACK_MS,
+    );
+  }
+
+  function handleHeaderAnimationEnd(
+    event: AnimationEvent,
+  ): void {
+    if (
+      event.target !== header ||
+      event.animationName !== "slide-in-top"
+    ) {
+      return;
+    }
+
+    stopHeaderEntrance();
   }
 
   function showHeader(revealing = false): void {
@@ -72,6 +111,9 @@ export function initSmartHeader(): void {
   }
 
   function hideHeader(): void {
+
+    stopHeaderEntrance();
+
     header.classList.remove("is-revealing");
     header.classList.add("is-hidden");
   }
@@ -108,34 +150,22 @@ export function initSmartHeader(): void {
       return currentScrollY;
     }
 
-    /*
-     * On reload, window.scrollY can temporarily be 0 even though the
-     * browser is about to restore a much lower page position.
-     */
     return Math.max(currentScrollY, readStoredScrollY());
   }
 
   function releaseInitialPaintLock(): void {
     if (isReady) return;
 
-    /*
-     * Apply the correct state while the header is still completely
-     * invisible through its inline visibility lock.
-     */
     syncHeaderToPosition(getInitialScrollY());
 
-    /*
-     * Commit the transform before exposing the header.
-     */
     void header.offsetHeight;
 
     window.requestAnimationFrame(() => {
-      /*
-       * Do not read window.scrollY again here. It may still temporarily
-       * report 0 during scroll restoration and would recreate the flash.
-       */
+      startHeaderEntrance();
+
       header.style.removeProperty("visibility");
       header.classList.remove("is-booting");
+
       isReady = true;
     });
   }
@@ -191,10 +221,7 @@ export function initSmartHeader(): void {
   }
 
   function requestHeaderUpdate(): void {
-    /*
-     * Store immediately rather than waiting for the animation frame.
-     * This ensures the latest position is available during a reload.
-     */
+
     storeScrollY();
 
     if (!isReady || ticking) return;
@@ -213,6 +240,11 @@ export function initSmartHeader(): void {
       travelled = 0;
     }
   }
+
+  header.addEventListener(
+    "animationend",
+    handleHeaderAnimationEnd,
+  );
 
   window.addEventListener("scroll", requestHeaderUpdate, {
     passive: true,
@@ -238,9 +270,6 @@ export function initSmartHeader(): void {
         return;
       }
 
-      /*
-       * Handles returning through the browser back-forward cache.
-       */
       syncHeaderToPosition(window.scrollY);
     },
     { passive: true },
@@ -251,9 +280,6 @@ export function initSmartHeader(): void {
     handleMobileMenuState,
   );
 
-  /*
-   * The module can initialize after pageshow has already fired.
-   */
   if (document.readyState === "complete") {
     releaseInitialPaintLock();
   }
