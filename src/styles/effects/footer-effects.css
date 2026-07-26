@@ -1,12 +1,16 @@
 .site-footer {
   position: relative;
   margin-top: 8rem;
+  overflow: visible;
 
   background-color: var(--color-bg);
   color: var(--color-text-secondary);
 }
 
 .footer-inner {
+  overflow: hidden;
+  overflow: clip;
+
   padding-block: 8rem 2rem;
 }
 
@@ -155,6 +159,10 @@
     transform var(--footer-divider-right-duration) linear
       var(--footer-divider-right-delay);
 }
+
+/*
+ * Footer columns
+ */
 
 .footer-columns {
   display: grid;
@@ -362,19 +370,57 @@
   transform: scale(1.18);
 }
 
+/*
+ * Initial hidden state for lower footer content
+ */
+
 .site-footer.is-reveal-ready .footer-social-row,
 .site-footer.is-reveal-ready .footer-legal {
   opacity: 0;
-  transform: translateY(2rem);
+  transform: translate3d(0, 2rem, 0);
+}
+
+/*
+ * Reveal the social and legal rows when the columns become visible.
+ *
+ * This avoids relying only on separate IntersectionObserver triggers
+ * for elements positioned at the very bottom of the document.
+ */
+
+.site-footer.is-reveal-ready
+  .footer-columns.is-visible
+  ~ .footer-social-row {
+  animation: footer-slide-in-bottom 650ms
+    cubic-bezier(0.445, 0.05, 0.55, 0.95) 320ms both;
 }
 
 .site-footer.is-reveal-ready
-  .footer-social-row.is-visible,
+  .footer-columns.is-visible
+  ~ .footer-legal {
+  animation: footer-slide-in-bottom 650ms
+    cubic-bezier(0.445, 0.05, 0.55, 0.95) 440ms both;
+}
+
+/*
+ * Compatibility with the existing JavaScript if it adds
+ * is-visible directly to either lower footer element.
+ */
+
+.site-footer.is-reveal-ready
+  .footer-social-row.is-visible {
+  animation: footer-slide-in-bottom 650ms
+    cubic-bezier(0.445, 0.05, 0.55, 0.95) 320ms both;
+}
+
 .site-footer.is-reveal-ready
   .footer-legal.is-visible {
   animation: footer-slide-in-bottom 650ms
-    cubic-bezier(0.445, 0.05, 0.55, 0.95) both;
+    cubic-bezier(0.445, 0.05, 0.55, 0.95) 440ms both;
 }
+
+/*
+ * Footer animation keyframes
+ */
 
 @keyframes footer-slide-in-bl {
   from {
@@ -637,6 +683,12 @@
     .footer-columns.is-visible > div,
   .site-footer.is-reveal-ready .footer-social-row,
   .site-footer.is-reveal-ready .footer-legal,
+  .site-footer.is-reveal-ready
+    .footer-columns.is-visible
+    ~ .footer-social-row,
+  .site-footer.is-reveal-ready
+    .footer-columns.is-visible
+    ~ .footer-legal,
   .site-footer.is-reveal-ready
     .footer-social-row.is-visible,
   .site-footer.is-reveal-ready
