@@ -1,0 +1,29 @@
+---
+import Icon from "../../ui/icons/Icon.astro";
+import type { IconName } from "../../ui/icons/iconPaths";
+
+type Props = {
+  id: string;
+  icon: IconName;
+  title: string;
+  body: string;
+};
+
+const { id, icon, title, body } = Astro.props as Props;
+---
+
+<article id={`vision-${id}`} class="home-vision-item">
+  <div class="home-vision-item__icon" aria-hidden="true">
+    <Icon name={icon} />
+  </div>
+
+  <div class="home-vision-item__content">
+    <h3 class="home-vision-item__title">
+      {title}
+    </h3>
+
+    <p class="home-vision-item__body">
+      {body}
+    </p>
+  </div>
+</article>

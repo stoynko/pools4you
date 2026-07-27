@@ -12,7 +12,14 @@ const icon = iconPaths[name];
 const isStrokeIcon = "mode" in icon && icon.mode === "stroke";
 ---
 
-<span class:list={["ui-icon", className]} aria-hidden="true">
+<span
+  class:list={[
+    "ui-icon",
+    `ui-icon--${name}`,
+    className,
+  ]}
+  aria-hidden="true"
+>
   <svg
     viewBox={icon.viewBox}
     fill={isStrokeIcon ? "none" : "currentColor"}

@@ -1,11 +1,9 @@
 ---
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
-import Image from "astro/components/Image.astro";
-import poolImage from "../../../assets/images/pages/home/pool.png";
+import type { IconName } from "../../ui/icons/iconPaths";
 
-import HomeProcessItem from "./HomeProcessItem.astro";
-import SectionHeader from "../../shared/SectionHeader.astro";
+import HomeVisionItem from "./HomeVisionItem.astro";
 
 type Props = {
   language: Language;
@@ -14,46 +12,28 @@ type Props = {
 const { language } = Astro.props as Props;
 
 const translation = getPageTranslations(language, "home");
-const sectionTitle = translation.vision.title;
+const vision = translation.vision;
 ---
 
-<section class="section-shell section-spacing-lg u-no-select">
-  <div class="section-container">
-    <div class="w-full">
-  
-      <SectionHeader
-          title={sectionTitle}
-          size="large"
-        />
+<section class="home-vision section-shell u-no-select" data-home-vision>
+  <div class="home-vision__accents-band">
+    <div class="site-container-wide">
+      <header class="home-vision__accents-header">
+        <h3 class="home-vision__accents-title">
+          {vision.accentsTitle}
+        </h3>
 
-      <div class="section-body-stack">
-        <p class="section-body-lg">
-          {translation.vision.introMain}
+        <p class="home-vision__accents-description">
+          {vision.accentsDescription}
         </p>
+      </header>
 
-        <p class="section-body-lg">
-          {translation.vision.introSecondary}
-        </p>
-      </div>
-    </div>
-
-    <div class="split-grid split-grid-spaced">
-      <div class="relative">
-        <Image
-          src={poolImage}
-          alt="alt"
-          width={poolImage.width}
-          height={poolImage.height}
-          loading="lazy"
-          class="media-card media-card-portrait"
-        />
-      </div>
-
-      <div class="space-y-20">
+      <div class="home-vision__grid">
         {
-          translation.vision.accents.map((accent) => (
-            <HomeProcessItem
+          vision.accents.map((accent) => (
+            <HomeVisionItem
               id={accent.id}
+              icon={accent.icon as IconName}
               title={accent.title}
               body={accent.body}
             />

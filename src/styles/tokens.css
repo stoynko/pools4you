@@ -10,6 +10,7 @@
 
   --color-bg: #0d0e11;
   --color-bg-secondary: #15171c;
+  --color-bg-subtle: #0f1014;
   --color-bg-warm: #1b1e24;
   --color-surface: #15171c;
 
@@ -68,10 +69,8 @@
     --container-narrow-max: 80rem;
     --container-default-max: 112rem;
     --container-wide-max: 132rem;
-
     --container-gutter: clamp(4rem, 5vw, 8rem);
     --container-wide-gutter: clamp(3rem, 4vw, 6rem);
-
     --section-space-default: clamp(6rem, 7vw, 9rem);
   }
 }
