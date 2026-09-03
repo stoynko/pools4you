@@ -1,15 +1,34 @@
 ---
-import { iconPaths, type IconName } from "./iconPaths";
+import {
+  iconPaths,
+  type IconName,
+} from "./iconPaths";
 
 type Props = {
   name: IconName;
   class?: string;
 };
 
-const { name, class: className } = Astro.props as Props;
+const {
+  name,
+  class: className,
+} = Astro.props as Props;
 
 const icon = iconPaths[name];
-const isStrokeIcon = "mode" in icon && icon.mode === "stroke";
+
+const isStrokeIcon =
+  "mode" in icon &&
+  icon.mode === "stroke";
+
+const hasSecondaryPath =
+  "secondaryPath" in icon;
+
+const hasAnimatedGradient =
+  "animatedGradient" in icon &&
+  icon.animatedGradient;
+
+const gradientId =
+  `ui-icon-gradient-${name}`;
 ---
 
 <span
@@ -22,13 +41,79 @@ const isStrokeIcon = "mode" in icon && icon.mode === "stroke";
 >
   <svg
     viewBox={icon.viewBox}
-    fill={isStrokeIcon ? "none" : "currentColor"}
-    stroke={isStrokeIcon ? "currentColor" : "none"}
-    stroke-width={isStrokeIcon ? "1" : undefined}
-    stroke-linecap={isStrokeIcon ? "round" : undefined}
-    stroke-linejoin={isStrokeIcon ? "round" : undefined}
+    fill={
+      isStrokeIcon
+        ? "none"
+        : "currentColor"
+    }
+    stroke={
+      isStrokeIcon
+        ? "currentColor"
+        : "none"
+    }
+    stroke-width={
+      isStrokeIcon
+        ? "1"
+        : undefined
+    }
+    stroke-linecap={
+      isStrokeIcon
+        ? "round"
+        : undefined
+    }
+    stroke-linejoin={
+      isStrokeIcon
+        ? "round"
+        : undefined
+    }
     focusable="false"
   >
-    <path d={icon.path} />
+    {
+      hasAnimatedGradient && (
+        <defs>
+          <linearGradient
+            id={gradientId}
+            x1="0"
+            y1="0"
+            x2="0"
+            y2="1"
+          >
+            <stop
+              class="ui-icon__gradient-stop ui-icon__gradient-stop--1"
+              offset="0%"
+            />
+
+            <stop
+              class="ui-icon__gradient-stop ui-icon__gradient-stop--2"
+              offset="50%"
+            />
+
+            <stop
+              class="ui-icon__gradient-stop ui-icon__gradient-stop--3"
+              offset="100%"
+            />
+          </linearGradient>
+        </defs>
+      )
+    }
+
+    <path
+      class="ui-icon__primary"
+      d={icon.path}
+    />
+
+    {
+      hasSecondaryPath && (
+        <path
+          class="ui-icon__secondary"
+          d={icon.secondaryPath}
+          stroke={
+            hasAnimatedGradient
+              ? `url(#${gradientId})`
+              : undefined
+          }
+        />
+      )
+    }
   </svg>
 </span>

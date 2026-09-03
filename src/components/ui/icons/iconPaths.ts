@@ -74,6 +74,14 @@ export const iconPaths = {
     mode: "stroke",
   },
 
+  mouseScroll: {
+    viewBox: "0 0 24 24",
+    path: "M10 3H14C16.2091 3 18 4.79086 18 7V17C18 19.2091 16.2091 21 14 21H10C7.79086 21 6 19.2091 6 17V7C6 4.79086 7.79086 3 10 3Z",
+    secondaryPath: "M12 7V11",
+    mode: "stroke",
+    animatedGradient: true,
+  },
+
   galleryExpand: {
     viewBox: "0 0 17 17",
     path: "M16.5 4.5V0.5H12.5M16.5 0.5L10.5 6.5M0.5 12.5V16.5H4.5M0.5 16.5L6.5 10.5",

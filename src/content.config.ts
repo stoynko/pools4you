@@ -3,6 +3,40 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 import { LANGUAGES } from "./config/i18n/i18n";
 
+const serviceHighlightImageKeys = [
+  "concept-design",
+  "construction",
+  "maintenance",
+  "renovation",
+] as const;
+
+const serviceHighlights = defineCollection({
+  loader: glob({
+    base: "./src/content/index/serviceHighlights",
+    pattern: "**/*.{md,mdx}",
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, ""),
+  }),
+
+  schema: z.object({
+    language: z.enum(LANGUAGES),
+    translationKey: z.string(),
+
+    order: z.number().int().positive(),
+
+    eyebrow: z.string(),
+    title: z.string(),
+    description: z.string(),
+
+    buttonLabel: z.string(),
+    href: z.string(),
+
+    imageKey: z.enum(serviceHighlightImageKeys),
+
+    imageAlt: z.string(),
+    imagePosition: z.string().default("center center"),
+  }),
+});
+
 const projects = defineCollection({
   loader: glob({
     base: "./src/content/projects",
@@ -141,6 +175,7 @@ const suppliers = defineCollection({
 });
 
 export const collections = {
+  serviceHighlights,
   projects,
   facilitiesPages,
   facilities,

@@ -15,6 +15,7 @@
 
 @import "./components/scroll-to-top-button.css";
 
+@import "./sections/service-highlights.css";
 @import "./sections/featured-projects.css";
 @import "./sections/home-cta.css";
 @import "./sections/home-vision.css";
