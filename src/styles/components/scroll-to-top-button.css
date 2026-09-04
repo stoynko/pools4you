@@ -9,17 +9,36 @@
   height: 3rem;
   place-items: center;
 
-  border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+  border:
+    1px solid
+    color-mix(
+      in srgb,
+      var(--color-gold) 55%,
+      transparent
+    );
+
   border-radius: 999px;
-  background: color-mix(in srgb, var(--color-bg) 92%, var(--color-surface));
+
+  background:
+    color-mix(
+      in srgb,
+      var(--color-bg) 92%,
+      var(--color-surface)
+    );
+
   color: var(--color-gold);
 
-  box-shadow: 0 16px 40px rgb(0 0 0 / 28%);
+  box-shadow:0 16px 40px rgb(0 0 0 / 28%);
+
   cursor: pointer;
 
   opacity: 0;
   visibility: hidden;
-  transform: translate3d(0, 0.75rem, 0) scale(0.96);
+
+  transform:
+    translate3d(0, 0.75rem, 0)
+    scale(0.96);
+
   pointer-events: none;
 
   transition:
@@ -34,7 +53,11 @@
 .scroll-to-top.is-visible {
   opacity: 1;
   visibility: visible;
-  transform: translate3d(0, 0, 0) scale(1);
+
+  transform:
+    translate3d(0, 0, 0)
+    scale(1);
+
   pointer-events: auto;
 }
 
@@ -50,15 +73,22 @@
   outline-offset: 3px;
 }
 
-.scroll-to-top svg {
+.scroll-to-top__icon {
   width: 1.45rem;
   height: 1.45rem;
 }
 
-@supports (bottom: env(safe-area-inset-bottom)) {
+.scroll-to-top__icon svg {
+  stroke-width: 2;
+}
+
+@supports (
+  bottom: env(safe-area-inset-bottom)
+) {
   .scroll-to-top {
     right: max(1rem, env(safe-area-inset-right));
-    bottom: max(1rem, env(safe-area-inset-bottom));
+
+    bottom:max(1rem, env(safe-area-inset-bottom));
   }
 }
 
@@ -66,18 +96,21 @@
   .scroll-to-top {
     right: 1rem;
     bottom: 5rem;
+
     width: 2.75rem;
     height: 2.75rem;
   }
 
-  .scroll-to-top svg {
+  .scroll-to-top__icon {
     width: 1.3rem;
     height: 1.3rem;
   }
 
-  @supports (bottom: env(safe-area-inset-bottom)) {
+  @supports (
+    bottom: env(safe-area-inset-bottom)
+  ) {
     .scroll-to-top {
-      bottom: calc(4.25rem + env(safe-area-inset-bottom));
+      bottom:calc(4.25rem + env(safe-area-inset-bottom));
     }
   }
 }

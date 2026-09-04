@@ -10,7 +10,7 @@
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-inter);
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -34,6 +34,8 @@
 
   background:
     var(--color-bg);
+
+  isolation: isolate;
 }
 
 /* --------------------------------------------------
@@ -42,7 +44,11 @@
 
 .service-highlights__media {
   position: absolute;
+  z-index: 0;
+
   inset: 0;
+
+  overflow: hidden;
 }
 
 .service-highlights__image {
@@ -51,15 +57,15 @@
 
   opacity: 0;
 
+  overflow: hidden;
+
   pointer-events: none;
 
-  transition:
-    opacity 700ms
-      var(--ease-out-expo);
+  will-change: opacity;
 }
 
 .service-highlights__image.is-active {
-  opacity: 1;
+  opacity: 0.85;
 }
 
 .service-highlights__image img {
@@ -69,6 +75,20 @@
   height: 100%;
 
   object-fit: cover;
+
+  filter:
+
+  saturate(0.65)
+
+  brightness(0.78);
+
+  transform-origin: center center;
+
+  will-change:
+    transform,
+    filter;
+
+  backface-visibility: hidden;
 }
 
 /* --------------------------------------------------
@@ -77,6 +97,8 @@
 
 .service-highlights__overlay {
   position: absolute;
+  z-index: 1;
+
   inset: 0;
 
   background:
@@ -194,6 +216,10 @@
     -0.035em;
 
   white-space: nowrap;
+
+  will-change:
+    transform,
+    opacity;
 }
 
 /* --------------------------------------------------
@@ -238,6 +264,10 @@
   line-height: 1.7;
 
   opacity: 0.92;
+
+  will-change:
+    transform,
+    opacity;
 }
 
 /* --------------------------------------------------
@@ -302,6 +332,10 @@
     color 200ms ease,
     background-color 200ms ease,
     border-color 200ms ease;
+
+  will-change:
+    transform,
+    opacity;
 }
 
 .service-highlights__cta:hover,
@@ -328,6 +362,7 @@
 
 .service-highlights__controls {
   position: absolute;
+  z-index: 3;
 
   left:
     var(--container-wide-gutter);
@@ -408,10 +443,6 @@
   stroke-linejoin: round;
 }
 
-/*
- * The wheel itself remains completely stationary.
- * Only the gradient referenced by its stroke moves.
- */
 .service-highlights__mouse-wheel {
   fill: none;
 
@@ -426,7 +457,9 @@
 
   filter:
     drop-shadow(
-      0 0 0.08rem
+      0
+      0
+      0.08rem
       rgba(
         211,
         179,
@@ -440,7 +473,9 @@
   .service-highlights__mouse-wheel {
   filter:
     drop-shadow(
-      0 0 0.1rem
+      0
+      0
+      0.1rem
       rgba(
         211,
         179,
@@ -454,7 +489,9 @@
  * Medium desktop
  * -------------------------------------------------- */
 
-@media (max-width: 80rem) {
+@media (
+  max-width: 80rem
+) {
   .service-highlights__copy {
     width:
       min(
@@ -482,7 +519,9 @@
  * Tablet
  * -------------------------------------------------- */
 
-@media (max-width: 70rem) {
+@media (
+  max-width: 70rem
+) {
   .service-highlights {
     --service-title-row: 5rem;
     --service-description-gap: 1.25rem;
@@ -528,7 +567,9 @@
  * Small tablet
  * -------------------------------------------------- */
 
-@media (max-width: 56rem) {
+@media (
+  max-width: 56rem
+) {
   .service-highlights {
     --service-title-row: 4.5rem;
     --service-description-gap: 1rem;
@@ -567,7 +608,9 @@
  * Mobile
  * -------------------------------------------------- */
 
-@media (max-width: 48rem) {
+@media (
+  max-width: 48rem
+) {
   .service-highlights {
     --service-step-height: 45svh;
 
@@ -680,7 +723,9 @@
  * Very small mobile
  * -------------------------------------------------- */
 
-@media (max-width: 30rem) {
+@media (
+  max-width: 30rem
+) {
   .service-highlights {
     --service-title-row: 3.5rem;
     --service-description-gap: 0.85rem;
@@ -732,7 +777,6 @@
 @media (
   prefers-reduced-motion: reduce
 ) {
-  .service-highlights__image,
   .service-highlights__copy-layer,
   .service-highlights__scroll-hint,
   .service-highlights__cta {

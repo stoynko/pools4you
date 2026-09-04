@@ -1,60 +1,218 @@
-<button
-  type="button"
-  class="scroll-to-top"
-  data-scroll-to-top
-  aria-label="Scroll to top"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-    focusable="false"
-  >
-    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-    <path d="M6 15l6 -6l6 6" />
-  </svg>
+---
+import Icon from "./icons/Icon.astro";
+---
+
+<button type="button" class="scroll-to-top" data-scroll-to-top aria-label="Scroll to top">
+  <Icon name="chevronUp" class="scroll-to-top__icon"/>
 </button>
 
 <script>
-  const scrollToTopButton = document.querySelector<HTMLButtonElement>(
-    "[data-scroll-to-top]",
-  );
+  import gsap from "gsap";
 
-  const visibleScrollDistance = 420;
+  const SCROLL_TO_TOP_SELECTOR = "[data-scroll-to-top]";
 
-  const getScrollTop = () => {
-    return window.scrollY || document.documentElement.scrollTop || 0;
+  const SERVICE_HIGHLIGHTS_SELECTOR = "[data-service-highlights]";
+
+  const PROGRAMMATIC_SCROLL_START_EVENT = "site:programmatic-scroll-start";
+
+  const PROGRAMMATIC_SCROLL_END_EVENT = "site:programmatic-scroll-end";
+
+  const VISIBLE_SCROLL_DISTANCE = 420;
+
+  const MIN_SCROLL_DURATION = 0.5;
+  const MAX_SCROLL_DURATION = 1.2;
+  const PIXELS_PER_SECOND = 3600;
+
+  type ScrollRange = {
+    start: number;
+    end: number;
+    hiddenTravel: number;
+  };
+
+  const scrollToTopButton = document.querySelector<HTMLButtonElement>(SCROLL_TO_TOP_SELECTOR);
+
+  const documentElement = document.documentElement;
+
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)",);
+
+  let scrollingToTop = false;
+
+  let activeTween:
+    gsap.core.Tween | null = null;
+
+  const getScrollTop = (): number => {
+    return (
+      window.scrollY || documentElement.scrollTop || 0
+    );
   };
 
   const updateScrollToTopVisibility = () => {
-    if (!scrollToTopButton) return;
+    if (!scrollToTopButton) {
+      return;
+    }
 
-    const shouldShow = getScrollTop() > visibleScrollDistance;
-
-    scrollToTopButton.classList.toggle("is-visible", shouldShow);
+    scrollToTopButton.classList.toggle(
+      "is-visible", getScrollTop() > VISIBLE_SCROLL_DISTANCE,
+    );
   };
 
-  scrollToTopButton?.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "auto"
-        : "smooth",
-    });
-  });
+  const getServiceHighlightsRange =
+    (): ScrollRange | null => {
+      const section = document.querySelector<HTMLElement>(SERVICE_HIGHLIGHTS_SELECTOR);
 
+      if (!section) {
+        return null;
+      }
+
+      const start = getScrollTop() + section.getBoundingClientRect().top;
+
+      const hiddenTravel =Math.max(section.offsetHeight - window.innerHeight, 0);
+
+      return {start, end: start + hiddenTravel, hiddenTravel};
+    };
+
+  const toVisualScrollY = (
+    actualY: number,
+    range: ScrollRange | null,
+  ): number => {
+    if (!range || range.hiddenTravel <= 0) {
+      return actualY;
+    }
+
+    if (actualY <= range.start) {
+      return actualY;
+    }
+
+    if (actualY >= range.end) {
+      return (actualY - range.hiddenTravel);
+    }
+
+    return range.start;
+  };
+
+  const toActualScrollY = (visualY: number, range: ScrollRange | null,): number => {
+    if (!range || range.hiddenTravel <= 0) {
+      return visualY;
+    }
+
+    if (visualY > range.start) {
+      return (visualY + range.hiddenTravel);
+    }
+
+    return visualY;
+  };
+
+  const getScrollDuration = (visualDistance: number,): number => {
+    return gsap.utils.clamp(MIN_SCROLL_DURATION, MAX_SCROLL_DURATION, visualDistance / PIXELS_PER_SECOND);
+  };
+
+  const startProgrammaticScroll = () => {
+    scrollingToTop = true;
+
+    documentElement.style.scrollBehavior = "auto";
+
+    documentElement.dataset.programmaticScroll = "true";
+
+    window.dispatchEvent(
+      new CustomEvent(PROGRAMMATIC_SCROLL_START_EVENT)
+    );
+  };
+
+  const finishProgrammaticScroll = () => {
+    if (!scrollingToTop) {
+      return;
+    }
+
+    scrollingToTop = false;
+    activeTween = null;
+
+    delete documentElement.dataset.programmaticScroll;
+    documentElement.style.removeProperty("scroll-behavior");
+    window.dispatchEvent(new CustomEvent(PROGRAMMATIC_SCROLL_END_EVENT));
+  };
+
+  const cancelProgrammaticScroll = () => {
+    if (!scrollingToTop) {
+      return;
+    }
+
+    activeTween?.kill();
+    activeTween = null;
+
+    finishProgrammaticScroll();
+  };
+
+  const scrollToTop = () => {
+    if (scrollingToTop) {
+      return;
+    }
+
+    const currentY = getScrollTop();
+
+    if (currentY <= 0) {
+      return;
+    }
+
+    startProgrammaticScroll();
+
+    if (reducedMotionQuery.matches) {
+      window.scrollTo({
+        top: 0,
+        behavior: "auto",
+      });
+
+      finishProgrammaticScroll();
+      return;
+    }
+
+    const serviceRange = getServiceHighlightsRange();
+
+    const startingVisualY = toVisualScrollY(currentY, serviceRange);
+
+    const scrollState = {
+      visualY: startingVisualY
+    };
+
+    const startingActualY = toActualScrollY(startingVisualY, serviceRange);
+
+    if (Math.abs(startingActualY - currentY) > 1) {
+      window.scrollTo({
+        top: startingActualY,
+        behavior: "auto",
+      });
+    }
+
+    activeTween = gsap.to(
+      scrollState, {
+        visualY: 0,
+        duration: getScrollDuration(startingVisualY),
+        ease: "expo.out",
+        overwrite: true,
+        onUpdate: () => {
+          window.scrollTo({
+            top:
+              toActualScrollY(scrollState.visualY, serviceRange),
+
+            behavior: "auto",
+          });
+        },
+
+        onComplete: () => {
+          window.scrollTo({
+            top: 0,
+            behavior: "auto",
+          });
+
+          finishProgrammaticScroll();
+        },
+      },
+    );
+  };
+
+  scrollToTopButton?.addEventListener("click", scrollToTop);
+  window.addEventListener("wheel", cancelProgrammaticScroll, {passive: true});
+  window.addEventListener("touchstart", cancelProgrammaticScroll, {passive: true});
   updateScrollToTopVisibility();
-
-  window.addEventListener("scroll", updateScrollToTopVisibility, {
-    passive: true,
-  });
-
+  window.addEventListener("scroll", updateScrollToTopVisibility, {passive: true});
   window.addEventListener("resize", updateScrollToTopVisibility);
 </script>

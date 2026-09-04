@@ -10,8 +10,13 @@
 
 .home-vision__accents-band {
   position: relative;
-  padding-block: clamp(5rem, 7vw, 8rem) clamp(5rem, 7vw, 8rem);
-  background: var(--color-surface-subtle);
+
+  padding-block:
+    4rem
+    clamp(7rem, 10vw, 11rem);
+
+  background:
+    var(--color-surface-subtle);
 }
 
 .home-vision__accents-header {
