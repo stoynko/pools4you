@@ -1,3 +1,4 @@
+import type { truncate } from "fs";
 import gsap from "gsap";
 import { Observer } from "gsap/Observer";
 
@@ -7,7 +8,6 @@ const SECTION_SELECTOR = "[data-service-highlights]";
 const IMAGE_SELECTOR = "[data-service-image]";
 const COPY_SELECTOR = "[data-service-copy]";
 const SCROLL_HINT_SELECTOR = "[data-service-scroll-hint]";
-
 const GESTURE_THRESHOLD = 30;
 const NEW_IMPULSE_MIN_DELTA = 12;
 const NEW_IMPULSE_ACCELERATION = 1.7;
@@ -15,26 +15,16 @@ const DECAY_FROM_PEAK_RATIO = 0.6;
 const OBSERVER_STOP_DELAY = 0.14;
 const SCROLL_HINT_DELAY_MS = 3000;
 const POSITION_TOLERANCE = 4;
-
-/* SERVICE HIGHLIGHTS ENTRY TRIGGER
-  - LARGER VALUE - TAKEOVER HAPPENS EARLIER
-*/
+const EXIT_RELEASE_VIEWPORT_RATIO = 0.1;
+const EXIT_RELEASE_DURATION = 0.3;
 const ENTRY_TRIGGER_VIEWPORT_RATIO = 0.85;
-
-/*
-  DURATION OF THE AUTOMATIC SCROLL THAT 
-  BRINGS SERVICE HIGHLIGHTS INTO ITS FULLY PINNED POSITION
- */
 const ENTRY_SNAP_DURATION = 0.35;
-
 const IMAGE_FADE_DURATION = 1;
 const IMAGE_KEN_BURNS_DURATION = 2;
 const IMAGE_KEN_BURNS_SCALE = 1.06;
-
 const ENTRANCE_TITLE_DURATION = 0.78;
 const ENTRANCE_DESCRIPTION_DURATION = 0.72;
 const ENTRANCE_CTA_DURATION = 0.66;
-
 type Direction = 1 | -1;
 
 type ServiceHighlightElements = {
@@ -59,17 +49,15 @@ type ServiceHighlightState = {
   hintTimer?: number;
   entrancePrepared: boolean;
   entrancePlayed: boolean;
+  exitTween: gsap.core.Tween | null;
+  exitInterruptionArmed: boolean;
 };
 
 type EntranceTargets = {
   imageLayer: HTMLElement;
-
   image: HTMLElement | null;
-
   title: HTMLElement | null;
-
   description: HTMLElement | null;
-
   cta: HTMLElement | null;
 };
 
@@ -78,103 +66,47 @@ type EntranceTargets = {
  * -------------------------------------------------- */
 
 function isProgrammaticScrollActive(): boolean {
-  return (
-    document.documentElement.dataset
-      .programmaticScroll === "true"
-  );
+  return (document.documentElement.dataset.programmaticScroll === "true");
 }
 
 /* --------------------------------------------------
  * DOM
  * -------------------------------------------------- */
 
-function getElements(
-  section: HTMLElement,
-): ServiceHighlightElements | null {
-  const images = Array.from(
-    section.querySelectorAll<HTMLElement>(
-      IMAGE_SELECTOR,
-    ),
-  );
+function getElements(section: HTMLElement): ServiceHighlightElements | null {
+  const images =Array.from(section.querySelectorAll<HTMLElement>(IMAGE_SELECTOR));
+  const copyLayers =Array.from(section.querySelectorAll<HTMLElement>(COPY_SELECTOR));
+  const scrollHint =section.querySelector<HTMLElement>(SCROLL_HINT_SELECTOR);
 
-  const copyLayers = Array.from(
-    section.querySelectorAll<HTMLElement>(
-      COPY_SELECTOR,
-    ),
-  );
-
-  const scrollHint =
-    section.querySelector<HTMLElement>(
-      SCROLL_HINT_SELECTOR,
-    );
-
-  if (
-    images.length === 0 ||
-    copyLayers.length === 0 ||
-    images.length !== copyLayers.length
-  ) {
+  if (images.length === 0 || copyLayers.length === 0 || images.length !== copyLayers.length) {
     return null;
   }
 
-  return {
-    images,
-    copyLayers,
-    scrollHint,
-  };
+  return {images, copyLayers, scrollHint};
 }
 
-function getImageElement(
-  layer: HTMLElement | null,
-): HTMLElement | null {
-  return (
-    layer?.querySelector<HTMLElement>(
-      "img",
-    ) ?? null
-  );
+function getImageElement(layer: HTMLElement | null): HTMLElement | null {
+  return (layer?.querySelector<HTMLElement>("img") ?? null);
 }
 
 /* --------------------------------------------------
  * Entrance targets
  * -------------------------------------------------- */
 
-function getEntranceTargets(
-  elements: ServiceHighlightElements,
-): EntranceTargets | null {
-  const imageLayer =
-    elements.images[0];
+function getEntranceTargets(elements: ServiceHighlightElements): EntranceTargets | null {
+  const imageLayer = elements.images[0];
+  const copyLayer = elements.copyLayers[0];
 
-  const copyLayer =
-    elements.copyLayers[0];
-
-  if (
-    !imageLayer ||
-    !copyLayer
-  ) {
+  if (!imageLayer || !copyLayer) {
     return null;
   }
 
-  return {
-    imageLayer,
-
+  return {imageLayer, 
     image:
-      getImageElement(
-        imageLayer,
-      ),
-
-    title:
-      copyLayer.querySelector<HTMLElement>(
-        ".service-highlights__title",
-      ),
-
-    description:
-      copyLayer.querySelector<HTMLElement>(
-        ".service-highlights__description",
-      ),
-
-    cta:
-      copyLayer.querySelector<HTMLElement>(
-        ".service-highlights__cta",
-      ),
+      getImageElement(imageLayer),
+      title: copyLayer.querySelector<HTMLElement>(".service-highlights__title"),
+      description: copyLayer.querySelector<HTMLElement>(".service-highlights__description"),
+      cta: copyLayer.querySelector<HTMLElement>(".service-highlights__cta")
   };
 }
 
@@ -182,50 +114,26 @@ function getEntranceTargets(
  * Image state
  * -------------------------------------------------- */
 
-function setStaticImageState(
-  activeIndex: number,
-  elements: ServiceHighlightElements,
-): void {
+function setStaticImageState(activeIndex: number, elements: ServiceHighlightElements): void {
   elements.images.forEach(
-    (
-      layer,
-      index,
-    ) => {
-      gsap.killTweensOf(
-        layer,
-      );
+    (layer,index,) => {
+      gsap.killTweensOf(layer);
 
-      const image =
-        getImageElement(
-          layer,
-        );
+      const image =getImageElement(layer);
 
       if (image) {
-        gsap.killTweensOf(
-          image,
-        );
+        gsap.killTweensOf(image);
       }
 
-      gsap.set(
-        layer,
-        {
-          opacity:
-            index === activeIndex
-              ? 1
-              : 0,
-
-          zIndex:
-            index === activeIndex
-              ? 2
-              : 1,
+      gsap.set(layer, {
+        opacity: index === activeIndex ? 1 : 0,
+        zIndex: index === activeIndex ? 2 : 1
         },
       );
 
       if (image) {
-        gsap.set(
-          image,
-          {
-            scale: 1.06,
+        gsap.set(image, {
+          scale: IMAGE_KEN_BURNS_SCALE
           },
         );
       }
@@ -237,151 +145,60 @@ function setStaticImageState(
  * Ken Burns image transition
  * -------------------------------------------------- */
 
-function animateServiceImage(
-  previousIndex: number,
-  nextIndex: number,
-  elements: ServiceHighlightElements,
-): void {
-  const previousLayer =
-    previousIndex >= 0
-      ? (
-          elements.images[
-            previousIndex
-          ] ?? null
-        )
-      : null;
-
-  const nextLayer =
-    elements.images[
-      nextIndex
-    ] ?? null;
+function animateServiceImage(previousIndex: number, nextIndex: number, elements: ServiceHighlightElements): void {
+  const previousLayer = previousIndex >= 0 ? (elements.images[previousIndex] ?? null) : null;
+  const nextLayer =elements.images[nextIndex] ?? null;
 
   if (!nextLayer) {
     return;
   }
 
-  const previousImage =
-    getImageElement(
-      previousLayer,
-    );
+  const previousImage = getImageElement(previousLayer);
+  const nextImage = getImageElement(nextLayer);
 
-  const nextImage =
-    getImageElement(
-      nextLayer,
-    );
-
-  /*
-   * Stop any old image animation first.
-   *
-   * This prevents a fast gesture from leaving
-   * several images partially visible.
-   */
   elements.images.forEach(
-    (
-      layer,
-      index,
-    ) => {
-      gsap.killTweensOf(
-        layer,
-      );
+    (layer, index) => {
+      gsap.killTweensOf(layer);
 
-      const image =
-        getImageElement(
-          layer,
-        );
+      const image = getImageElement(layer);
 
       if (image) {
-        gsap.killTweensOf(
-          image,
-        );
+        gsap.killTweensOf(image);
       }
 
-      gsap.set(
-        layer,
-        {
-          zIndex:
-            index === nextIndex
-              ? 2
-              : 1,
+      gsap.set(layer, {
+          zIndex: index === nextIndex? 2 : 1,
         },
       );
     },
   );
 
-  const tl =
-    gsap.timeline();
+  const timeline = gsap.timeline();
 
-  /*
-   * Fade previous service away.
-   */
-  if (
-    previousLayer &&
-    previousLayer !== nextLayer
-  ) {
-    tl.to(
-      previousLayer,
-      {
-        opacity: 0,
-
-        duration:
-          IMAGE_FADE_DURATION,
-
-        ease:
-          "power2.out",
-      },
-      0,
-    );
+  if (previousLayer && previousLayer !== nextLayer) {
+    timeline.to(previousLayer, {
+      opacity: 0,
+      duration: IMAGE_FADE_DURATION,
+      ease: "power2.out",
+    }, 0);
   }
 
-  /*
-   * Fade new service in.
-   */
-  tl.fromTo(
-    nextLayer,
-    {
-      opacity: 0,
-    },
-    {
-      opacity: 1,
-
-      duration:
-        IMAGE_FADE_DURATION,
-
-      ease:
-        "power2.inOut",
-    },
-    0,
-  );
+  timeline.fromTo(nextLayer, {opacity: 0}, {
+    opacity: 1,
+    duration: IMAGE_FADE_DURATION,
+    ease: "power2.inOut"
+  }, 0);
 
   if (nextImage) {
-    tl.fromTo(
-      nextImage,
-      {
-        scale: 1,
-      },
-      {
-        scale:
-          IMAGE_KEN_BURNS_SCALE,
-
-        duration:
-          IMAGE_KEN_BURNS_DURATION,
-
-        ease:
-          "power1.inOut",
-      },
-      0,
-    );
+    timeline.fromTo(nextImage, {scale: 1}, {
+      scale: IMAGE_KEN_BURNS_SCALE,
+      duration: IMAGE_KEN_BURNS_DURATION,
+      ease: "power1.inOut"
+    }, 0);
   }
 
-  if (
-    previousImage &&
-    previousLayer !== nextLayer
-  ) {
-    tl.set(
-      previousImage,
-      {
-        scale: 1,
-      },
+  if (previousImage && previousLayer !== nextLayer) {
+    timeline.set(previousImage, {scale: 1},
       IMAGE_FADE_DURATION,
     );
   }
@@ -391,95 +208,46 @@ function animateServiceImage(
  * Active service
  * -------------------------------------------------- */
 
-function setActiveService(
-  index: number,
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-  animateImage = true,
-): void {
-  const lastIndex =
-    elements.copyLayers.length -
-    1;
+function setActiveService(index: number, state: ServiceHighlightState, 
+  elements: ServiceHighlightElements, animateImage = true): void {
 
-  const nextIndex =
-    Math.min(
-      Math.max(
-        index,
-        0,
-      ),
-      lastIndex,
-    );
+  const lastIndex = elements.copyLayers.length - 1;
+  const nextIndex = Math.min(Math.max(index,0), lastIndex,);
 
-  if (
-    nextIndex ===
-    state.activeIndex
-  ) {
+  if (nextIndex === state.activeIndex) {
     return;
   }
 
-  const previousIndex =
-    state.activeIndex;
+  const previousIndex = state.activeIndex;
 
-  state.activeIndex =
-    nextIndex;
+  state.activeIndex = nextIndex;
 
   elements.images.forEach(
-    (
-      image,
-      imageIndex,
-    ) => {
-      image.classList.toggle(
-        "is-active",
-        imageIndex === nextIndex,
-      );
-    },
+    (image,imageIndex) => {
+      image.classList.toggle("is-active", imageIndex === nextIndex);
+    }
   );
 
   if (animateImage) {
-    animateServiceImage(
-      previousIndex,
-      nextIndex,
-      elements,
-    );
+    animateServiceImage(previousIndex, nextIndex, elements);
   } else {
-    setStaticImageState(
-      nextIndex,
-      elements,
-    );
+    setStaticImageState(nextIndex, elements);
   }
 
   elements.copyLayers.forEach(
-    (
-      layer,
-      layerIndex,
-    ) => {
-      const isActive =
-        layerIndex === nextIndex;
+    (layer, layerIndex) => {
+      const isActive = layerIndex === nextIndex;
 
-      layer.classList.toggle(
-        "is-active",
-        isActive,
-      );
+      layer.classList.toggle("is-active", isActive);
 
-      layer.setAttribute(
-        "aria-hidden",
-        isActive
-          ? "false"
-          : "true",
-      );
+      layer.setAttribute("aria-hidden", isActive ? "false" : "true");
 
-      const link =
-        layer.querySelector<HTMLAnchorElement>(
-          "a",
-        );
+      const link = layer.querySelector<HTMLAnchorElement>("a");
 
       if (link) {
-        link.tabIndex =
-          isActive
-            ? 0
-            : -1;
+        link.tabIndex = isActive ? 0 : -1;
       }
-    },
+    }
   );
 }
 
@@ -487,330 +255,166 @@ function setActiveService(
  * Prepare first entrance
  * -------------------------------------------------- */
 
-function prepareEntranceAnimation(
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
-  if (
-    state.entrancePrepared ||
-    state.entrancePlayed
-  ) {
+function prepareEntranceAnimation(state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+  if (state.entrancePrepared || state.entrancePlayed) {
     return;
   }
 
-  const targets =
-    getEntranceTargets(
-      elements,
-    );
+  const targets =getEntranceTargets(elements);
 
   if (!targets) {
-    state.entrancePlayed =
-      true;
-
+    state.entrancePlayed =true;
     return;
   }
 
-  gsap.set(
-    targets.imageLayer,
-    {
-      opacity: 0,
-
-      zIndex: 2,
-    },
-  );
+  gsap.set(targets.imageLayer,{
+    opacity: 0,
+    zIndex: 2,
+  });
 
   if (targets.image) {
-    gsap.set(
-      targets.image,
-      {
-        scale: 1,
-
-        transformOrigin:
-          "50% 50%",
-      },
-    );
+    gsap.set(targets.image, {
+      scale: 1,
+      transformOrigin:"50% 50%"
+    });
   }
 
   if (targets.title) {
-    gsap.set(
-      targets.title,
-      {
-        autoAlpha: 0,
-
-        y: 40,
-      },
-    );
+    gsap.set(targets.title, {
+      autoAlpha: 0,
+      y: 40
+    });
   }
 
   if (targets.description) {
-    gsap.set(
-      targets.description,
-      {
-        autoAlpha: 0,
-
-        y: 28,
-      },
-    );
+    gsap.set(targets.description, {
+      autoAlpha: 0,
+      y: 28
+    });
   }
 
   if (targets.cta) {
-    gsap.set(
-      targets.cta,
-      {
-        autoAlpha: 0,
-
-        y: 22,
-
-        scale: 0.97,
-
-        transformOrigin:
-          "50% 50%",
-      },
-    );
+    gsap.set(targets.cta, {
+      autoAlpha: 0,
+      y: 22,
+      scale: 0.97,
+      transformOrigin: "50% 50%"
+    });
   }
 
-  state.entrancePrepared =
-    true;
+  state.entrancePrepared = true;
 }
 
 /* --------------------------------------------------
  * Cancel prepared entrance
  * -------------------------------------------------- */
 
-function clearPreparedEntrance(
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
-  if (
-    !state.entrancePrepared ||
-    state.entrancePlayed
-  ) {
+function clearPreparedEntrance(state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+  if (!state.entrancePrepared || state.entrancePlayed) {
     return;
   }
 
-  const targets =
-    getEntranceTargets(
-      elements,
-    );
+  const targets =getEntranceTargets(elements);
 
   if (!targets) {
-    state.entrancePrepared =
-      false;
-
-    state.entrancePlayed =
-      true;
-
+    state.entrancePrepared =false;
+    state.entrancePlayed = true;
     return;
   }
 
-  gsap.set(
-    targets.imageLayer,
-    {
-      opacity: 1,
+  gsap.set(targets.imageLayer, {
+    opacity: 1,
+    clearProps: "zIndex"
+  });
 
-      clearProps:
-        "zIndex",
-    },
+  const clearTargets = [targets.image, targets.title, targets.description, targets.cta]
+    .filter((target,): target is HTMLElement => 
+      target !== null
   );
 
-  const clearTargets = [
-    targets.image,
-    targets.title,
-    targets.description,
-    targets.cta,
-  ].filter(
-    (
-      target,
-    ): target is HTMLElement =>
-      target !== null,
-  );
+  gsap.set(clearTargets, {
+    clearProps: "opacity, visibility, transform"
+  });
 
-  gsap.set(
-    clearTargets,
-    {
-      clearProps:
-        "opacity,visibility,transform",
-    },
-  );
-
-  state.entrancePrepared =
-    false;
-
-  state.entrancePlayed =
-    true;
+  state.entrancePrepared = false;
+  state.entrancePlayed = true;
 }
 
 /* --------------------------------------------------
  * First entrance animation
  * -------------------------------------------------- */
 
-function playEntranceAnimation(
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
-  if (
-    state.entrancePlayed ||
-    isProgrammaticScrollActive()
-  ) {
+function playEntranceAnimation(state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+  if (state.entrancePlayed || isProgrammaticScrollActive()) {
     return;
   }
 
   if (!state.entrancePrepared) {
-    prepareEntranceAnimation(
-      state,
-      elements,
-    );
+    prepareEntranceAnimation(state,elements);
   }
 
-  const targets =
-    getEntranceTargets(
-      elements,
-    );
+  const targets = getEntranceTargets(elements);
 
   if (!targets) {
-    state.entrancePlayed =
-      true;
-
+    state.entrancePlayed = true;
     return;
   }
 
-  state.entrancePlayed =
-    true;
+  state.entrancePlayed = true;
 
-  gsap.killTweensOf(
-    targets.imageLayer,
-  );
+  gsap.killTweensOf(targets.imageLayer);
 
   if (targets.image) {
-    gsap.killTweensOf(
-      targets.image,
-    );
+    gsap.killTweensOf(targets.image);
   }
 
-  const tl =
-    gsap.timeline({
-      defaults: {
-        ease:
-          "power3.out",
-      },
-
+  const timeline = gsap.timeline({defaults: {ease: "power3.out"},
       onComplete: () => {
+        const clearTargets = [targets.title, targets.description, targets.cta,]
+          .filter((target): target is HTMLElement => target !== null);
 
-        const clearTargets = [
-          targets.title,
-          targets.description,
-          targets.cta,
-        ].filter(
-          (
-            target,
-          ): target is HTMLElement =>
-            target !== null,
-        );
-
-        gsap.set(
-          clearTargets,
-          {
-            clearProps:
-              "opacity,visibility,transform",
-          },
-        );
-
-        state.entrancePrepared =
-          false;
-      },
+        gsap.set(clearTargets, {clearProps: "opacity, visibility, transform"});
+        state.entrancePrepared = false;
+      }
     });
 
-  /*
-   * Image fade.
-   */
-  tl.to(
-    targets.imageLayer,
-    {
-      opacity: 1,
+  timeline.to(targets.imageLayer, {
+    opacity: 1,
+    duration: IMAGE_FADE_DURATION,
+    ease: "power2.inOut"
+  }, 0);
 
-      duration:
-        IMAGE_FADE_DURATION,
-
-      ease:
-        "power2.inOut",
-    },
-    0,
-  );
-
-  /*
-   * Ken Burns zoom.
-   */
   if (targets.image) {
-    tl.to(
-      targets.image,
-      {
-        scale:
-          IMAGE_KEN_BURNS_SCALE,
-
-        duration:
-          IMAGE_KEN_BURNS_DURATION,
-
-        ease:
-          "power1.inOut",
-      },
-      0,
-    );
+    timeline.to(targets.image, {
+      scale:IMAGE_KEN_BURNS_SCALE,
+      duration: IMAGE_KEN_BURNS_DURATION,
+      ease: "power1.inOut"
+    }, 0);
   }
 
-  /*
-   * Title.
-   */
   if (targets.title) {
-    tl.to(
-      targets.title,
-      {
-        autoAlpha: 1,
-
-        y: 0,
-
-        duration:
-          ENTRANCE_TITLE_DURATION,
-      },
-      0.16,
-    );
+    timeline.to(targets.title, {
+      autoAlpha: 1,
+      y: 0,
+      duration: ENTRANCE_TITLE_DURATION
+    }, 0.16);
   }
 
-  /*
-   * Description.
-   */
   if (targets.description) {
-    tl.to(
-      targets.description,
-      {
-        autoAlpha: 1,
-
-        y: 0,
-
-        duration:
-          ENTRANCE_DESCRIPTION_DURATION,
-      },
-      0.3,
-    );
+    timeline.to( targets.description, {
+      autoAlpha: 1,
+      y: 0,
+      duration: ENTRANCE_DESCRIPTION_DURATION
+    }, 0.3);
   }
 
-  /*
-   * CTA.
-   */
   if (targets.cta) {
-    tl.to(
-      targets.cta,
-      {
-        autoAlpha: 1,
-
-        y: 0,
-
-        scale: 1,
-
-        duration:
-          ENTRANCE_CTA_DURATION,
-      },
-      0.44,
-    );
+    timeline.to(targets.cta, {
+      autoAlpha: 1,
+      y: 0,
+      scale: 1,
+      duration: ENTRANCE_CTA_DURATION
+    }, 0.44);
   }
 }
 
@@ -818,425 +422,236 @@ function playEntranceAnimation(
  * Section geometry
  * -------------------------------------------------- */
 
-function getSectionStart(
-  section: HTMLElement,
-): number {
-  return (
-    window.scrollY +
-    section
-      .getBoundingClientRect()
-      .top
-  );
+function getSectionStart(section: HTMLElement): number {
+  return (window.scrollY + section.getBoundingClientRect().top);
 }
 
-function getSectionTravel(
-  section: HTMLElement,
-): number {
-  return Math.max(
-    section.offsetHeight -
-      window.innerHeight,
-    0,
-  );
+function getSectionTravel(section: HTMLElement): number {
+  return Math.max(section.offsetHeight - window.innerHeight, 0);
 }
 
-function getSectionEnd(
-  section: HTMLElement,
-): number {
-  return (
-    getSectionStart(section) +
-    getSectionTravel(section)
-  );
+function getSectionEnd(section: HTMLElement): number {
+  return (getSectionStart(section) + getSectionTravel(section));
 }
 
-function getServicePosition(
-  section: HTMLElement,
-  index: number,
-  serviceCount: number,
-): number {
+function getServicePosition(section: HTMLElement, index: number, serviceCount: number): number {
   if (serviceCount <= 1) {
-    return getSectionStart(
-      section,
-    );
+    return getSectionStart(section);
   }
 
-  const step =
-    getSectionTravel(section) /
-    (serviceCount - 1);
+  const step = getSectionTravel(section) / (serviceCount - 1);
 
-  return (
-    getSectionStart(section) +
-    step * index
-  );
+  return (getSectionStart(section) + step * index);
 }
 
-function isPinned(
-  section: HTMLElement,
-): boolean {
-  const rect =
-    section.getBoundingClientRect();
+function isPinned(section: HTMLElement): boolean {
+  const rect = section.getBoundingClientRect();
+  return (rect.top <= POSITION_TOLERANCE && rect.bottom >= window.innerHeight - POSITION_TOLERANCE);
+}
 
-  return (
-    rect.top <=
-      POSITION_TOLERANCE &&
-    rect.bottom >=
-      window.innerHeight -
-        POSITION_TOLERANCE
-  );
+function getExitReleaseDistance(): number {
+  return (window.innerHeight * EXIT_RELEASE_VIEWPORT_RATIO);
+}
+
+/* --------------------------------------------------
+ * Exit release
+ * -------------------------------------------------- */
+
+function cancelExitTween(state: ServiceHighlightState): void {
+  if (!state.exitTween) {
+    return;
+  }
+
+  state.exitTween.kill();
+
+  state.exitTween = null;
+  state.exitInterruptionArmed = false;
+  state.wasPinned = false;
+  state.previousScrollY = window.scrollY;
+}
+
+function handleExitInterruption(state: ServiceHighlightState): void {
+  if (!state.exitTween || !state.exitInterruptionArmed) {
+    return;
+  }
+
+  cancelExitTween(state);
 }
 
 /* --------------------------------------------------
  * Automatic section entry
  * -------------------------------------------------- */
 
-function shouldAutoEnterSection(
-  section: HTMLElement,
-  state: ServiceHighlightState,
-): boolean {
-  if (
-    state.autoEntering ||
-    state.wasPinned ||
-    isProgrammaticScrollActive()
-  ) {
+function shouldAutoEnterSection(section: HTMLElement, state: ServiceHighlightState): boolean {
+  if (state.autoEntering || state.exitTween || state.wasPinned || isProgrammaticScrollActive()) {
     return false;
   }
 
-  const rect =
-    section.getBoundingClientRect();
+  const rect = section.getBoundingClientRect();
 
-  if (
-    rect.top <=
-    POSITION_TOLERANCE
-  ) {
+  if (rect.top <= POSITION_TOLERANCE) {
     return false;
   }
 
-  const triggerY =
-    window.innerHeight *
-    ENTRY_TRIGGER_VIEWPORT_RATIO;
+  const triggerY = window.innerHeight * ENTRY_TRIGGER_VIEWPORT_RATIO;
 
-  const movingDown =
-    window.scrollY >
-    state.previousScrollY;
+  const movingDown = window.scrollY > state.previousScrollY;
 
   return (
-    movingDown &&
-    rect.top <= triggerY
+    movingDown && rect.top <= triggerY
   );
 }
 
-function autoEnterSection(
-  section: HTMLElement,
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
-  if (
-    state.autoEntering ||
-    isProgrammaticScrollActive()
-  ) {
+function autoEnterSection(section: HTMLElement, state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+  if (state.autoEntering || state.exitTween || isProgrammaticScrollActive()) {
     return;
   }
 
-  state.autoEntering =
-    true;
+  state.autoEntering = true;
 
   state.observer?.disable();
 
-  hideScrollHint(
-    state,
-    elements,
-  );
+  hideScrollHint(state, elements);
 
-  resetImpulse(
-    state,
-  );
+  resetImpulse(state);
 
-  if (
-    state.activeIndex !== 0
-  ) {
-    setActiveService(
-      0,
-      state,
-      elements,
-      false,
-    );
+  if (state.activeIndex !== 0) {
+    setActiveService(0, state, elements,false);
   }
 
-  const scrollPosition = {
-    y: window.scrollY,
-  };
+  const scrollPosition = { y: window.scrollY };
 
-  const targetY =
-    getSectionStart(
-      section,
-    );
+  const targetY = getSectionStart(section);
 
-  gsap.to(
-    scrollPosition,
-    {
-      y:
-        targetY,
+  gsap.to(scrollPosition, {
+    y: targetY,
+    duration: ENTRY_SNAP_DURATION,
+    ease: "power2.inOut",
+    overwrite: true,
+    onUpdate: () => {
+      if (isProgrammaticScrollActive()) {
+        return;
+      }
 
-      duration:
-        ENTRY_SNAP_DURATION,
+      window.scrollTo(0, scrollPosition.y);
+    },
+    onComplete: () => {
+      if (isProgrammaticScrollActive()) {
+        state.autoEntering = false;
+        return;
+      }
 
-      ease:
-        "power2.inOut",
-
-      overwrite:
-        true,
-
-      onUpdate: () => {
-        if (
-          isProgrammaticScrollActive()
-        ) {
-          return;
-        }
-
-        window.scrollTo(
-          0,
-          scrollPosition.y,
-        );
-      },
-
-      onComplete: () => {
-        if (
-          isProgrammaticScrollActive()
-        ) {
-          state.autoEntering =
-            false;
-
-          return;
-        }
-
-        window.scrollTo({
-          top:
-            getSectionStart(
-              section,
-            ),
-
-          behavior:
-            "auto",
+      window.scrollTo({
+        top: getSectionStart(section),
+        behavior: "auto",
         });
 
-        state.autoEntering =
-          false;
+      state.autoEntering = false;
+      state.wasPinned = true;
+      state.previousScrollY = window.scrollY;
 
-        state.wasPinned =
-          true;
+      resetImpulse(state);
 
-        state.previousScrollY =
-          window.scrollY;
+      state.enteringSection = true;
+      state.impulseConsumed = true;
+      state.observer?.enable();
 
-        resetImpulse(
-          state,
-        );
+      hideScrollHint(state,elements);
 
-        state.enteringSection =
-          true;
+      requestAnimationFrame(() => {
+        playEntranceAnimation(state, elements);
+      });
 
-        state.impulseConsumed =
-          true;
-
-        state.observer?.enable();
-
-        hideScrollHint(
-          state,
-          elements,
-        );
-
-        requestAnimationFrame(
-          () => {
-            playEntranceAnimation(
-              state,
-              elements,
-            );
-          },
-        );
-      },
-    },
-  );
+      scheduleScrollHint(section, state, elements);
+    }});
 }
 
 /* --------------------------------------------------
  * Scroll hint
  * -------------------------------------------------- */
 
-function clearHintTimer(
-  state: ServiceHighlightState,
-): void {
-  if (
-    state.hintTimer ===
-    undefined
-  ) {
+function clearHintTimer(state: ServiceHighlightState): void {
+  if (state.hintTimer === undefined) {
     return;
   }
 
-  window.clearTimeout(
-    state.hintTimer,
-  );
-
-  state.hintTimer =
-    undefined;
+  window.clearTimeout(state.hintTimer);
+  state.hintTimer = undefined;
 }
 
-function hideScrollHint(
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
-  clearHintTimer(
-    state,
-  );
-
-  elements.scrollHint
-    ?.classList.remove(
-      "is-visible",
-    );
+function hideScrollHint(state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+  clearHintTimer(state);
+  elements.scrollHint?.classList.remove("is-visible");
 }
 
-function scheduleScrollHint(
-  section: HTMLElement,
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
-  if (
-    isProgrammaticScrollActive()
-  ) {
+function scheduleScrollHint(section: HTMLElement, state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+  if (isProgrammaticScrollActive() || state.exitTween) {
     return;
   }
 
-  hideScrollHint(
-    state,
-    elements,
-  );
+  hideScrollHint(state, elements);
 
   if (!isPinned(section)) {
     return;
   }
 
-  state.hintTimer =
-    window.setTimeout(
-      () => {
-        state.hintTimer =
-          undefined;
+  state.hintTimer = window.setTimeout(() => {
+    state.hintTimer = undefined;
 
-        if (
-          isProgrammaticScrollActive() ||
-          !isPinned(section)
-        ) {
-          return;
-        }
+  if (isProgrammaticScrollActive() || state.exitTween || !isPinned(section)) {
+    return;
+  }
 
-        elements.scrollHint
-          ?.classList.add(
-            "is-visible",
-          );
-      },
-      SCROLL_HINT_DELAY_MS,
-    );
+  elements.scrollHint?.classList.add("is-visible");
+  }, SCROLL_HINT_DELAY_MS);
 }
 
 /* --------------------------------------------------
  * Gesture impulse
  * -------------------------------------------------- */
 
-function resetImpulse(
-  state: ServiceHighlightState,
-): void {
-  state.impulseConsumed =
-    false;
-
-  state.accumulatedDelta =
-    0;
-
-  state.previousDelta =
-    0;
-
-  state.peakDelta =
-    0;
-
-  state.impulseDirection =
-    0;
-
-  state.decayDetected =
-    false;
+function resetImpulse(state: ServiceHighlightState): void {
+  state.impulseConsumed = false;
+  state.accumulatedDelta = 0;
+  state.previousDelta = 0;
+  state.peakDelta = 0;
+  state.impulseDirection = 0;
+  state.decayDetected = false;
 }
 
-function beginNewImpulse(
-  direction: Direction,
-  delta: number,
-  state: ServiceHighlightState,
-): void {
-  state.impulseConsumed =
-    false;
-
-  state.accumulatedDelta =
-    0;
-
-  state.previousDelta =
-    delta;
-
-  state.peakDelta =
-    delta;
-
-  state.impulseDirection =
-    direction;
-
-  state.decayDetected =
-    false;
-
-  state.enteringSection =
-    false;
+function beginNewImpulse(direction: Direction, delta: number, state: ServiceHighlightState): void {
+  state.impulseConsumed = false;
+  state.accumulatedDelta = 0;
+  state.previousDelta = delta;
+  state.peakDelta = delta;
+  state.impulseDirection = direction;
+  state.decayDetected = false;
+  state.enteringSection = false;
 }
 
-function isNewImpulse(
-  direction: Direction,
-  delta: number,
-  state: ServiceHighlightState,
-): boolean {
-  if (
-    state.impulseDirection !==
-      0 &&
-    direction !==
-      state.impulseDirection
-  ) {
-    return (
-      delta >=
-      NEW_IMPULSE_MIN_DELTA
-    );
+function isNewImpulse(direction: Direction, delta: number, state: ServiceHighlightState): boolean {
+  if (state.impulseDirection !== 0 && direction !== state.impulseDirection) {
+    return (delta >= NEW_IMPULSE_MIN_DELTA);
   }
 
-  if (
-    state.previousDelta <= 0
-  ) {
+  if (state.previousDelta <= 0) {
     return false;
   }
 
-  if (
-    state.peakDelta > 0 &&
-    delta <=
-      state.peakDelta *
-        DECAY_FROM_PEAK_RATIO
-  ) {
-    state.decayDetected =
-      true;
+  if (state.peakDelta > 0 && delta <= state.peakDelta * DECAY_FROM_PEAK_RATIO) {
+    state.decayDetected = true;
   }
 
   if (!state.decayDetected) {
     return false;
   }
 
-  const significantlyAccelerating =
-    delta >=
-    state.previousDelta *
-      NEW_IMPULSE_ACCELERATION;
+  const significantlyAccelerating = delta >= state.previousDelta * NEW_IMPULSE_ACCELERATION;
 
-  const strongEnough =
-    delta >=
-    NEW_IMPULSE_MIN_DELTA;
+  const strongEnough = delta >= NEW_IMPULSE_MIN_DELTA;
 
   return (
-    significantlyAccelerating &&
-    strongEnough
+    significantlyAccelerating && strongEnough
   );
 }
 
@@ -1317,6 +732,7 @@ function leaveSection(
   section: HTMLElement,
   direction: Direction,
   state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
 ): void {
   if (
     isProgrammaticScrollActive()
@@ -1333,33 +749,113 @@ function leaveSection(
   state.enteringSection =
     false;
 
-  if (direction > 0) {
-    window.scrollTo({
-      top:
-        getSectionEnd(
-          section,
-        ) +
-        POSITION_TOLERANCE +
-        2,
+  hideScrollHint(
+    state,
+    elements,
+  );
 
-      behavior:
-        "auto",
-    });
+  if (state.exitTween) {
+    state.exitTween.kill();
 
-    return;
+    state.exitTween =
+      null;
   }
 
-  window.scrollTo({
-    top:
-      getSectionStart(
-        section,
-      ) -
-      POSITION_TOLERANCE -
-      2,
+  state.exitInterruptionArmed =
+    false;
 
-    behavior:
-      "auto",
-  });
+  const releaseDistance =
+    getExitReleaseDistance();
+
+  const targetY =
+    direction > 0
+      ? getSectionEnd(
+          section,
+        ) +
+        releaseDistance
+      : getSectionStart(
+          section,
+        ) -
+        releaseDistance;
+
+  const scrollPosition = {
+    y:
+      window.scrollY,
+  };
+
+  state.exitTween =
+    gsap.to(
+      scrollPosition,
+      {
+        y:
+          targetY,
+
+        duration:
+          EXIT_RELEASE_DURATION,
+
+        ease:
+          "power2.out",
+
+        overwrite:
+          true,
+
+        onUpdate: () => {
+          if (
+            isProgrammaticScrollActive()
+          ) {
+            return;
+          }
+
+          window.scrollTo(
+            0,
+            scrollPosition.y,
+          );
+        },
+
+        onComplete: () => {
+          state.exitTween =
+            null;
+
+          state.exitInterruptionArmed =
+            false;
+
+          if (
+            isProgrammaticScrollActive()
+          ) {
+            return;
+          }
+
+          state.wasPinned =
+            false;
+
+          state.previousScrollY =
+            window.scrollY;
+        },
+
+        onInterrupt: () => {
+          state.exitTween =
+            null;
+
+          state.exitInterruptionArmed =
+            false;
+        },
+      },
+    );
+
+  /*
+   * Do not allow the same physical event that
+   * initiated the release to immediately cancel it.
+   */
+  requestAnimationFrame(
+    () => {
+      if (
+        state.exitTween
+      ) {
+        state.exitInterruptionArmed =
+          true;
+      }
+    },
+  );
 }
 
 function executeImpulse(
@@ -1390,6 +886,7 @@ function executeImpulse(
       section,
       1,
       state,
+      elements,
     );
 
     return;
@@ -1397,21 +894,38 @@ function executeImpulse(
 
   if (
     direction < 0 &&
-    state.activeIndex === 0
+    state.activeIndex ===
+      0
   ) {
     leaveSection(
       section,
       -1,
       state,
+      elements,
     );
 
     return;
   }
 
+  /*
+   * Only an actual service change resets the
+   * scroll-hint timer.
+   */
+  hideScrollHint(
+    state,
+    elements,
+  );
+
   moveToService(
     section,
     state.activeIndex +
       direction,
+    state,
+    elements,
+  );
+
+  scheduleScrollHint(
+    section,
     state,
     elements,
   );
@@ -1431,22 +945,20 @@ function handleObserverInput(
   if (
     isProgrammaticScrollActive() ||
     state.autoEntering ||
+    state.exitTween ||
     !isPinned(section)
   ) {
     return;
   }
-
-  hideScrollHint(
-    state,
-    elements,
-  );
 
   const delta =
     Math.abs(
       rawDelta,
     );
 
-  if (delta <= 0) {
+  if (
+    delta <= 0
+  ) {
     return;
   }
 
@@ -1583,7 +1095,8 @@ function createServiceObserver(
       ) => {
         if (
           isProgrammaticScrollActive() ||
-          state.autoEntering
+          state.autoEntering ||
+          state.exitTween
         ) {
           return;
         }
@@ -1602,7 +1115,8 @@ function createServiceObserver(
       ) => {
         if (
           isProgrammaticScrollActive() ||
-          state.autoEntering
+          state.autoEntering ||
+          state.exitTween
         ) {
           return;
         }
@@ -1619,7 +1133,8 @@ function createServiceObserver(
       onStop: () => {
         if (
           isProgrammaticScrollActive() ||
-          state.autoEntering
+          state.autoEntering ||
+          state.exitTween
         ) {
           return;
         }
@@ -1630,12 +1145,6 @@ function createServiceObserver(
 
         state.enteringSection =
           false;
-
-        scheduleScrollHint(
-          section,
-          state,
-          elements,
-        );
       },
     });
 
@@ -1655,6 +1164,17 @@ function handleWindowScroll(
 ): void {
   if (
     isProgrammaticScrollActive()
+  ) {
+    return;
+  }
+
+  /*
+   * The assisted exit itself generates scroll
+   * events. Ignore those until the tween finishes
+   * or the user interrupts it.
+   */
+  if (
+    state.exitTween
   ) {
     return;
   }
@@ -1688,9 +1208,44 @@ function handleWindowScroll(
   const currentScrollY =
     window.scrollY;
 
-  const movingDown =
-    currentScrollY >=
-    state.previousScrollY;
+  /*
+   * Do not infer the side of entry from the latest
+   * scroll direction.
+   *
+   * At the sticky boundaries the browser can emit
+   * small position changes while the section is
+   * transitioning between pinned/unpinned states.
+   * That made bottom entry occasionally look like
+   * top entry and reset the active service to 0.
+   *
+   * Instead, determine which physical section
+   * boundary the current position is closest to.
+   */
+  const sectionStart =
+    getSectionStart(
+      section,
+    );
+
+  const sectionEnd =
+    getSectionEnd(
+      section,
+    );
+
+  const distanceFromStart =
+    Math.abs(
+      currentScrollY -
+        sectionStart,
+    );
+
+  const distanceFromEnd =
+    Math.abs(
+      currentScrollY -
+        sectionEnd,
+    );
+
+  const enteredFromBottom =
+    distanceFromEnd <
+    distanceFromStart;
 
   if (
     pinned &&
@@ -1706,12 +1261,49 @@ function handleWindowScroll(
     state.impulseConsumed =
       true;
 
-    /*
-     * Normal top-to-bottom entry.
-     */
-    if (movingDown) {
+    if (
+      enteredFromBottom
+    ) {
+      /*
+       * Entering ServiceHighlights from below:
+       * start deterministically on the final service.
+       */
+      clearPreparedEntrance(
+        state,
+        elements,
+      );
+
+      const lastIndex =
+        elements.copyLayers.length -
+        1;
+
       if (
-        state.activeIndex !== 0
+        state.activeIndex !==
+        lastIndex
+      ) {
+        setActiveService(
+          lastIndex,
+          state,
+          elements,
+          false,
+        );
+      }
+
+      window.scrollTo({
+        top:
+          sectionEnd,
+
+        behavior:
+          "auto",
+      });
+    } else {
+      /*
+       * Entering ServiceHighlights from above:
+       * start deterministically on the first service.
+       */
+      if (
+        state.activeIndex !==
+        0
       ) {
         setActiveService(
           0,
@@ -1723,9 +1315,7 @@ function handleWindowScroll(
 
       window.scrollTo({
         top:
-          getSectionStart(
-            section,
-          ),
+          sectionStart,
 
         behavior:
           "auto",
@@ -1739,37 +1329,17 @@ function handleWindowScroll(
           );
         },
       );
-    } else {
-
-      clearPreparedEntrance(
-        state,
-        elements,
-      );
-
-      const lastIndex =
-        elements.copyLayers.length -
-        1;
-
-      setActiveService(
-        lastIndex,
-        state,
-        elements,
-      );
-
-      window.scrollTo({
-        top:
-          getSectionEnd(
-            section,
-          ),
-
-        behavior:
-          "auto",
-      });
     }
 
     state.observer?.enable();
 
     hideScrollHint(
+      state,
+      elements,
+    );
+
+    scheduleScrollHint(
+      section,
       state,
       elements,
     );
@@ -1813,6 +1383,7 @@ function handleResize(
   if (
     isProgrammaticScrollActive() ||
     state.autoEntering ||
+    state.exitTween ||
     !isPinned(section)
   ) {
     return;
@@ -1839,9 +1410,20 @@ function suspendServiceHighlights(
   state: ServiceHighlightState,
   elements: ServiceHighlightElements,
 ): void {
-
   state.autoEntering =
     false;
+
+  if (
+    state.exitTween
+  ) {
+    state.exitTween.kill();
+
+    state.exitTween =
+      null;
+
+    state.exitInterruptionArmed =
+      false;
+  }
 
   state.observer?.disable();
 
@@ -1866,6 +1448,9 @@ function resumeServiceHighlights(
   state.autoEntering =
     false;
 
+  state.exitInterruptionArmed =
+    false;
+
   const pinned =
     isPinned(
       section,
@@ -1884,7 +1469,9 @@ function resumeServiceHighlights(
   state.enteringSection =
     false;
 
-  if (!pinned) {
+  if (
+    !pinned
+  ) {
     state.observer?.disable();
 
     hideScrollHint(
@@ -1936,7 +1523,8 @@ function resumeServiceHighlights(
     !state.entrancePlayed
   ) {
     if (
-      state.activeIndex !== 0
+      state.activeIndex !==
+      0
     ) {
       setActiveService(
         0,
@@ -2062,14 +1650,14 @@ function initializeSection(
 
       entrancePlayed:
         false,
+
+      exitTween:
+        null,
+
+      exitInterruptionArmed:
+        false,
     };
 
-  /*
-   * Establish service 1 without animation.
-   *
-   * This happens while the section is normally still
-   * below the viewport.
-   */
   setActiveService(
     0,
     state,
@@ -2089,7 +1677,9 @@ function initializeSection(
       elements,
     );
 
-  if (pinnedInitially) {
+  if (
+    pinnedInitially
+  ) {
     const sectionStart =
       getSectionStart(
         section,
@@ -2127,7 +1717,8 @@ function initializeSection(
       );
 
     if (
-      initialIndex === 0
+      initialIndex ===
+      0
     ) {
       requestAnimationFrame(
         () => {
@@ -2138,7 +1729,6 @@ function initializeSection(
         },
       );
     } else {
-
       clearPreparedEntrance(
         state,
         elements,
@@ -2164,6 +1754,36 @@ function initializeSection(
       );
     }
   }
+
+  /* ------------------------------------------------
+   * Exit interruption
+   * ------------------------------------------------ */
+
+  window.addEventListener(
+    "wheel",
+    () => {
+      handleExitInterruption(
+        state,
+      );
+    },
+    {
+      passive:
+        true,
+    },
+  );
+
+  window.addEventListener(
+    "touchmove",
+    () => {
+      handleExitInterruption(
+        state,
+      );
+    },
+    {
+      passive:
+        true,
+    },
+  );
 
   /* ------------------------------------------------
    * Programmatic scroll events

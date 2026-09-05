@@ -3,20 +3,30 @@ import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 
 import type { Language } from "../../../config/i18n/i18n";
+
 import { serviceHighlightImages } from "../../../lib/index/serviceHighlightsImages";
+
+import Icon from "../../ui/icons/Icon.astro";
 
 interface Props {
   language: Language;
 }
 
-const { language } = Astro.props as Props;
+const {
+  language,
+} = Astro.props as Props;
 
 const services = (
   await getCollection(
     "serviceHighlights",
-    ({ data }) => data.language === language,
+    ({ data }) =>
+      data.language === language,
   )
-).sort((a, b) => a.data.order - b.data.order);
+).sort(
+  (a, b) =>
+    a.data.order -
+    b.data.order,
+);
 ---
 
 <section
@@ -24,104 +34,142 @@ const services = (
   data-service-highlights
   style={`--service-count: ${services.length}`}
 >
-  <div class="service-highlights__sticky">
+  <div
+    class="service-highlights__sticky"
+  >
     <div
       class="service-highlights__media"
       aria-hidden="true"
     >
       {
-        services.map((service, index) => (
-          <div
-            class:list={[
-              "service-highlights__image",
-              {
-                "is-active": index === 0,
-              },
-            ]}
-            data-service-image={index}
-          >
-            <Image
-              src={
-                serviceHighlightImages[
-                  service.data.imageKey
-                ]
-              }
-              alt=""
-              widths={[
-                960,
-                1280,
-                1600,
-                1920,
+        services.map(
+          (
+            service,
+            index,
+          ) => (
+            <div
+              class:list={[
+                "service-highlights__image",
+                {
+                  "is-active":
+                    index === 0,
+                },
               ]}
-              sizes="100vw"
-              loading={
-                index === 0
-                  ? "eager"
-                  : "lazy"
+              data-service-image={
+                index
               }
-              style={`object-position: ${service.data.imagePosition}`}
-            />
-          </div>
-        ))
+            >
+              <Image
+                src={
+                  serviceHighlightImages[
+                    service.data.imageKey
+                  ]
+                }
+                alt=""
+                widths={[
+                  960,
+                  1280,
+                  1600,
+                  1920,
+                ]}
+                sizes="100vw"
+                loading={
+                  index === 0
+                    ? "eager"
+                    : "lazy"
+                }
+                style={`object-position: ${service.data.imagePosition}`}
+              />
+            </div>
+          ),
+        )
       }
 
-      <div class="service-highlights__overlay"></div>
+      <div
+        class="service-highlights__overlay"
+      ></div>
     </div>
 
     <div
       class="service-highlights__content site-container-wide"
     >
-      <div class="service-highlights__copy">
+      <div
+        class="service-highlights__copy"
+      >
         {
-          services.map((service, index) => (
-            <article
-              class:list={[
-                "service-highlights__copy-layer",
-                {
-                  "is-active": index === 0,
-                },
-              ]}
-              data-service-copy={index}
-              aria-hidden={
-                index === 0
-                  ? "false"
-                  : "true"
-              }
-            >
-              <h2 class="service-highlights__title">
-                {service.data.title}
-              </h2>
-
-              <div class="service-highlights__description-box">
-                <p class="service-highlights__description">
-                  {service.data.description}
-                </p>
-              </div>
-
-              <div class="service-highlights__cta-row">
-                <a
-                  class="service-highlights__cta"
-                  href={service.data.href}
-                  tabindex={
-                    index === 0
-                      ? 0
-                      : -1
-                  }
+          services.map(
+            (
+              service,
+              index,
+            ) => (
+              <article
+                class:list={[
+                  "service-highlights__copy-layer",
+                  {
+                    "is-active":
+                      index === 0,
+                  },
+                ]}
+                data-service-copy={
+                  index
+                }
+                aria-hidden={
+                  index === 0
+                    ? "false"
+                    : "true"
+                }
+              >
+                <h2
+                  class="service-highlights__title"
                 >
-                  <span>
-                    {service.data.buttonLabel}
-                  </span>
+                  {
+                    service.data.title
+                  }
+                </h2>
 
-                  <span
-                    class="service-highlights__cta-arrow"
-                    aria-hidden="true"
+                <div
+                  class="service-highlights__description-box"
+                >
+                  <p
+                    class="service-highlights__description"
                   >
-                    →
-                  </span>
-                </a>
-              </div>
-            </article>
-          ))
+                    {
+                      service.data.description
+                    }
+                  </p>
+                </div>
+
+                <div
+                  class="service-highlights__cta-row"
+                >
+                  <a
+                    class="service-highlights__cta"
+                    href={
+                      service.data.href
+                    }
+                    tabindex={
+                      index === 0
+                        ? 0
+                        : -1
+                    }
+                  >
+                    <span>
+                      {
+                        service.data.buttonLabel
+                      }
+                    </span>
+
+                    <span
+                      class="service-highlights__cta-arrow"
+                      aria-hidden="true"
+                    >
+                      →
+                    </span>
+                  </a>
+                </div>
+              </article>
+            ),
+          )
         }
       </div>
 
@@ -133,86 +181,10 @@ const services = (
           class="service-highlights__scroll-hint"
           data-service-scroll-hint
         >
-          <svg
-            class="service-highlights__mouse"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient
-                id="service-highlights-wheel-gradient"
-                x1="0"
-                y1="-4"
-                x2="0"
-                y2="4"
-                gradientUnits="userSpaceOnUse"
-                spreadMethod="repeat"
-              >
-                <stop
-                  offset="0%"
-                  stop-color="#ffffff"
-                  stop-opacity="0.22"
-                />
-
-                <stop
-                  offset="20%"
-                  stop-color="#ffffff"
-                  stop-opacity="0.22"
-                />
-
-                <stop
-                  offset="38%"
-                  stop-color="#d3b368"
-                  stop-opacity="0.55"
-                />
-
-                <stop
-                  offset="48%"
-                  stop-color="#d3b368"
-                  stop-opacity="1"
-                />
-
-                <stop
-                  offset="58%"
-                  stop-color="#d3b368"
-                  stop-opacity="0.55"
-                />
-
-                <stop
-                  offset="78%"
-                  stop-color="#ffffff"
-                  stop-opacity="0.22"
-                />
-
-                <stop
-                  offset="100%"
-                  stop-color="#ffffff"
-                  stop-opacity="0.22"
-                />
-
-                <animateTransform
-                  attributeName="gradientTransform"
-                  type="translate"
-                  from="0 0"
-                  to="0 8"
-                  dur="1.5s"
-                  repeatCount="indefinite"
-                />
-              </linearGradient>
-            </defs>
-
-            <path
-              class="service-highlights__mouse-body"
-              d="M10 3H14C16.2091 3 18 4.79086 18 7V17C18 19.2091 16.2091 21 14 21H10C7.79086 21 6 19.2091 6 17V7C6 4.79086 7.79086 3 10 3Z"
-            />
-
-            <path
-              class="service-highlights__mouse-wheel"
-              d="M12 7V11"
-            />
-          </svg>
+          <Icon
+            name="chevronDown"
+            class="scroll-cue-chevron"
+          />
         </div>
       </div>
     </div>

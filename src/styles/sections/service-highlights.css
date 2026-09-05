@@ -53,6 +53,7 @@
 
 .service-highlights__image {
   position: absolute;
+
   inset: 0;
 
   opacity: 0;
@@ -77,18 +78,18 @@
   object-fit: cover;
 
   filter:
+    saturate(0.65)
+    brightness(0.78);
 
-  saturate(0.65)
-
-  brightness(0.78);
-
-  transform-origin: center center;
+  transform-origin:
+    center center;
 
   will-change:
     transform,
     filter;
 
-  backface-visibility: hidden;
+  backface-visibility:
+    hidden;
 }
 
 /* --------------------------------------------------
@@ -104,16 +105,58 @@
   background:
     linear-gradient(
       90deg,
-      rgba(13, 14, 17, 0.92) 0%,
-      rgba(13, 14, 17, 0.78) 30%,
-      rgba(13, 14, 17, 0.42) 58%,
-      rgba(13, 14, 17, 0.28) 100%
+      rgba(
+        13,
+        14,
+        17,
+        0.92
+      )
+        0%,
+      rgba(
+        13,
+        14,
+        17,
+        0.78
+      )
+        30%,
+      rgba(
+        13,
+        14,
+        17,
+        0.42
+      )
+        58%,
+      rgba(
+        13,
+        14,
+        17,
+        0.28
+      )
+        100%
     ),
     linear-gradient(
       180deg,
-      rgba(13, 14, 17, 0.14) 0%,
-      rgba(13, 14, 17, 0.04) 52%,
-      rgba(13, 14, 17, 0.5) 100%
+      rgba(
+        13,
+        14,
+        17,
+        0.14
+      )
+        0%,
+      rgba(
+        13,
+        14,
+        17,
+        0.04
+      )
+        52%,
+      rgba(
+        13,
+        14,
+        17,
+        0.5
+      )
+        100%
     );
 
   pointer-events: none;
@@ -286,8 +329,11 @@
 
   display: flex;
 
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content:
+    flex-start;
+
+  align-items:
+    flex-start;
 }
 
 .service-highlights__cta {
@@ -365,10 +411,14 @@
   z-index: 3;
 
   left:
-    var(--container-wide-gutter);
+    var(
+      --container-wide-gutter
+    );
 
   right:
-    var(--container-wide-gutter);
+    var(
+      --container-wide-gutter
+    );
 
   bottom:
     clamp(
@@ -390,99 +440,30 @@
  * -------------------------------------------------- */
 
 .service-highlights__scroll-hint {
-  display: flex;
+  display: grid;
 
-  align-items: center;
-  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
 
-  width: 2.625rem;
-  height: 2.625rem;
+  place-items: center;
+
+  color:
+    var(--color-gold);
 
   opacity: 0;
   visibility: hidden;
 
+  pointer-events: none;
+
   transition:
     opacity 300ms ease,
     visibility 300ms ease;
-
-  pointer-events: none;
 }
 
 .service-highlights__scroll-hint.is-visible {
   opacity: 1;
+
   visibility: visible;
-}
-
-/* --------------------------------------------------
- * Mouse
- * -------------------------------------------------- */
-
-.service-highlights__mouse {
-  display: block;
-
-  width: 1.96875rem;
-  height: 1.96875rem;
-
-  overflow: visible;
-}
-
-.service-highlights__mouse-body {
-  fill: none;
-
-  stroke:
-    rgba(
-      255,
-      255,
-      255,
-      0.72
-    );
-
-  stroke-width: 1.45;
-
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.service-highlights__mouse-wheel {
-  fill: none;
-
-  stroke:
-    url(
-      "#service-highlights-wheel-gradient"
-    );
-
-  stroke-width: 2.15;
-
-  stroke-linecap: round;
-
-  filter:
-    drop-shadow(
-      0
-      0
-      0.08rem
-      rgba(
-        211,
-        179,
-        104,
-        0.3
-      )
-    );
-}
-
-.service-highlights__scroll-hint.is-visible
-  .service-highlights__mouse-wheel {
-  filter:
-    drop-shadow(
-      0
-      0
-      0.1rem
-      rgba(
-        211,
-        179,
-        104,
-        0.48
-      )
-    );
 }
 
 /* --------------------------------------------------
@@ -523,10 +504,17 @@
   max-width: 70rem
 ) {
   .service-highlights {
-    --service-title-row: 5rem;
-    --service-description-gap: 1.25rem;
-    --service-description-min-height: 7rem;
-    --service-cta-gap: 1rem;
+    --service-title-row:
+      5rem;
+
+    --service-description-gap:
+      1.25rem;
+
+    --service-description-min-height:
+      7rem;
+
+    --service-cta-gap:
+      1rem;
   }
 
   .service-highlights__copy {
@@ -571,10 +559,17 @@
   max-width: 56rem
 ) {
   .service-highlights {
-    --service-title-row: 4.5rem;
-    --service-description-gap: 1rem;
-    --service-description-min-height: 6.5rem;
-    --service-cta-gap: 0.9rem;
+    --service-title-row:
+      4.5rem;
+
+    --service-description-gap:
+      1rem;
+
+    --service-description-min-height:
+      6.5rem;
+
+    --service-cta-gap:
+      0.9rem;
   }
 
   .service-highlights__copy {
@@ -597,11 +592,6 @@
   .service-highlights__cta-row {
     width: 85%;
   }
-
-  .service-highlights__mouse {
-    width: 1.85625rem;
-    height: 1.85625rem;
-  }
 }
 
 /* --------------------------------------------------
@@ -612,12 +602,20 @@
   max-width: 48rem
 ) {
   .service-highlights {
-    --service-step-height: 45svh;
+    --service-step-height:
+      45svh;
 
-    --service-title-row: 4rem;
-    --service-description-gap: 1rem;
-    --service-description-min-height: 6rem;
-    --service-cta-gap: 0.9rem;
+    --service-title-row:
+      4rem;
+
+    --service-description-gap:
+      1rem;
+
+    --service-description-min-height:
+      6rem;
+
+    --service-cta-gap:
+      0.9rem;
   }
 
   .service-highlights__sticky {
@@ -625,7 +623,8 @@
   }
 
   .service-highlights__content {
-    align-items: flex-end;
+    align-items:
+      flex-end;
 
     padding-bottom:
       clamp(
@@ -681,13 +680,8 @@
   }
 
   .service-highlights__scroll-hint {
-    width: 2.25rem;
-    height: 2.25rem;
-  }
-
-  .service-highlights__mouse {
-    width: 1.6875rem;
-    height: 1.6875rem;
+    width: 3rem;
+    height: 3rem;
   }
 
   .service-highlights__overlay {
@@ -727,10 +721,17 @@
   max-width: 30rem
 ) {
   .service-highlights {
-    --service-title-row: 3.5rem;
-    --service-description-gap: 0.85rem;
-    --service-description-min-height: 5.5rem;
-    --service-cta-gap: 0.85rem;
+    --service-title-row:
+      3.5rem;
+
+    --service-description-gap:
+      0.85rem;
+
+    --service-description-min-height:
+      5.5rem;
+
+    --service-cta-gap:
+      0.85rem;
   }
 
   .service-highlights__title {
@@ -760,13 +761,8 @@
   }
 
   .service-highlights__scroll-hint {
-    width: 2.1rem;
-    height: 2.1rem;
-  }
-
-  .service-highlights__mouse {
-    width: 1.575rem;
-    height: 1.575rem;
+    width: 2.75rem;
+    height: 2.75rem;
   }
 }
 
@@ -781,9 +777,5 @@
   .service-highlights__scroll-hint,
   .service-highlights__cta {
     transition: none;
-  }
-
-  .service-highlights__mouse-wheel {
-    filter: none;
   }
 }

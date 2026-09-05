@@ -1,18 +1,34 @@
-const HERO_SELECTOR = ".home-hero";
-const SCROLL_CUE_SELECTOR ="[data-home-hero-scroll-cue]";
+const HERO_SELECTOR =
+  ".home-hero";
 
-const HOME_VISION_SELECTOR = "[data-home-vision]";
-const HOME_VISION_GRID_SELECTOR = ".home-vision__grid";
-const HOME_VISION_DESCRIPTION_SELECTOR =".home-vision__accents-description";
+const SCROLL_CUE_SELECTOR =
+  "[data-home-hero-scroll-cue]";
 
-const SCROLL_CUE_DELAY = 1200;
-const SCROLL_END_DELAY = 180;
-const HERO_ACTIVE_RATIO = 0.5;
+const HOME_VISION_SELECTOR =
+  "[data-home-vision]";
 
-const HOME_VISION_HEADER_REVEAL_RATIO = 0.2;
-const HOME_VISION_GRID_REVEAL_RATIO = 0.05;
+const HOME_VISION_GRID_SELECTOR =
+  ".home-vision__grid";
 
-const HOME_VISION_HEADER_SEQUENCE_FALLBACK = 1700;
+const HOME_VISION_DESCRIPTION_SELECTOR =
+  ".home-vision__accents-description";
+
+const SCROLL_CUE_DELAY = 3000;
+
+const SCROLL_END_DELAY =
+  180;
+
+const HERO_ACTIVE_RATIO =
+  0.5;
+
+const HOME_VISION_HEADER_REVEAL_RATIO =
+  0.2;
+
+const HOME_VISION_GRID_REVEAL_RATIO =
+  0.05;
+
+const HOME_VISION_HEADER_SEQUENCE_FALLBACK =
+  1700;
 
 type HomeHeroState = {
   isHeroActive: boolean;
@@ -41,15 +57,17 @@ function initializeHomeHero(
   hero: HTMLElement,
 ): void {
   if (
-    hero.dataset.homeHeroInitialized === "true"
+    hero.dataset.homeHeroInitialized ===
+    "true"
   ) {
     return;
   }
 
-  hero.dataset.homeHeroInitialized = "true";
+  hero.dataset.homeHeroInitialized =
+    "true";
 
   const scrollCue =
-    hero.querySelector<HTMLButtonElement>(
+    hero.querySelector<HTMLElement>(
       SCROLL_CUE_SELECTOR,
     );
 
@@ -61,111 +79,133 @@ function initializeHomeHero(
     isHeroActive: false,
   };
 
-  const clearRevealTimer = (): void => {
-    if (state.revealTimer === undefined) {
-      return;
-    }
-
-    window.clearTimeout(state.revealTimer);
-    state.revealTimer = undefined;
-  };
-
-  const clearScrollEndTimer = (): void => {
-    if (state.scrollEndTimer === undefined) {
-      return;
-    }
-
-    window.clearTimeout(state.scrollEndTimer);
-    state.scrollEndTimer = undefined;
-  };
-
-  const hideScrollCue = (): void => {
-    clearRevealTimer();
-    scrollCue.classList.remove("is-visible");
-  };
-
-  const showScrollCueAfterDelay = (): void => {
-    hideScrollCue();
-
-    if (!state.isHeroActive) {
-      return;
-    }
-
-    state.revealTimer = window.setTimeout(() => {
-      state.revealTimer = undefined;
-
-      if (state.isHeroActive) {
-        scrollCue.classList.add("is-visible");
+  const clearRevealTimer =
+    (): void => {
+      if (
+        state.revealTimer ===
+        undefined
+      ) {
+        return;
       }
-    }, SCROLL_CUE_DELAY);
-  };
 
-  const handleScrollStart = (): void => {
-    hideScrollCue();
-    clearScrollEndTimer();
+      window.clearTimeout(
+        state.revealTimer,
+      );
 
-    state.scrollEndTimer = window.setTimeout(() => {
-      state.scrollEndTimer = undefined;
+      state.revealTimer =
+        undefined;
+    };
 
-      if (state.isHeroActive) {
+  const clearScrollEndTimer =
+    (): void => {
+      if (
+        state.scrollEndTimer ===
+        undefined
+      ) {
+        return;
+      }
+
+      window.clearTimeout(
+        state.scrollEndTimer,
+      );
+
+      state.scrollEndTimer =
+        undefined;
+    };
+
+  const hideScrollCue =
+    (): void => {
+      clearRevealTimer();
+
+      scrollCue.classList.remove(
+        "is-visible",
+      );
+    };
+
+  const showScrollCueAfterDelay =
+    (): void => {
+      hideScrollCue();
+
+      if (
+        !state.isHeroActive
+      ) {
+        return;
+      }
+
+      state.revealTimer =
+        window.setTimeout(
+          () => {
+            state.revealTimer =
+              undefined;
+
+            if (
+              state.isHeroActive
+            ) {
+              scrollCue.classList.add(
+                "is-visible",
+              );
+            }
+          },
+          SCROLL_CUE_DELAY,
+        );
+    };
+
+  const handleScrollStart =
+    (): void => {
+      hideScrollCue();
+      clearScrollEndTimer();
+
+      state.scrollEndTimer =
+        window.setTimeout(
+          () => {
+            state.scrollEndTimer =
+              undefined;
+
+            if (
+              state.isHeroActive
+            ) {
+              showScrollCueAfterDelay();
+            }
+          },
+          SCROLL_END_DELAY,
+        );
+    };
+
+  const heroObserver =
+    new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) {
+          return;
+        }
+
+        state.isHeroActive =
+          entry.isIntersecting &&
+          entry.intersectionRatio >=
+            HERO_ACTIVE_RATIO;
+
+        if (
+          !state.isHeroActive
+        ) {
+          hideScrollCue();
+
+          return;
+        }
+
         showScrollCueAfterDelay();
-      }
-    }, SCROLL_END_DELAY);
-  };
+      },
+      {
+        root: null,
 
-  const scrollToNextSection = (): void => {
-    hideScrollCue();
-    clearScrollEndTimer();
-
-    const nextSection = hero.nextElementSibling;
-
-    if (!(nextSection instanceof HTMLElement)) {
-      return;
-    }
-
-    nextSection.scrollIntoView({
-      behavior: prefersReducedMotion()
-        ? "auto"
-        : "smooth",
-      block: "start",
-    });
-  };
-
-  const heroObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry) {
-        return;
-      }
-
-      state.isHeroActive =
-        entry.isIntersecting &&
-        entry.intersectionRatio >=
-          HERO_ACTIVE_RATIO;
-
-      if (!state.isHeroActive) {
-        hideScrollCue();
-        return;
-      }
-
-      showScrollCueAfterDelay();
-    },
-    {
-      root: null,
-      threshold: [
-        0,
-        HERO_ACTIVE_RATIO,
-        0.75,
-        1,
-      ],
-    },
-  );
+        threshold: [
+          0,
+          HERO_ACTIVE_RATIO,
+          0.75,
+          1,
+        ],
+      },
+    );
 
   heroObserver.observe(hero);
-
-  scrollCue.addEventListener(
-    "click",
-    scrollToNextSection,
-  );
 
   window.addEventListener(
     "scroll",
@@ -180,7 +220,9 @@ function initializeHomeHero(
     () => {
       hideScrollCue();
 
-      if (state.isHeroActive) {
+      if (
+        state.isHeroActive
+      ) {
         showScrollCueAfterDelay();
       }
     },
@@ -189,26 +231,36 @@ function initializeHomeHero(
     },
   );
 
-  hero.classList.add("is-copy-pending");
+  hero.classList.add(
+    "is-copy-pending",
+  );
 
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      hero.classList.add("is-copy-visible");
-    });
-  });
+  window.requestAnimationFrame(
+    () => {
+      window.requestAnimationFrame(
+        () => {
+          hero.classList.add(
+            "is-copy-visible",
+          );
+        },
+      );
+    },
+  );
 }
 
 function initializeHomeVisionReveal(
   section: HTMLElement,
 ): void {
   if (
-    section.dataset.homeVisionRevealInitialized ===
+    section.dataset
+      .homeVisionRevealInitialized ===
     "true"
   ) {
     return;
   }
 
-  section.dataset.homeVisionRevealInitialized =
+  section.dataset
+    .homeVisionRevealInitialized =
     "true";
 
   const grid =
@@ -227,79 +279,99 @@ function initializeHomeVisionReveal(
     hasRevealedAccents: false,
   };
 
-  const clearSequenceFallback = (): void => {
-    if (
-      state.sequenceFallbackTimer === undefined
-    ) {
-      return;
-    }
+  const clearSequenceFallback =
+    (): void => {
+      if (
+        state.sequenceFallbackTimer ===
+        undefined
+      ) {
+        return;
+      }
 
-    window.clearTimeout(
-      state.sequenceFallbackTimer,
-    );
-
-    state.sequenceFallbackTimer = undefined;
-  };
-
-  const tryRevealAccents = (): void => {
-    if (
-      state.hasRevealedAccents ||
-      !state.isGridReady ||
-      !state.isHeaderSequenceComplete
-    ) {
-      return;
-    }
-
-    state.hasRevealedAccents = true;
-
-    section.classList.add(
-      "are-accents-revealed",
-    );
-  };
-
-  const completeHeaderSequence = (): void => {
-    if (state.isHeaderSequenceComplete) {
-      return;
-    }
-
-    clearSequenceFallback();
-
-    state.isHeaderSequenceComplete = true;
-
-    tryRevealAccents();
-  };
-
-  const revealHeader = (): void => {
-    if (
-      section.classList.contains(
-        "is-header-revealed",
-      )
-    ) {
-      return;
-    }
-
-    section.classList.add("is-header-revealed");
-
-    state.sequenceFallbackTimer =
-      window.setTimeout(
-        completeHeaderSequence,
-        HOME_VISION_HEADER_SEQUENCE_FALLBACK,
+      window.clearTimeout(
+        state.sequenceFallbackTimer,
       );
-  };
 
-  const markGridReady = (): void => {
-    state.isGridReady = true;
+      state.sequenceFallbackTimer =
+        undefined;
+    };
 
-    tryRevealAccents();
-  };
+  const tryRevealAccents =
+    (): void => {
+      if (
+        state.hasRevealedAccents ||
+        !state.isGridReady ||
+        !state.isHeaderSequenceComplete
+      ) {
+        return;
+      }
+
+      state.hasRevealedAccents =
+        true;
+
+      section.classList.add(
+        "are-accents-revealed",
+      );
+    };
+
+  const completeHeaderSequence =
+    (): void => {
+      if (
+        state.isHeaderSequenceComplete
+      ) {
+        return;
+      }
+
+      clearSequenceFallback();
+
+      state.isHeaderSequenceComplete =
+        true;
+
+      tryRevealAccents();
+    };
+
+  const revealHeader =
+    (): void => {
+      if (
+        section.classList.contains(
+          "is-header-revealed",
+        )
+      ) {
+        return;
+      }
+
+      section.classList.add(
+        "is-header-revealed",
+      );
+
+      state.sequenceFallbackTimer =
+        window.setTimeout(
+          completeHeaderSequence,
+          HOME_VISION_HEADER_SEQUENCE_FALLBACK,
+        );
+    };
+
+  const markGridReady =
+    (): void => {
+      state.isGridReady = true;
+
+      tryRevealAccents();
+    };
 
   if (
     prefersReducedMotion() ||
-    !("IntersectionObserver" in window)
+    !(
+      "IntersectionObserver" in
+      window
+    )
   ) {
-    section.classList.add("is-header-revealed");
+    section.classList.add(
+      "is-header-revealed",
+    );
 
-    state.isHeaderSequenceComplete = true;
+    state.isHeaderSequenceComplete =
+      true;
+
     state.isGridReady = true;
 
     tryRevealAccents();
@@ -307,11 +379,15 @@ function initializeHomeVisionReveal(
     return;
   }
 
-  section.classList.add("is-reveal-ready");
+  section.classList.add(
+    "is-reveal-ready",
+  );
 
   description?.addEventListener(
     "animationend",
-    (event: AnimationEvent) => {
+    (
+      event: AnimationEvent,
+    ) => {
       if (
         event.animationName !==
         "vision-description-reveal"
@@ -326,65 +402,75 @@ function initializeHomeVisionReveal(
     },
   );
 
-  const headerObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (
-        !entry ||
-        !entry.isIntersecting ||
-        entry.intersectionRatio <
-          HOME_VISION_HEADER_REVEAL_RATIO
-      ) {
-        return;
-      }
+  const headerObserver =
+    new IntersectionObserver(
+      ([entry]) => {
+        if (
+          !entry ||
+          !entry.isIntersecting ||
+          entry.intersectionRatio <
+            HOME_VISION_HEADER_REVEAL_RATIO
+        ) {
+          return;
+        }
 
-      headerObserver.disconnect();
+        headerObserver.disconnect();
 
-      revealHeader();
-    },
-    {
-      root: null,
-      threshold: [
-        0,
-        HOME_VISION_HEADER_REVEAL_RATIO,
-        0.5,
-      ],
-      rootMargin: "0px 0px -8% 0px",
-    },
+        revealHeader();
+      },
+      {
+        root: null,
+
+        threshold: [
+          0,
+          HOME_VISION_HEADER_REVEAL_RATIO,
+          0.5,
+        ],
+
+        rootMargin:
+          "0px 0px -8% 0px",
+      },
+    );
+
+  headerObserver.observe(
+    section,
   );
-
-  headerObserver.observe(section);
 
   if (!grid) {
     markGridReady();
+
     return;
   }
 
-  const gridObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (
-        !entry ||
-        !entry.isIntersecting ||
-        entry.intersectionRatio <
-          HOME_VISION_GRID_REVEAL_RATIO
-      ) {
-        return;
-      }
+  const gridObserver =
+    new IntersectionObserver(
+      ([entry]) => {
+        if (
+          !entry ||
+          !entry.isIntersecting ||
+          entry.intersectionRatio <
+            HOME_VISION_GRID_REVEAL_RATIO
+        ) {
+          return;
+        }
 
-      gridObserver.disconnect();
+        gridObserver.disconnect();
 
-      markGridReady();
-    },
-    {
-      root: null,
-      threshold: [
-        0,
-        HOME_VISION_GRID_REVEAL_RATIO,
-        0.25,
-      ],
+        markGridReady();
+      },
+      {
+        root: null,
 
-      rootMargin: "0px 0px -10% 0px",
-    },
-  );
+        threshold: [
+          0,
+          HOME_VISION_GRID_REVEAL_RATIO,
+          0.25,
+        ],
+
+        rootMargin:
+          "0px 0px -10% 0px",
+      },
+    );
 
   gridObserver.observe(grid);
 }
@@ -395,12 +481,18 @@ function initializeHomeVisionReveal(
 
 export function initHomePageAnimations(): void {
   document
-    .querySelectorAll<HTMLElement>(HERO_SELECTOR)
-    .forEach(initializeHomeHero);
+    .querySelectorAll<HTMLElement>(
+      HERO_SELECTOR,
+    )
+    .forEach(
+      initializeHomeHero,
+    );
 
   document
     .querySelectorAll<HTMLElement>(
       HOME_VISION_SELECTOR,
     )
-    .forEach(initializeHomeVisionReveal);
+    .forEach(
+      initializeHomeVisionReveal,
+    );
 }
