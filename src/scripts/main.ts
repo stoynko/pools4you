@@ -1,3 +1,4 @@
+import { initSmoothWheelScroll } from "./components/smoothWheelScroll";
 import { initSmartHeader } from "./components/smartHeader";
 import { initServiceHighlights } from "./components/serviceHighlights";
 import { initCarousels } from "./components/carousel";
@@ -6,6 +7,7 @@ import { initSupplierFilterPaginations } from "./components/supplierFilterPagina
 import { initFooterDivider } from "./components/footerDivider";
 
 function initializeSiteScripts(): void {
+  initSmoothWheelScroll();
   initSmartHeader();
   initServiceHighlights();
   initSupplierFilterPaginations();
