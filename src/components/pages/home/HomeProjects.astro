@@ -6,32 +6,22 @@ import type { Language } from "../../../config/i18n/i18n";
 import { getPagePath } from "../../../config/pages/pagePaths";
 import { getPageTranslations } from "../../../lib/i18n";
 
-import HomeFeaturedProject from "./HomeFeaturedProject.astro";
-import SectionHeader from "../../shared/SectionHeader.astro";
+import HomeProjectCard from "./HomeProjectCard.astro";
 
-type Props = {
-  language: Language;
-  limit?: number;
-};
-
-const { language, limit = 2 } = Astro.props as Props;
-
+type Props = { language: Language; limit?: number; };
+const { language, limit = 5 } = Astro.props as Props;
 const translation = getPageTranslations(language, "home");
 const sectionTitle = translation.featuredProjects.title;
 const sectionDescription = translation.featuredProjects.intro;
 const projectsHref = getPagePath("projects", language);
-
 const allProjects = await getCollection("projects");
 
-const featuredProjects = allProjects
-  .filter(
-    (project) => project.data.language === language && project.data.isFeatured,
-  )
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, limit);
+const featuredProjects = allProjects.filter((project) =>
+  project.data.language === language && project.data.isFeatured).sort((a, b) => 
+    b.data.date.getTime() - a.data.date.getTime()).slice(0, limit);
 
-function getProjectHref(project: CollectionEntry<"projects">) {
-  const basePath = language === "en" ? "/en/projects" : "/proekti";
+function getProjectHref(project: CollectionEntry<"projects">): string {
+  const basePath =language === "en" ? "/en/projects" : "/proekti";
 
   return `${basePath}/${project.data.slug}`;
 }
@@ -39,34 +29,48 @@ function getProjectHref(project: CollectionEntry<"projects">) {
 
 {
   featuredProjects.length > 0 && (
-    <section class="featured-projects u-no-select">
+    <section class="home-projects u-no-select" data-home-projects>
       <div class="site-container-wide">
-        <SectionHeader
-          title={sectionTitle}
-          description={sectionDescription}
-          size="large"
-          descriptionSize="large"
-          descriptionWeight="normal"
-        />
+        <header class="home-projects__header">
+          <h2 class="home-projects__title">
+            {sectionTitle}
+          </h2>
 
-        <div class="featured-projects-list">
-          {featuredProjects.map((project, index) => (
-            <HomeFeaturedProject
-              project={project}
-              href={getProjectHref(project)}
-              ctaLabel={translation.featuredProjects.projectCtaLabel}
-              isReversed={index % 2 === 1}
-              eager={index === 0}
-            />
-          ))}
+          <div class="home-projects__separator" aria-hidden="true"/>
+
+          <p class="home-projects__description">
+            {sectionDescription}
+          </p>
+        </header>
+
+        <div class="home-project-book" data-home-projects-book
+          tabindex="0" aria-label={sectionTitle}>
+          {
+            featuredProjects.map((project, index) => (
+                <HomeProjectCard
+                  project={project}
+                  href={getProjectHref(project)}
+                  index={index}
+                  isActive={ index === 0 }
+                  viewProjectLabel={ translation.featuredProjects.projectCtaLabel }
+                />
+              )
+            )
+          }
         </div>
 
-        <div class="featured-projects-footer">
-          <a href={projectsHref} class="button-primary w-fit">
-            {translation.featuredProjects.ctaLabel}
+        <div class="home-projects__footer">
+          <a href={projectsHref} class="home-projects__cta">
+            { translation.featuredProjects.ctaLabel }
           </a>
         </div>
       </div>
+
+      <script>
+        import { initHomeProjects } from "../../../scripts/components/homeProjects";
+        initHomeProjects();
+        document.addEventListener("astro:page-load", initHomeProjects);
+      </script>
     </section>
   )
 }

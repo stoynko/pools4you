@@ -1,0 +1,98 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import Icon from "../../ui/icons/Icon.astro";
+
+type Props = {
+    project: CollectionEntry<"projects">;
+    href: string;
+    index: number;
+    isActive?: boolean;
+    viewProjectLabel: string;
+};
+
+const { project, href, index, isActive = false, viewProjectLabel } = Astro.props as Props;
+const summary = project.data.featuredExcerpt ?? project.data.description;
+const quote = project.data.featuredQuote;
+---
+
+<article
+  class:list={["home-project-card", { "is-active": isActive}]}
+  data-home-project-card
+  data-index={index}
+  aria-current={isActive ? "true" : "false"}
+  aria-expanded={isActive ? "true" : "false"}
+>
+  <div class="home-project-card__scene">
+    <div class="home-project-card__flipper">
+
+      <!-- FRONT -->
+
+      <section class="home-project-card__face home-project-card__front">
+        <div class="home-project-card__image">
+          <Image src={project.data.thumbnailImage}
+            alt={project.data.title}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 760px) 100vw, 70vw"
+          />
+
+          <div class="home-project-card__image-shade"/>
+        </div>
+
+        <div class="home-project-card__spine" aria-hidden="true">
+          <span> { project.data.title} </span>
+        </div>
+
+        <button type="button" class="home-project-card__rotate home-project-card__rotate--front"
+          aria-label="Rotate project card"
+        >
+          <Icon name="rotateCard" class="home-project-card__rotate-icon"/>
+        </button>
+
+        <div class="home-project-card__ribbon">
+          <div class="home-project-card__ribbon-copy">
+            <span> { project.data.location} </span>
+
+            <strong> {project.data.title}</strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- BACK -->
+
+      <section class="home-project-card__face home-project-card__back">
+        <div class="home-project-card__back-image">
+          <Image src={project.data.heroImage}
+            alt="" loading="lazy" decoding="async"
+            widths={[720, 960, 1280, 1600]}
+            sizes="(max-width: 760px) 100vw, 70vw"
+            style={`object-position:${project.data.heroImagePosition};`}
+          />
+        </div>
+
+        <div class=" home-project-card__back-overlay"/>
+
+        <button type="button" class=" home-project-card__rotate home-project-card__rotate--back"
+          aria-label="Rotate project card"
+        >
+          <Icon name="rotateCard" class="home-project-card__rotate-icon"/>
+        </button>
+
+        <div class="home-project-card__details">
+          <h3> { project.data.title} </h3>
+
+          { quote && ( <blockquote>“{quote}”</blockquote>) }
+
+          <p> {summary} </p>
+
+          <a href={href} class="home-project-card__cta">
+            {viewProjectLabel}
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</article>

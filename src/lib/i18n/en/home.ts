@@ -1,7 +1,7 @@
 export const home = {
   hero: {
     title: "From the First Idea to Long-Term Operation",
-    subtitle: "We partner with private clients, hotels, investors, and operators of aquatic and wellness facilities - from consultation and planning to construction, equipment, renovation, service, and seasonal maintenance.a",
+    subtitle: "We partner with private clients, hotels, investors, and operators of aquatic and wellness facilities - from consultation and planning to construction, equipment, renovation, service, and seasonal maintenance",
     ctaPrimary: "Request a Quote",
     ctaSecondary: "View Projects",
   },
@@ -18,8 +18,8 @@ export const home = {
         body: "We develop a tailored concept and 3D visualization that give you a clear view of the design, layout, and final result before construction begins.",
       },
       {
-        id: "delivery",
-        icon: "projectDelivery",
+        id: "complete-delivery",
+        icon: "completeDelivery",
         title: "Complete Solution",
         body: "We deliver projects from the initial concept and technical design through to commissioning and ongoing maintenance.",
       },
@@ -71,6 +71,10 @@ export const home = {
     intro: "A glimpse into our completed projects, demonstrating our experience and attention to detail.",
     ctaLabel: "See all projects",
     projectCtaLabel: "View project",
+    locationLabel: "Location",
+    dateLabel: "Date",
+    areaLabel: "Area",
+    clientLabel: "Client"
   },
 
   cta: {
