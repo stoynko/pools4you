@@ -18,9 +18,9 @@ const POSITION_TOLERANCE = 4;
 const EXIT_RELEASE_VIEWPORT_RATIO = 0.1;
 const EXIT_RELEASE_DURATION = 0.3;
 const ENTRY_TRIGGER_VIEWPORT_RATIO = 0.85;
-const ENTRY_SNAP_DURATION = 0.35;
-const IMAGE_FADE_DURATION = 1;
-const IMAGE_KEN_BURNS_DURATION = 2;
+const ENTRY_SNAP_DURATION = 1;
+const IMAGE_FADE_DURATION = 0.85;
+const IMAGE_KEN_BURNS_DURATION = 1;
 const IMAGE_KEN_BURNS_SCALE = 1.06;
 const ENTRANCE_TITLE_DURATION = 0.78;
 const ENTRANCE_DESCRIPTION_DURATION = 0.72;
@@ -66,7 +66,7 @@ type EntranceTargets = {
  * -------------------------------------------------- */
 
 function isProgrammaticScrollActive(): boolean {
-  return (document.documentElement.dataset.programmaticScroll === "true");
+  return document.documentElement.dataset.programmaticScroll === "true";
 }
 
 /* --------------------------------------------------
@@ -74,19 +74,23 @@ function isProgrammaticScrollActive(): boolean {
  * -------------------------------------------------- */
 
 function getElements(section: HTMLElement): ServiceHighlightElements | null {
-  const images =Array.from(section.querySelectorAll<HTMLElement>(IMAGE_SELECTOR));
-  const copyLayers =Array.from(section.querySelectorAll<HTMLElement>(COPY_SELECTOR));
-  const scrollHint =section.querySelector<HTMLElement>(SCROLL_HINT_SELECTOR);
+  const images = Array.from(section.querySelectorAll<HTMLElement>(IMAGE_SELECTOR));
+  const copyLayers = Array.from(section.querySelectorAll<HTMLElement>(COPY_SELECTOR));
+  const scrollHint = section.querySelector<HTMLElement>(SCROLL_HINT_SELECTOR);
 
-  if (images.length === 0 || copyLayers.length === 0 || images.length !== copyLayers.length) {
+  if (
+    images.length === 0 ||
+    copyLayers.length === 0 ||
+    images.length !== copyLayers.length
+  ) {
     return null;
   }
 
-  return {images, copyLayers, scrollHint};
+  return { images, copyLayers, scrollHint };
 }
 
 function getImageElement(layer: HTMLElement | null): HTMLElement | null {
-  return (layer?.querySelector<HTMLElement>("img") ?? null);
+  return layer?.querySelector<HTMLElement>("img") ?? null;
 }
 
 /* --------------------------------------------------
@@ -101,12 +105,12 @@ function getEntranceTargets(elements: ServiceHighlightElements): EntranceTargets
     return null;
   }
 
-  return {imageLayer, 
-    image:
-      getImageElement(imageLayer),
-      title: copyLayer.querySelector<HTMLElement>(".service-highlights__title"),
-      description: copyLayer.querySelector<HTMLElement>(".service-highlights__description"),
-      cta: copyLayer.querySelector<HTMLElement>(".service-highlights__cta")
+  return {
+    imageLayer,
+    image: getImageElement(imageLayer),
+    title: copyLayer.querySelector<HTMLElement>(".service-highlights__title"),
+    description: copyLayer.querySelector<HTMLElement>(".service-highlights__description"),
+    cta: copyLayer.querySelector<HTMLElement>(".service-highlights__cta")
   };
 }
 
@@ -115,30 +119,24 @@ function getEntranceTargets(elements: ServiceHighlightElements): EntranceTargets
  * -------------------------------------------------- */
 
 function setStaticImageState(activeIndex: number, elements: ServiceHighlightElements): void {
-  elements.images.forEach(
-    (layer,index,) => {
-      gsap.killTweensOf(layer);
+  elements.images.forEach((layer, index) => {gsap.killTweensOf(layer);
+    const image = getImageElement(layer);
 
-      const image =getImageElement(layer);
+    if (image) {
+      gsap.killTweensOf(image);
+    }
 
-      if (image) {
-        gsap.killTweensOf(image);
-      }
+    gsap.set(layer, {
+      opacity: index === activeIndex ? 1 : 0,
+      zIndex: index === activeIndex ? 2 : 1,
+    });
 
-      gsap.set(layer, {
-        opacity: index === activeIndex ? 1 : 0,
-        zIndex: index === activeIndex ? 2 : 1
-        },
-      );
-
-      if (image) {
-        gsap.set(image, {
-          scale: IMAGE_KEN_BURNS_SCALE
-          },
-        );
-      }
-    },
-  );
+    if (image) {
+      gsap.set(image, {
+        scale: IMAGE_KEN_BURNS_SCALE,
+      });
+    }
+  });
 }
 
 /* --------------------------------------------------
@@ -147,7 +145,7 @@ function setStaticImageState(activeIndex: number, elements: ServiceHighlightElem
 
 function animateServiceImage(previousIndex: number, nextIndex: number, elements: ServiceHighlightElements): void {
   const previousLayer = previousIndex >= 0 ? (elements.images[previousIndex] ?? null) : null;
-  const nextLayer =elements.images[nextIndex] ?? null;
+  const nextLayer = elements.images[nextIndex] ?? null;
 
   if (!nextLayer) {
     return;
@@ -156,51 +154,46 @@ function animateServiceImage(previousIndex: number, nextIndex: number, elements:
   const previousImage = getImageElement(previousLayer);
   const nextImage = getImageElement(nextLayer);
 
-  elements.images.forEach(
-    (layer, index) => {
-      gsap.killTweensOf(layer);
+  elements.images.forEach((layer, index) => {
+    gsap.killTweensOf(layer);
 
-      const image = getImageElement(layer);
+    const image = getImageElement(layer);
 
-      if (image) {
-        gsap.killTweensOf(image);
-      }
+    if (image) {
+      gsap.killTweensOf(image);
+    }
 
-      gsap.set(layer, {
-          zIndex: index === nextIndex? 2 : 1,
-        },
-      );
-    },
-  );
+    gsap.set(layer, {
+      zIndex: index === nextIndex ? 2 : 1,
+    });
+  });
 
   const timeline = gsap.timeline();
 
   if (previousLayer && previousLayer !== nextLayer) {
     timeline.to(previousLayer, {
-      opacity: 0,
-      duration: IMAGE_FADE_DURATION,
-      ease: "power2.out",
-    }, 0);
+        opacity: 0,
+        duration: IMAGE_FADE_DURATION,
+        ease: "power2.out",
+      }, 0);
   }
 
-  timeline.fromTo(nextLayer, {opacity: 0}, {
-    opacity: 1,
-    duration: IMAGE_FADE_DURATION,
-    ease: "power2.inOut"
-  }, 0);
+  timeline.fromTo(nextLayer, { opacity: 0 }, {
+      opacity: 1,
+      duration: IMAGE_FADE_DURATION,
+      ease: "power2.inOut",
+    }, 0);
 
   if (nextImage) {
-    timeline.fromTo(nextImage, {scale: 1}, {
-      scale: IMAGE_KEN_BURNS_SCALE,
-      duration: IMAGE_KEN_BURNS_DURATION,
-      ease: "power1.inOut"
-    }, 0);
+    timeline.fromTo(nextImage, { scale: 1 }, {
+        scale: IMAGE_KEN_BURNS_SCALE,
+        duration: IMAGE_KEN_BURNS_DURATION,
+        ease: "power1.inOut",
+      }, 0);
   }
 
   if (previousImage && previousLayer !== nextLayer) {
-    timeline.set(previousImage, {scale: 1},
-      IMAGE_FADE_DURATION,
-    );
+    timeline.set(previousImage, { scale: 1 }, IMAGE_FADE_DURATION);
   }
 }
 
@@ -209,10 +202,10 @@ function animateServiceImage(previousIndex: number, nextIndex: number, elements:
  * -------------------------------------------------- */
 
 function setActiveService(index: number, state: ServiceHighlightState, 
-  elements: ServiceHighlightElements, animateImage = true): void {
+  elements: ServiceHighlightElements, animateImage = true,): void {
 
   const lastIndex = elements.copyLayers.length - 1;
-  const nextIndex = Math.min(Math.max(index,0), lastIndex,);
+  const nextIndex = Math.min(Math.max(index, 0), lastIndex);
 
   if (nextIndex === state.activeIndex) {
     return;
@@ -222,11 +215,9 @@ function setActiveService(index: number, state: ServiceHighlightState,
 
   state.activeIndex = nextIndex;
 
-  elements.images.forEach(
-    (image,imageIndex) => {
-      image.classList.toggle("is-active", imageIndex === nextIndex);
-    }
-  );
+  elements.images.forEach((image, imageIndex) => {
+    image.classList.toggle("is-active", imageIndex === nextIndex);
+  });
 
   if (animateImage) {
     animateServiceImage(previousIndex, nextIndex, elements);
@@ -234,21 +225,19 @@ function setActiveService(index: number, state: ServiceHighlightState,
     setStaticImageState(nextIndex, elements);
   }
 
-  elements.copyLayers.forEach(
-    (layer, layerIndex) => {
-      const isActive = layerIndex === nextIndex;
+  elements.copyLayers.forEach((layer, layerIndex) => {
+    const isActive = layerIndex === nextIndex;
 
-      layer.classList.toggle("is-active", isActive);
+    layer.classList.toggle("is-active", isActive);
 
-      layer.setAttribute("aria-hidden", isActive ? "false" : "true");
+    layer.setAttribute("aria-hidden", isActive ? "false" : "true");
 
-      const link = layer.querySelector<HTMLAnchorElement>("a");
+    const link = layer.querySelector<HTMLAnchorElement>("a");
 
-      if (link) {
-        link.tabIndex = isActive ? 0 : -1;
-      }
+    if (link) {
+      link.tabIndex = isActive ? 0 : -1;
     }
-  );
+  });
 }
 
 /* --------------------------------------------------
@@ -260,14 +249,14 @@ function prepareEntranceAnimation(state: ServiceHighlightState, elements: Servic
     return;
   }
 
-  const targets =getEntranceTargets(elements);
+  const targets = getEntranceTargets(elements);
 
   if (!targets) {
-    state.entrancePlayed =true;
+    state.entrancePlayed = true;
     return;
   }
 
-  gsap.set(targets.imageLayer,{
+  gsap.set(targets.imageLayer, {
     opacity: 0,
     zIndex: 2,
   });
@@ -275,21 +264,21 @@ function prepareEntranceAnimation(state: ServiceHighlightState, elements: Servic
   if (targets.image) {
     gsap.set(targets.image, {
       scale: 1,
-      transformOrigin:"50% 50%"
+      transformOrigin: "50% 50%",
     });
   }
 
   if (targets.title) {
     gsap.set(targets.title, {
       autoAlpha: 0,
-      y: 40
+      y: 40,
     });
   }
 
   if (targets.description) {
     gsap.set(targets.description, {
       autoAlpha: 0,
-      y: 28
+      y: 28,
     });
   }
 
@@ -298,7 +287,7 @@ function prepareEntranceAnimation(state: ServiceHighlightState, elements: Servic
       autoAlpha: 0,
       y: 22,
       scale: 0.97,
-      transformOrigin: "50% 50%"
+      transformOrigin: "50% 50%",
     });
   }
 
@@ -314,26 +303,28 @@ function clearPreparedEntrance(state: ServiceHighlightState, elements: ServiceHi
     return;
   }
 
-  const targets =getEntranceTargets(elements);
+  const targets = getEntranceTargets(elements);
 
   if (!targets) {
-    state.entrancePrepared =false;
+    state.entrancePrepared = false;
     state.entrancePlayed = true;
     return;
   }
 
   gsap.set(targets.imageLayer, {
     opacity: 1,
-    clearProps: "zIndex"
+    clearProps: "zIndex",
   });
 
-  const clearTargets = [targets.image, targets.title, targets.description, targets.cta]
-    .filter((target,): target is HTMLElement => 
-      target !== null
-  );
+  const clearTargets = [
+    targets.image,
+    targets.title,
+    targets.description,
+    targets.cta,
+  ].filter((target): target is HTMLElement => target !== null);
 
   gsap.set(clearTargets, {
-    clearProps: "opacity, visibility, transform"
+    clearProps: "opacity, visibility, transform",
   });
 
   state.entrancePrepared = false;
@@ -350,7 +341,7 @@ function playEntranceAnimation(state: ServiceHighlightState, elements: ServiceHi
   }
 
   if (!state.entrancePrepared) {
-    prepareEntranceAnimation(state,elements);
+    prepareEntranceAnimation(state, elements);
   }
 
   const targets = getEntranceTargets(elements);
@@ -368,53 +359,57 @@ function playEntranceAnimation(state: ServiceHighlightState, elements: ServiceHi
     gsap.killTweensOf(targets.image);
   }
 
-  const timeline = gsap.timeline({defaults: {ease: "power3.out"},
-      onComplete: () => {
-        const clearTargets = [targets.title, targets.description, targets.cta,]
-          .filter((target): target is HTMLElement => target !== null);
+  const timeline = gsap.timeline({
+    defaults: { ease: "power3.out" },
+    onComplete: () => {
+      const clearTargets = [
+        targets.title,
+        targets.description,
+        targets.cta,
+      ].filter((target): target is HTMLElement => target !== null);
 
-        gsap.set(clearTargets, {clearProps: "opacity, visibility, transform"});
-        state.entrancePrepared = false;
-      }
-    });
+      gsap.set(clearTargets, { clearProps: "opacity, visibility, transform" });
+      state.entrancePrepared = false;
+    },
+  });
 
   timeline.to(targets.imageLayer, {
-    opacity: 1,
-    duration: IMAGE_FADE_DURATION,
-    ease: "power2.inOut"
-  }, 0);
+      opacity: 1,
+      duration: IMAGE_FADE_DURATION,
+      ease: "power2.inOut",
+    }, 0);
 
   if (targets.image) {
     timeline.to(targets.image, {
-      scale:IMAGE_KEN_BURNS_SCALE,
-      duration: IMAGE_KEN_BURNS_DURATION,
-      ease: "power1.inOut"
-    }, 0);
+        scale: IMAGE_KEN_BURNS_SCALE,
+        duration: IMAGE_KEN_BURNS_DURATION,
+        ease: "power1.inOut",
+      }, 0);
   }
 
   if (targets.title) {
     timeline.to(targets.title, {
-      autoAlpha: 1,
-      y: 0,
-      duration: ENTRANCE_TITLE_DURATION
-    }, 0.16);
+        autoAlpha: 1,
+        y: 0,
+        duration: ENTRANCE_TITLE_DURATION,
+      }, 0.16);
   }
 
   if (targets.description) {
-    timeline.to( targets.description, {
-      autoAlpha: 1,
-      y: 0,
-      duration: ENTRANCE_DESCRIPTION_DURATION
-    }, 0.3);
+    timeline.to(targets.description,{
+        autoAlpha: 1,
+        y: 0,
+        duration: ENTRANCE_DESCRIPTION_DURATION,
+      }, 0.3);
   }
 
   if (targets.cta) {
     timeline.to(targets.cta, {
-      autoAlpha: 1,
-      y: 0,
-      scale: 1,
-      duration: ENTRANCE_CTA_DURATION
-    }, 0.44);
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: ENTRANCE_CTA_DURATION,
+      }, 0.44);
   }
 }
 
@@ -423,7 +418,7 @@ function playEntranceAnimation(state: ServiceHighlightState, elements: ServiceHi
  * -------------------------------------------------- */
 
 function getSectionStart(section: HTMLElement): number {
-  return (window.scrollY + section.getBoundingClientRect().top);
+  return window.scrollY + section.getBoundingClientRect().top;
 }
 
 function getSectionTravel(section: HTMLElement): number {
@@ -431,7 +426,7 @@ function getSectionTravel(section: HTMLElement): number {
 }
 
 function getSectionEnd(section: HTMLElement): number {
-  return (getSectionStart(section) + getSectionTravel(section));
+  return getSectionStart(section) + getSectionTravel(section);
 }
 
 function getServicePosition(section: HTMLElement, index: number, serviceCount: number): number {
@@ -441,16 +436,19 @@ function getServicePosition(section: HTMLElement, index: number, serviceCount: n
 
   const step = getSectionTravel(section) / (serviceCount - 1);
 
-  return (getSectionStart(section) + step * index);
+  return getSectionStart(section) + step * index;
 }
 
 function isPinned(section: HTMLElement): boolean {
   const rect = section.getBoundingClientRect();
-  return (rect.top <= POSITION_TOLERANCE && rect.bottom >= window.innerHeight - POSITION_TOLERANCE);
+  return (
+    rect.top <= POSITION_TOLERANCE &&
+    rect.bottom >= window.innerHeight - POSITION_TOLERANCE
+  );
 }
 
 function getExitReleaseDistance(): number {
-  return (window.innerHeight * EXIT_RELEASE_VIEWPORT_RATIO);
+  return window.innerHeight * EXIT_RELEASE_VIEWPORT_RATIO;
 }
 
 /* --------------------------------------------------
@@ -483,6 +481,7 @@ function handleExitInterruption(state: ServiceHighlightState): void {
  * -------------------------------------------------- */
 
 function shouldAutoEnterSection(section: HTMLElement, state: ServiceHighlightState): boolean {
+  
   if (state.autoEntering || state.exitTween || state.wasPinned || isProgrammaticScrollActive()) {
     return false;
   }
@@ -497,9 +496,7 @@ function shouldAutoEnterSection(section: HTMLElement, state: ServiceHighlightSta
   const movingDown = window.scrollY > state.previousScrollY;
   claimScrollControl();
 
-  return (
-    movingDown && rect.top <= triggerY
-  );
+  return movingDown && rect.top <= triggerY;
 }
 
 function autoEnterSection(section: HTMLElement, state: ServiceHighlightState, elements: ServiceHighlightElements): void {
@@ -516,7 +513,7 @@ function autoEnterSection(section: HTMLElement, state: ServiceHighlightState, el
   resetImpulse(state);
 
   if (state.activeIndex !== 0) {
-    setActiveService(0, state, elements,false);
+    setActiveService(0, state, elements, false);
   }
 
   const scrollPosition = { y: window.scrollY };
@@ -544,7 +541,7 @@ function autoEnterSection(section: HTMLElement, state: ServiceHighlightState, el
       window.scrollTo({
         top: getSectionStart(section),
         behavior: "auto",
-        });
+      });
 
       state.autoEntering = false;
       state.wasPinned = true;
@@ -556,14 +553,15 @@ function autoEnterSection(section: HTMLElement, state: ServiceHighlightState, el
       state.impulseConsumed = true;
       state.observer?.enable();
 
-      hideScrollHint(state,elements);
+      hideScrollHint(state, elements);
 
       requestAnimationFrame(() => {
         playEntranceAnimation(state, elements);
       });
 
       scheduleScrollHint(section, state, elements);
-    }});
+    },
+  });
 }
 
 /* --------------------------------------------------
@@ -579,12 +577,19 @@ function clearHintTimer(state: ServiceHighlightState): void {
   state.hintTimer = undefined;
 }
 
-function hideScrollHint(state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+function hideScrollHint(
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): void {
   clearHintTimer(state);
   elements.scrollHint?.classList.remove("is-visible");
 }
 
-function scheduleScrollHint(section: HTMLElement, state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+function scheduleScrollHint(
+  section: HTMLElement,
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): void {
   if (isProgrammaticScrollActive() || state.exitTween) {
     return;
   }
@@ -598,11 +603,11 @@ function scheduleScrollHint(section: HTMLElement, state: ServiceHighlightState, 
   state.hintTimer = window.setTimeout(() => {
     state.hintTimer = undefined;
 
-  if (isProgrammaticScrollActive() || state.exitTween || !isPinned(section)) {
-    return;
-  }
+    if (isProgrammaticScrollActive() || state.exitTween || !isPinned(section)) {
+      return;
+    }
 
-  elements.scrollHint?.classList.add("is-visible");
+    elements.scrollHint?.classList.add("is-visible");
   }, SCROLL_HINT_DELAY_MS);
 }
 
@@ -619,7 +624,11 @@ function resetImpulse(state: ServiceHighlightState): void {
   state.decayDetected = false;
 }
 
-function beginNewImpulse(direction: Direction, delta: number, state: ServiceHighlightState): void {
+function beginNewImpulse(
+  direction: Direction,
+  delta: number,
+  state: ServiceHighlightState,
+): void {
   state.impulseConsumed = false;
   state.accumulatedDelta = 0;
   state.previousDelta = delta;
@@ -631,7 +640,7 @@ function beginNewImpulse(direction: Direction, delta: number, state: ServiceHigh
 
 function isNewImpulse(direction: Direction, delta: number, state: ServiceHighlightState): boolean {
   if (state.impulseDirection !== 0 && direction !== state.impulseDirection) {
-    return (delta >= NEW_IMPULSE_MIN_DELTA);
+    return delta >= NEW_IMPULSE_MIN_DELTA;
   }
 
   if (state.previousDelta <= 0) {
@@ -647,12 +656,8 @@ function isNewImpulse(direction: Direction, delta: number, state: ServiceHighlig
   }
 
   const significantlyAccelerating = delta >= state.previousDelta * NEW_IMPULSE_ACCELERATION;
-
   const strongEnough = delta >= NEW_IMPULSE_MIN_DELTA;
-
-  return (
-    significantlyAccelerating && strongEnough
-  );
+  return significantlyAccelerating && strongEnough;
 }
 
 function updateImpulseMetrics(direction: Direction, delta: number, state: ServiceHighlightState): void {
@@ -675,8 +680,8 @@ function updateImpulseMetrics(direction: Direction, delta: number, state: Servic
  * Service movement
  * -------------------------------------------------- */
 
-function moveToService(section: HTMLElement, index: number, 
-  state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+function moveToService(section: HTMLElement, index: number, state: ServiceHighlightState, 
+  elements: ServiceHighlightElements): void {
 
   if (isProgrammaticScrollActive()) {
     return;
@@ -686,12 +691,12 @@ function moveToService(section: HTMLElement, index: number,
 
   window.scrollTo({
     top: getServicePosition(section, index, elements.copyLayers.length),
-    behavior: "auto"
+    behavior: "auto",
   });
 }
 
-function leaveSection(section: HTMLElement, direction: Direction, 
-  state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+function leaveSection(section: HTMLElement, direction: Direction, state: ServiceHighlightState, 
+  elements: ServiceHighlightElements): void {
 
   if (isProgrammaticScrollActive()) {
     return;
@@ -715,54 +720,58 @@ function leaveSection(section: HTMLElement, direction: Direction,
   const releaseDistance = getExitReleaseDistance();
 
   const targetY = direction > 0
-    ? getSectionEnd(section) + releaseDistance
-    : getSectionStart(section) - releaseDistance;
+      ? getSectionEnd(section) + releaseDistance
+      : getSectionStart(section) - releaseDistance;
 
   const scrollPosition = { y: window.scrollY };
 
-  state.exitTween =
-    gsap.to(scrollPosition, {
-      y:targetY,
-      duration: EXIT_RELEASE_DURATION,
-      ease: "power2.out",
-      overwrite: true,
+  state.exitTween = gsap.to(scrollPosition, {
+    y: targetY,
+    duration: EXIT_RELEASE_DURATION,
+    ease: "power2.out",
+    overwrite: true,
 
-  onUpdate: () => {
-    if (isProgrammaticScrollActive()) {
-      return;
-    }
+    onUpdate: () => {
+      if (isProgrammaticScrollActive()) {
+        return;
+      }
 
-    window.scrollTo(0, scrollPosition.y);
-  },
+      window.scrollTo(0, scrollPosition.y);
+    },
 
-  onComplete: () => {
-    state.exitTween = null;
-    state.exitInterruptionArmed = false;
-    releaseScrollControl();
+    onComplete: () => {
+      state.exitTween = null;
+      state.exitInterruptionArmed = false;
+      releaseScrollControl();
 
-    if (isProgrammaticScrollActive()) {
-      return;
-    }
+      if (isProgrammaticScrollActive()) {
+        return;
+      }
 
-    state.wasPinned = false;
-    state.previousScrollY = window.scrollY;
-  },
+      state.wasPinned = false;
+      state.previousScrollY = window.scrollY;
+    },
 
-  onInterrupt: () => {
-    state.exitTween = null;
-    state.exitInterruptionArmed = false;
-    releaseScrollControl();
-  }});
+    onInterrupt: () => {
+      state.exitTween = null;
+      state.exitInterruptionArmed = false;
+      releaseScrollControl();
+    },
+  });
 
   requestAnimationFrame(() => {
     if (state.exitTween) {
       state.exitInterruptionArmed = true;
-    }});
+    }
+  });
 }
 
-function executeImpulse(direction: Direction, section: HTMLElement, 
-  state: ServiceHighlightState, elements: ServiceHighlightElements): void {
-
+function executeImpulse(
+  direction: Direction,
+  section: HTMLElement,
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): void {
   if (isProgrammaticScrollActive()) {
     return;
   }
@@ -790,10 +799,19 @@ function executeImpulse(direction: Direction, section: HTMLElement,
  * Observer input
  * -------------------------------------------------- */
 
-function handleObserverInput(direction: Direction, rawDelta: number, section: HTMLElement, 
-  state: ServiceHighlightState, elements: ServiceHighlightElements): void {
-  
-  if (isProgrammaticScrollActive() || state.autoEntering || state.exitTween || !isPinned(section)) {
+function handleObserverInput(
+  direction: Direction,
+  rawDelta: number,
+  section: HTMLElement,
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): void {
+  if (
+    isProgrammaticScrollActive() ||
+    state.autoEntering ||
+    state.exitTween ||
+    !isPinned(section)
+  ) {
     return;
   }
 
@@ -806,7 +824,8 @@ function handleObserverInput(direction: Direction, rawDelta: number, section: HT
   if (state.impulseConsumed) {
     if (isNewImpulse(direction, delta, state)) {
       beginNewImpulse(direction, delta, state);
-    } else {updateImpulseMetrics(direction,delta,state);
+    } else {
+      updateImpulseMetrics(direction, delta, state);
       return;
     }
   }
@@ -820,7 +839,7 @@ function handleObserverInput(direction: Direction, rawDelta: number, section: HT
     return;
   }
 
-  if (state.impulseDirection !== 0 && direction !==state.impulseDirection) {
+  if (state.impulseDirection !== 0 && direction !== state.impulseDirection) {
     state.accumulatedDelta = 0;
     state.peakDelta = 0;
     state.decayDetected = false;
@@ -828,7 +847,7 @@ function handleObserverInput(direction: Direction, rawDelta: number, section: HT
 
   state.impulseDirection = direction;
   state.accumulatedDelta += delta;
-  state.peakDelta = Math.max(state.peakDelta,delta);
+  state.peakDelta = Math.max(state.peakDelta, delta);
   state.previousDelta = delta;
 
   if (state.accumulatedDelta < GESTURE_THRESHOLD) {
@@ -844,40 +863,56 @@ function handleObserverInput(direction: Direction, rawDelta: number, section: HT
  * GSAP Observer
  * -------------------------------------------------- */
 
-function createServiceObserver(section: HTMLElement, state: ServiceHighlightState, elements: ServiceHighlightElements): Observer {
+function createServiceObserver(
+  section: HTMLElement,
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): Observer {
   const observer = Observer.create({
-      target: window,
-      type: "wheel,touch",
-      preventDefault: true,
-      lockAxis: true,
-      debounce: true,
-      tolerance: 4,
-      onStopDelay: OBSERVER_STOP_DELAY,
-      onDown: (self: Observer) => {
-        if (isProgrammaticScrollActive() || state.autoEntering || state.exitTween) {
-          return;
-        }
+    target: window,
+    type: "wheel,touch",
+    preventDefault: true,
+    lockAxis: true,
+    debounce: true,
+    tolerance: 4,
+    onStopDelay: OBSERVER_STOP_DELAY,
+    onDown: (self: Observer) => {
+      if (
+        isProgrammaticScrollActive() ||
+        state.autoEntering ||
+        state.exitTween
+      ) {
+        return;
+      }
 
       handleObserverInput(1, self.deltaY, section, state, elements);
-      },
+    },
 
-      onUp: (self: Observer) => {
-        if (isProgrammaticScrollActive() || state.autoEntering || state.exitTween) {
-          return;
-        }
-
-        handleObserverInput(-1, self.deltaY, section, state, elements);
-      },
-
-      onStop: () => {
-        if (isProgrammaticScrollActive() || state.autoEntering || state.exitTween) {
-          return;
-        }
-
-        resetImpulse(state);
-        state.enteringSection = false;
+    onUp: (self: Observer) => {
+      if (
+        isProgrammaticScrollActive() ||
+        state.autoEntering ||
+        state.exitTween
+      ) {
+        return;
       }
-    });
+
+      handleObserverInput(-1, self.deltaY, section, state, elements);
+    },
+
+    onStop: () => {
+      if (
+        isProgrammaticScrollActive() ||
+        state.autoEntering ||
+        state.exitTween
+      ) {
+        return;
+      }
+
+      resetImpulse(state);
+      state.enteringSection = false;
+    },
+  });
 
   observer.disable();
 
@@ -888,7 +923,11 @@ function createServiceObserver(section: HTMLElement, state: ServiceHighlightStat
  * Window scroll
  * -------------------------------------------------- */
 
-function handleWindowScroll(section: HTMLElement, state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+function handleWindowScroll(
+  section: HTMLElement,
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): void {
   if (isProgrammaticScrollActive()) {
     return;
   }
@@ -901,15 +940,15 @@ function handleWindowScroll(section: HTMLElement, state: ServiceHighlightState, 
     return;
   }
 
-  if (shouldAutoEnterSection(section,state)) {
-    autoEnterSection(section,state,elements);
+  if (shouldAutoEnterSection(section, state)) {
+    autoEnterSection(section, state, elements);
     return;
   }
 
   const pinned = isPinned(section);
   const currentScrollY = window.scrollY;
   const sectionStart = getSectionStart(section);
-  const sectionEnd =getSectionEnd(section);
+  const sectionEnd = getSectionEnd(section);
   const distanceFromStart = Math.abs(currentScrollY - sectionStart);
   const distanceFromEnd = Math.abs(currentScrollY - sectionEnd);
   const enteredFromBottom = distanceFromEnd < distanceFromStart;
@@ -922,7 +961,7 @@ function handleWindowScroll(section: HTMLElement, state: ServiceHighlightState, 
     state.impulseConsumed = true;
 
     if (enteredFromBottom) {
-      clearPreparedEntrance(state,elements);
+      clearPreparedEntrance(state, elements);
 
       const lastIndex = elements.copyLayers.length - 1;
 
@@ -935,25 +974,24 @@ function handleWindowScroll(section: HTMLElement, state: ServiceHighlightState, 
         behavior: "auto",
       });
     } else {
-
       if (state.activeIndex !== 0) {
         setActiveService(0, state, elements, false);
       }
 
       window.scrollTo({
         top: sectionStart,
-        behavior: "auto"
+        behavior: "auto",
       });
 
       requestAnimationFrame(() => {
-        playEntranceAnimation(state,elements);
+        playEntranceAnimation(state, elements);
       });
     }
 
     state.observer?.enable();
 
-    hideScrollHint(state,elements);
-    scheduleScrollHint(section,state,elements);
+    hideScrollHint(state, elements);
+    scheduleScrollHint(section, state, elements);
   }
 
   if (!pinned && state.wasPinned) {
@@ -971,18 +1009,34 @@ function handleWindowScroll(section: HTMLElement, state: ServiceHighlightState, 
  * Resize
  * -------------------------------------------------- */
 
-function handleResize(section: HTMLElement, state: ServiceHighlightState,elements: ServiceHighlightElements): void {
-  if ( isProgrammaticScrollActive() || state.autoEntering || state.exitTween || !isPinned(section)) {
+function handleResize(
+  section: HTMLElement,
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): void {
+  if (
+    isProgrammaticScrollActive() ||
+    state.autoEntering ||
+    state.exitTween ||
+    !isPinned(section)
+  ) {
     return;
   }
 
   window.scrollTo({
-    top: getServicePosition(section, state.activeIndex, elements.copyLayers.length),
-    behavior: "auto"
+    top: getServicePosition(
+      section,
+      state.activeIndex,
+      elements.copyLayers.length,
+    ),
+    behavior: "auto",
   });
 }
 
-function suspendServiceHighlights(state: ServiceHighlightState,elements: ServiceHighlightElements): void {
+function suspendServiceHighlights(
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): void {
   state.autoEntering = false;
 
   if (state.exitTween) {
@@ -997,10 +1051,12 @@ function suspendServiceHighlights(state: ServiceHighlightState,elements: Service
   hideScrollHint(state, elements);
 }
 
-function resumeServiceHighlights(section: HTMLElement, state: ServiceHighlightState, 
-  elements: ServiceHighlightElements): void {
-  
-  state.autoEntering =false;
+function resumeServiceHighlights(
+  section: HTMLElement,
+  state: ServiceHighlightState,
+  elements: ServiceHighlightElements,
+): void {
+  state.autoEntering = false;
   state.exitInterruptionArmed = false;
 
   const pinned = isPinned(section);
@@ -1014,14 +1070,15 @@ function resumeServiceHighlights(section: HTMLElement, state: ServiceHighlightSt
 
   if (!pinned) {
     state.observer?.disable();
-    hideScrollHint(state,elements);
+    hideScrollHint(state, elements);
     return;
   }
 
   const sectionStart = getSectionStart(section);
   const travel = getSectionTravel(section);
 
-  const progress = travel === 0
+  const progress =
+    travel === 0
       ? 0
       : Math.min(Math.max((window.scrollY - sectionStart) / travel, 0), 1);
 
@@ -1029,7 +1086,7 @@ function resumeServiceHighlights(section: HTMLElement, state: ServiceHighlightSt
 
   if (index === 0 && !state.entrancePlayed) {
     if (state.activeIndex !== 0) {
-      setActiveService(0, state, elements, false,);
+      setActiveService(0, state, elements, false);
     }
 
     requestAnimationFrame(() => {
@@ -1053,12 +1110,12 @@ function resumeServiceHighlights(section: HTMLElement, state: ServiceHighlightSt
  * Initialisation
  * -------------------------------------------------- */
 
-function initializeSection(section: HTMLElement,): void {
+function initializeSection(section: HTMLElement): void {
   if (section.dataset.serviceHighlightsInitialized === "true") {
     return;
   }
 
-  const elements =getElements(section);
+  const elements = getElements(section);
 
   if (!elements) {
     return;
@@ -1068,44 +1125,46 @@ function initializeSection(section: HTMLElement,): void {
 
   const pinnedInitially = isPinned(section);
 
-  const state:
-    ServiceHighlightState = {
-      activeIndex: -1,
-      observer:  null,
-      wasPinned:  pinnedInitially,
-      previousScrollY: window.scrollY,
-      enteringSection: false,
-      autoEntering: false,
-      impulseConsumed: false,
-      accumulatedDelta: 0,
-      previousDelta: 0,
-      peakDelta: 0,
-      impulseDirection: 0,
-      decayDetected: false,
-      entrancePrepared: false,
-      entrancePlayed: false,
-      exitTween: null,
-      exitInterruptionArmed: false,
-    };
+  const state: ServiceHighlightState = {
+    activeIndex: -1,
+    observer: null,
+    wasPinned: pinnedInitially,
+    previousScrollY: window.scrollY,
+    enteringSection: false,
+    autoEntering: false,
+    impulseConsumed: false,
+    accumulatedDelta: 0,
+    previousDelta: 0,
+    peakDelta: 0,
+    impulseDirection: 0,
+    decayDetected: false,
+    entrancePrepared: false,
+    entrancePlayed: false,
+    exitTween: null,
+    exitInterruptionArmed: false,
+  };
 
   setActiveService(0, state, elements, false);
 
-  prepareEntranceAnimation(state,elements);
+  prepareEntranceAnimation(state, elements);
 
-  state.observer = createServiceObserver(section,state,elements);
+  state.observer = createServiceObserver(section, state, elements);
 
   if (pinnedInitially) {
-    const sectionStart =getSectionStart(section);
-    const travel =getSectionTravel(section);
-    const progress = travel === 0
+    const sectionStart = getSectionStart(section);
+    const travel = getSectionTravel(section);
+    const progress =
+      travel === 0
         ? 0
         : Math.min(Math.max((window.scrollY - sectionStart) / travel, 0), 1);
 
-    const initialIndex = Math.round(progress * (elements.copyLayers.length - 1));
+    const initialIndex = Math.round(
+      progress * (elements.copyLayers.length - 1),
+    );
 
     if (initialIndex === 0) {
       requestAnimationFrame(() => {
-        playEntranceAnimation(state,elements);
+        playEntranceAnimation(state, elements);
       });
     } else {
       clearPreparedEntrance(state, elements);
@@ -1119,38 +1178,48 @@ function initializeSection(section: HTMLElement,): void {
     }
   }
 
-  window.addEventListener("wheel", () => {
+  window.addEventListener(
+    "wheel",
+    () => {
       handleExitInterruption(state);
     },
     {
       passive: true,
-    });
+    },
+  );
 
-  window.addEventListener( "touchmove", () => {
+  window.addEventListener(
+    "touchmove",
+    () => {
       handleExitInterruption(state);
     },
     {
-      passive:  true,
-    });
+      passive: true,
+    },
+  );
 
   window.addEventListener("site:programmatic-scroll-start", () => {
-      suspendServiceHighlights(state, elements);
+    suspendServiceHighlights(state, elements);
   });
 
   window.addEventListener("site:programmatic-scroll-end", () => {
-      resumeServiceHighlights(section, state,elements);
-    }
-  );
+    resumeServiceHighlights(section, state, elements);
+  });
 
-  window.addEventListener("scroll", () => {
-    handleWindowScroll(section, state, elements);
+  window.addEventListener(
+    "scroll",
+    () => {
+      handleWindowScroll(section, state, elements);
     },
     {
       passive: true,
-  });
+    },
+  );
 
-  window.addEventListener("resize", () => {
-    handleResize(section, state, elements);
+  window.addEventListener(
+    "resize",
+    () => {
+      handleResize(section, state, elements);
     },
     {
       passive: true,
@@ -1159,18 +1228,15 @@ function initializeSection(section: HTMLElement,): void {
 }
 
 export function initServiceHighlights(): void {
-  document.querySelectorAll<HTMLElement>(SECTION_SELECTOR).forEach(
-      initializeSection
-    );
+  document
+    .querySelectorAll<HTMLElement>(SECTION_SELECTOR)
+    .forEach(initializeSection);
 }
 
 function claimScrollControl(): void {
-  document.documentElement.dataset
-    .serviceHighlightsControl =
-    "true";
+  document.documentElement.dataset.serviceHighlightsControl = "true";
 }
 
 function releaseScrollControl(): void {
-  delete document.documentElement.dataset
-    .serviceHighlightsControl;
+  delete document.documentElement.dataset.serviceHighlightsControl;
 }
