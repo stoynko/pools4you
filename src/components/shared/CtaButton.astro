@@ -8,6 +8,8 @@ type Props = {
   ariaLabel?: string;
   size?: Size;
   class?: string;
+  tabindex?: number;
+  serviceCta?: boolean;
 };
 
 const {
@@ -17,6 +19,8 @@ const {
   ariaLabel,
   size = "md",
   class: className,
+  tabindex,
+  serviceCta = false,
 } = Astro.props as Props;
 
 const sizeClasses: Record<Size, string> = {
@@ -30,6 +34,8 @@ const sizeClasses: Record<Size, string> = {
   id={id}
   href={href}
   aria-label={ariaLabel}
+  tabindex={tabindex}
+  data-service-cta={serviceCta ? "" : undefined}
   class:list={[
     "inline-flex items-center justify-center",
     "border border-brand-gold",

@@ -1,4 +1,3 @@
-import type { truncate } from "fs";
 import gsap from "gsap";
 import { Observer } from "gsap/Observer";
 
