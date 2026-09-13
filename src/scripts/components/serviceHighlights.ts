@@ -6,6 +6,7 @@ gsap.registerPlugin(Observer);
 const SECTION_SELECTOR = "[data-service-highlights]";
 const IMAGE_SELECTOR = "[data-service-image]";
 const COPY_SELECTOR = "[data-service-copy]";
+const CTA_SELECTOR = "[data-service-cta]"
 const SCROLL_HINT_SELECTOR = "[data-service-scroll-hint]";
 const GESTURE_THRESHOLD = 30;
 const NEW_IMPULSE_MIN_DELTA = 12;
@@ -109,7 +110,7 @@ function getEntranceTargets(elements: ServiceHighlightElements): EntranceTargets
     image: getImageElement(imageLayer),
     title: copyLayer.querySelector<HTMLElement>(".service-highlights__title"),
     description: copyLayer.querySelector<HTMLElement>(".service-highlights__description"),
-    cta: copyLayer.querySelector<HTMLElement>("[data-service-cta]")
+    cta: copyLayer.querySelector<HTMLElement>(CTA_SELECTOR)
   };
 }
 
@@ -1120,8 +1121,6 @@ function initializeSection(section: HTMLElement): void {
     return;
   }
 
-  section.dataset.serviceHighlightsInitialized = "true";
-
   const pinnedInitially = isPinned(section);
 
   const state: ServiceHighlightState = {
@@ -1144,9 +1143,9 @@ function initializeSection(section: HTMLElement): void {
   };
 
   setActiveService(0, state, elements, false);
-
   prepareEntranceAnimation(state, elements);
 
+  section.dataset.serviceHighlightsInitialized = "true";
   state.observer = createServiceObserver(section, state, elements);
 
   if (pinnedInitially) {

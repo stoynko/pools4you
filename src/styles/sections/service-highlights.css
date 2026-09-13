@@ -20,6 +20,16 @@
 }
 
 /* --------------------------------------------------
+ * Initial entrance state
+ * -------------------------------------------------- */
+
+.service-highlights:not([data-service-highlights-initialized="true"]) [data-service-image="0"],
+.service-highlights:not([data-service-highlights-initialized="true"]) [data-service-copy="0"] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* --------------------------------------------------
  * Sticky viewport
  * -------------------------------------------------- */
 
