@@ -1,0 +1,46 @@
+---
+type Size = "sm" | "md" | "lg";
+
+type Props = {
+  id?: string;
+  href: string;
+  label: string;
+  ariaLabel?: string;
+  size?: Size;
+  class?: string;
+};
+
+const {
+  id,
+  href,
+  label,
+  ariaLabel,
+  size = "md",
+  class: className,
+} = Astro.props as Props;
+
+const sizeClasses: Record<Size, string> = {
+  sm: "min-w-40 px-5 py-3 text-sm",
+  md: "min-w-48 px-6 py-3.5 text-base",
+  lg: "min-w-60 px-8 py-4 text-lg",
+};
+---
+
+<a
+  id={id}
+  href={href}
+  aria-label={ariaLabel}
+  class:list={[
+    "inline-flex items-center justify-center",
+    "border border-brand-gold",
+    "bg-[rgba(13,14,17,0.62)]",
+    "font-inter font-semibold text-brand-gold no-underline",
+    "transition-[color,background-color,border-color] duration-200 ease-out",
+    "hover:border-brand-gold hover:bg-brand-gold hover:text-[var(--color-text-cta)]",
+    "focus-visible:border-brand-gold focus-visible:bg-brand-gold focus-visible:text-[var(--color-text-cta)]",
+    sizeClasses[size],
+    className,
+  ]}
+>
+  {label}
+</a>

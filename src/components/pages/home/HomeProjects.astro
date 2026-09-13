@@ -5,7 +5,7 @@ import type { CollectionEntry } from "astro:content";
 import type { Language } from "../../../config/i18n/i18n";
 import { getPagePath } from "../../../config/pages/pagePaths";
 import { getPageTranslations } from "../../../lib/i18n";
-
+import CtaButton from "../../shared/CtaButton.astro";
 import HomeProjectCard from "./HomeProjectCard.astro";
 
 type Props = { language: Language; limit?: number; };
@@ -59,11 +59,12 @@ function getProjectHref(project: CollectionEntry<"projects">): string {
           }
         </div>
 
+
+        {/* VIEW ALL PROJECTS CTA */}
         <div class="home-projects__footer">
-          <a href={projectsHref} class="home-projects__cta">
-            { translation.featuredProjects.ctaLabel }
-          </a>
+          <CtaButton href={projectsHref} label={translation.featuredProjects.ctaLabel} size="lg"/>
         </div>
+
       </div>
 
       <script>

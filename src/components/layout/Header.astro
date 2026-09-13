@@ -9,6 +9,7 @@ import { primaryNav } from "../../config/navigation/navigationItems";
 
 import HeaderLink from "./HeaderLink.astro";
 import HeaderLogo from "../brand/HeaderLogo.astro";
+import CtaButton from "../shared/CtaButton.astro";
 import HeaderMobileMenu from "./HeaderMobileMenu.astro";
 import LanguageDropdown from "../ui/LanguageDropdown.astro";
 
@@ -21,35 +22,24 @@ const { language, pageKey, alternates } = Astro.props as {
 const translation = getPageTranslations(language, "header");
 const contact = getSiteContacts(language);
 
-const enquirySubject =
-  language === "bg"
-    ? "Запитване"
-    : "Enquiry";
+const enquirySubject = language === "bg" ? "Запитване" : "Enquiry";
 
-const contactHref =
-  `mailto:${contact.email}?subject=${encodeURIComponent(enquirySubject)}`;
+const contactHref = `mailto:${contact.email}?subject=${encodeURIComponent(enquirySubject)}`;
 ---
 
-<header
-  class="site-header is-at-top is-booting text-text"
-  data-site-header
-  style="visibility: hidden;"
->
-  <div
-    class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center gap-6 xl:grid-cols-[minmax(190px,240px)_minmax(0,1fr)_minmax(280px,320px)] xl:gap-8"
-  >
-    {/* LOGO */}
-    <div
-      class="col-start-1 flex items-center justify-self-start u-no-select"
-    >
+<header class="site-header is-at-top is-booting text-text" data-site-header style="visibility: hidden;">
+
+  <div class="site-container-wide grid h-header grid-cols-[auto_1fr_auto] items-center 
+              gap-6 xl:grid-cols-[minmax(190px,240px)_minmax(0,1fr)_minmax(280px,320px)] xl:gap-8">
+
+    {/* HERO LOGO */}
+    <div class="col-start-1 flex items-center justify-self-start u-no-select">
       <HeaderLogo language={language} />
     </div>
 
     {/* DESKTOP NAVIGATION */}
-    <nav
-      class="col-start-2 hidden min-w-0 items-center justify-center gap-4 overflow-hidden px-4 xl:flex xl:gap-6 2xl:gap-8"
-      aria-label="Main navigation"
-    >
+    <nav class="col-start-2 hidden min-w-0 items-center justify-center gap-4 overflow-hidden px-4 xl:flex xl:gap-6 2xl:gap-8"
+                aria-label="Main navigation">
       {
         primaryNav.map((key) => (
           <HeaderLink
@@ -62,35 +52,22 @@ const contactHref =
     </nav>
 
     {/* RIGHT: DESKTOP ACTIONS */}
-    <div
-      class="col-start-3 hidden shrink-0 items-center justify-end gap-3 u-no-select xl:flex"
-      aria-label="Header actions"
-    >
-      <div
-        class="header-actions-icons flex flex-none shrink-0 items-center gap-3 text-base leading-none"
-      >
-        <LanguageDropdown
-          language={language}
-          pageKey={pageKey}
-          alternates={alternates}
-        />
+    <div class="col-start-3 hidden shrink-0 items-center justify-end gap-3 u-no-select xl:flex" aria-label="Header actions">
+      
+      {/* LANGUAGE DROPDOWN SELECTOR */}
+      <div class="header-actions-icons flex flex-none shrink-0 items-center gap-3 text-base leading-none">
+        <LanguageDropdown language={language} pageKey={pageKey} alternates={alternates}/>
       </div>
 
-      <a
-        href={contactHref}
-        class="button-base header-cta min-w-[160px] shrink-0 whitespace-nowrap 2xl:min-w-[180px]"
-      >
-        {translation.enquire}
-      </a>
+      {/* CTA BUTTON OFFER REQUEST */}
+        <CtaButton href={contactHref} label={translation.enquire} size="sm" class="shrink-0 whitespace-nowrap 2xl:min-w-[180px]"/>
+
     </div>
 
     {/* MOBILE HAMBURGER */}
     <div class="col-start-3 flex items-center justify-end xl:hidden">
-      <HeaderMobileMenu
-        language={language}
-        pageKey={pageKey}
-        alternates={alternates}
-      />
+      <HeaderMobileMenu language={language} pageKey={pageKey} alternates={alternates}/>
     </div>
+
   </div>
 </header>

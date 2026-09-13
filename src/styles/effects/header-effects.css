@@ -258,9 +258,7 @@
   outline: none;
 }
 
-/*
- * Header navigation links
- */
+/* HEADER NAVIGATION LINKS*/
 
 .header-link-effect {
   position: relative;
@@ -371,70 +369,6 @@ html[lang="bg"] .mobile-nav-primary-link {
   outline-offset: 0.3rem;
 }
 
-/*
- * Header CTA
- */
-
-.button-base.header-cta {
-  box-sizing: border-box;
-  min-width: 160px;
-
-  border-width: 1.5px;
-  border-style: solid;
-  border-color: var(--color-gold);
-  border-radius: 0;
-
-  background: transparent;
-  color: var(--color-gold);
-
-  font-family: var(--font-inter);
-  font-weight: 600;
-
-  box-shadow: none;
-  transform: none;
-
-  transition:
-    background-color 280ms ease,
-    border-color 280ms ease,
-    color 280ms ease;
-}
-
-.button-base.header-cta:hover,
-.button-base.header-cta:focus-visible {
-  border-width: 1.5px;
-  border-style: solid;
-  border-color: var(--color-gold);
-
-  background: var(--color-gold);
-  color: var(--color-text-cta);
-
-  box-shadow: none;
-  transform: none;
-}
-
-.button-base.header-cta:active {
-  border-width: 1.5px;
-  border-style: solid;
-  border-color: var(--color-gold);
-
-  background: var(--color-gold);
-  color: var(--color-text-cta);
-
-  box-shadow: none;
-  transform: none;
-}
-
-.button-base.header-cta:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 0.3rem;
-}
-
-@media (min-width: 1536px) {
-  .button-base.header-cta {
-    min-width: 180px;
-  }
-}
-
 @media (min-width: 1920px) {
   .language-dropdown__globe {
     width: 1.625rem;
@@ -466,8 +400,7 @@ html[lang="bg"] .mobile-nav-primary-link {
   .language-dropdown__option,
   .header-link-effect,
   .header-link-effect::before,
-  .header-link-effect::after,
-  .button-base.header-cta {
+  .header-link-effect::after{
     transition: none;
   }
 }

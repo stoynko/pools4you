@@ -313,98 +313,19 @@
     opacity;
 }
 
-/* --------------------------------------------------
- * CTA
- * -------------------------------------------------- */
+/* CTA ROW */
 
 .service-highlights__cta-row {
   width: 66.6667%;
-
   height: auto;
-
-  padding-top:
-    var(
-      --service-cta-gap
-    );
-
+  padding-top: var(--service-cta-gap);
   display: flex;
-
-  justify-content:
-    flex-start;
-
-  align-items:
-    flex-start;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
-.service-highlights__cta {
-  display: inline-flex;
 
-  align-items: center;
-  justify-content: center;
-
-  gap: 1rem;
-
-  width: fit-content;
-
-  min-width: 12rem;
-
-  margin: 0;
-
-  padding:
-    0.9rem
-    1.35rem;
-
-  border:
-    1px solid
-    var(--color-gold);
-
-  color:
-    var(--color-gold);
-
-  background:
-    rgba(
-      13,
-      14,
-      17,
-      0.62
-    );
-
-  font-size: 0.9rem;
-  font-weight: 600;
-
-  text-decoration: none;
-
-  transition:
-    color 200ms ease,
-    background-color 200ms ease,
-    border-color 200ms ease;
-
-  will-change:
-    transform,
-    opacity;
-}
-
-.service-highlights__cta:hover,
-.service-highlights__cta:focus-visible {
-  color:
-    var(--color-text-cta);
-
-  background:
-    var(--color-gold);
-
-  border-color:
-    var(--color-gold);
-}
-
-.service-highlights__cta-arrow {
-  font-size: 1.25rem;
-
-  line-height: 1;
-}
-
-/* --------------------------------------------------
- * Bottom scroll hint
- * -------------------------------------------------- */
+/* SCROLL CUE */
 
 .service-highlights__controls {
   position: absolute;
@@ -774,8 +695,7 @@
   prefers-reduced-motion: reduce
 ) {
   .service-highlights__copy-layer,
-  .service-highlights__scroll-hint,
-  .service-highlights__cta {
+  .service-highlights__scroll-hint{
     transition: none;
   }
 }

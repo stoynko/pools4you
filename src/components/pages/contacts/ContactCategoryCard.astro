@@ -1,6 +1,8 @@
 ---
-import Icon from "../../ui/icons/Icon.astro";
 import type { IconName } from "../../ui/icons/iconPaths";
+
+import Icon from "../../ui/icons/Icon.astro";
+import CtaButton from "../../shared/CtaButton.astro";
 
 type Props = {
   icon: IconName;
@@ -26,7 +28,6 @@ const { icon, title, text, button, href } = Astro.props as Props;
     {text}
   </p>
 
-  <a class="button-primary contact-method-card__button" href={href}>
-    {button}
-  </a>
+  <CtaButton href={href} label={button} size="md" class="mt-9 self-end max-sm:mt-7"/>
+  
 </article>

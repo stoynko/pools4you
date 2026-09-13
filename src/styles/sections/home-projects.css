@@ -1046,111 +1046,13 @@
     line-height: 1.7;
   }
 
-  /* --------------------------------------------------
-   * Project CTA
-   * -------------------------------------------------- */
-
-  .home-project-card__cta,
-  .home-projects__cta {
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 1rem;
-
-    width: fit-content;
-
-    min-width: 12rem;
-
-    margin: 0;
-
-    padding:
-      0.9rem
-      1.35rem;
-
-    border:
-      1px solid
-      var(--color-gold);
-
-    background:
-      rgba(
-        13,
-        14,
-        17,
-        0.62
-      );
-
-    color:
-      var(--color-gold);
-
-    font-size: 0.9rem;
-    font-weight: 600;
-
-    text-decoration: none;
-
-    transition:
-      color
-        200ms
-        ease,
-      background-color
-        200ms
-        ease,
-      border-color
-        200ms
-        ease;
-  }
-
-  .home-project-card__cta:hover,
-  .home-project-card__cta:focus-visible,
-  .home-projects__cta:hover,
-  .home-projects__cta:focus-visible {
-    color:
-      var(--color-text-cta);
-
-    background:
-      var(--color-gold);
-
-    border-color:
-      var(--color-gold);
-  }
-
-  .home-project-card__cta:focus-visible,
-  .home-projects__cta:focus-visible {
-    outline:
-      2px solid
-      var(--color-gold);
-
-    outline-offset:
-      0.25rem;
-  }
-
-  .home-project-card__cta {
-    margin-top:
-      clamp(
-        1.75rem,
-        4vh,
-        2.75rem
-      );
-  }
-
-  /* --------------------------------------------------
-   * Footer
-   * -------------------------------------------------- */
+  /* FOOTER */
 
   .home-projects__footer {
     display: flex;
-
     width: 100%;
-
     justify-content: center;
-
-    margin-top:
-      clamp(
-        4rem,
-        6vw,
-        6rem
-      );
+    margin-top: clamp(4rem, 6vw, 6rem);
   }
 
   /* --------------------------------------------------

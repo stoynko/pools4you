@@ -2,7 +2,7 @@ import type { Language } from "../i18n/i18n";
 import { pageDefinitions } from "./pageDefinitions";
 import type { PageKey } from "./pageDefinitions";
 
-// * RETURNS THE LOCALIZED PATH FOR A PAGE KEY AND LANGUAGE. */
+/* RETURNS THE LOCALIZED PATH FOR A PAGE KEY AND LANGUAGE. */
 export function getPagePath(pageKey: PageKey, language: Language): string {
   const page = pageDefinitions[pageKey];
 
@@ -23,7 +23,7 @@ export function getPagePath(pageKey: PageKey, language: Language): string {
   return path;
 }
 
-// * NORMALIZES PATHS BY REMOVING TRAILING SLASHES WHILE KEEPING ROOT
+/* NORMALIZES PATHS BY REMOVING TRAILING SLASHES WHILE KEEPING ROOT */
 
 export function normalizePath(path: string): string {
   return path.replace(/\/+$/, "") || "/";

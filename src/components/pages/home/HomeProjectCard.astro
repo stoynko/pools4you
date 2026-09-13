@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
 import Icon from "../../ui/icons/Icon.astro";
+import CtaButton from "../../shared/CtaButton.astro";
 
 type Props = {
     project: CollectionEntry<"projects">;
@@ -26,7 +27,7 @@ const quote = project.data.featuredQuote;
   <div class="home-project-card__scene">
     <div class="home-project-card__flipper">
 
-      <!-- FRONT -->
+      {/* PROJECT CARD FRONT */}
 
       <section class="home-project-card__face home-project-card__front">
         <div class="home-project-card__image">
@@ -60,7 +61,7 @@ const quote = project.data.featuredQuote;
         </div>
       </section>
 
-      <!-- BACK -->
+      {/* PROJECT CARD BACKSIDE */}
 
       <section class="home-project-card__face home-project-card__back">
         <div class="home-project-card__back-image">
@@ -87,9 +88,12 @@ const quote = project.data.featuredQuote;
 
           <p> {summary} </p>
 
-          <a href={href} class="home-project-card__cta">
-            {viewProjectLabel}
-          </a>
+          {/* VIEW PROJECT CTA */}
+          <CtaButton href={href} label={viewProjectLabel} 
+                     ariaLabel={`${viewProjectLabel}: ${project.data.title}`} 
+                     class="mt-[clamp(1.75rem,4vh,2.75rem)]"
+          />
+
         </div>
       </section>
 

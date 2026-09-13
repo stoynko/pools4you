@@ -1,6 +1,8 @@
 ---
-import Layout from "../layouts/MainLayout.astro";
 import { getPageTranslations } from "../lib/i18n/index";
+
+import Layout from "../layouts/MainLayout.astro";
+import CtaButton from "../components/shared/CtaButton.astro";
 
 const translations = {
   bg: getPageTranslations("bg", "notFound"),
@@ -13,37 +15,34 @@ const defaultTranslation = translations.bg;
 
 <Layout language={defaultLanguage} pageKey="notFound">
   <main class="min-h-[calc(100vh-var(--header-height))] bg-site">
-    <section
-      class="site-container flex min-h-[70vh] items-center justify-center py-20 sm:py-24 lg:py-28"
-    >
+    <section class="site-container flex min-h-[70vh] items-center justify-center py-20 sm:py-24 lg:py-28">
       <div class="mx-auto max-w-6xl text-center">
-        <p
-          class="font-inter text-sm font-semibold uppercase tracking-[0.32em] text-text-muted"
-        >
+        <p class="font-inter text-sm font-semibold uppercase tracking-[0.32em] text-text-muted">
           404
         </p>
 
-        <h1
-          id="notfound-title"
-          class="mt-5 whitespace-nowrap font-libertinus text-[clamp(1.75rem,4.8vw,5rem)] font-bold leading-[1.04] tracking-tight text-text-"
-        >
+        <h1 id="notfound-title"
+          class="mt-5 whitespace-nowrap font-libertinus text-[clamp(1.75rem,4.8vw,5rem)] 
+          font-bold leading-[1.04] tracking-tight text-text-">
           {defaultTranslation.title}
         </h1>
 
         <div class="section-divider mx-auto mt-6 max-w-md"></div>
 
-        <p
-          id="notfound-description"
-          class="mx-auto mt-7 max-w-5xl whitespace-nowrap font-inter text-[clamp(0.95rem,1.6vw,1.25rem)] font-medium leading-relaxed text-text-secondary"
-        >
+        <p id="notfound-description"
+          class="mx-auto mt-7 max-w-5xl whitespace-nowrap font-inter text-[clamp(0.95rem,1.6vw,1.25rem)] 
+          font-medium leading-relaxed text-text-secondary">
           {defaultTranslation.description}
         </p>
 
+        {/* CTA - BACK TO HOME */}
         <div class="mt-9 flex justify-center">
-          <a id="notfound-home-link" href="/" class="button-primary">
-            {defaultTranslation.homeButtonText}
-          </a>
+          <CtaButton id="notfound-home-link" href="/"
+                     label={defaultTranslation.homeButtonText}
+                     size="md"
+          />
         </div>
+
       </div>
     </section>
   </main>

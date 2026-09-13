@@ -40,10 +40,6 @@
     @apply mt-10 flex w-full max-w-2xl flex-col items-stretch justify-center gap-4 sm:flex-row;
   }
 
-  .home-cta-button {
-    @apply w-full sm:w-auto sm:min-w-[230px];
-  }
-
   @media (max-width: 640px) {
     .home-cta-panel {
       @apply rounded-xl px-5 py-14;

@@ -110,7 +110,7 @@ function getEntranceTargets(elements: ServiceHighlightElements): EntranceTargets
     image: getImageElement(imageLayer),
     title: copyLayer.querySelector<HTMLElement>(".service-highlights__title"),
     description: copyLayer.querySelector<HTMLElement>(".service-highlights__description"),
-    cta: copyLayer.querySelector<HTMLElement>(".service-highlights__cta")
+    cta: copyLayer.querySelector<HTMLElement>("[data-service-cta]")
   };
 }
 
