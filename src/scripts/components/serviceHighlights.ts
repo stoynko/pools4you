@@ -93,6 +93,10 @@ function getImageElement(layer: HTMLElement | null): HTMLElement | null {
   return layer?.querySelector<HTMLElement>("img") ?? null;
 }
 
+function revealEdgeBlend(section: HTMLElement): void {
+  section.dataset.edgeBlendReady = "true";
+}
+
 /* --------------------------------------------------
  * Entrance targets
  * -------------------------------------------------- */
@@ -335,7 +339,9 @@ function clearPreparedEntrance(state: ServiceHighlightState, elements: ServiceHi
  * First entrance animation
  * -------------------------------------------------- */
 
-function playEntranceAnimation(state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+function playEntranceAnimation(section: HTMLElement, state: ServiceHighlightState, 
+    elements: ServiceHighlightElements): void {
+
   if (state.entrancePlayed || isProgrammaticScrollActive()) {
     return;
   }
@@ -370,6 +376,7 @@ function playEntranceAnimation(state: ServiceHighlightState, elements: ServiceHi
 
       gsap.set(clearTargets, { clearProps: "opacity, visibility, transform" });
       state.entrancePrepared = false;
+      revealEdgeBlend(section);
     },
   });
 
@@ -556,7 +563,7 @@ function autoEnterSection(section: HTMLElement, state: ServiceHighlightState, el
       hideScrollHint(state, elements);
 
       requestAnimationFrame(() => {
-        playEntranceAnimation(state, elements);
+        playEntranceAnimation(section, state, elements);
       });
 
       scheduleScrollHint(section, state, elements);
@@ -766,12 +773,9 @@ function leaveSection(section: HTMLElement, direction: Direction, state: Service
   });
 }
 
-function executeImpulse(
-  direction: Direction,
-  section: HTMLElement,
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
+function executeImpulse( direction: Direction, section: HTMLElement, 
+  state: ServiceHighlightState, elements: ServiceHighlightElements): void {
+
   if (isProgrammaticScrollActive()) {
     return;
   }
@@ -923,11 +927,9 @@ function createServiceObserver(
  * Window scroll
  * -------------------------------------------------- */
 
-function handleWindowScroll(
-  section: HTMLElement,
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
+function handleWindowScroll(section: HTMLElement, state: ServiceHighlightState, 
+  elements: ServiceHighlightElements): void {
+    
   if (isProgrammaticScrollActive()) {
     return;
   }
@@ -962,7 +964,7 @@ function handleWindowScroll(
 
     if (enteredFromBottom) {
       clearPreparedEntrance(state, elements);
-
+      revealEdgeBlend(section);
       const lastIndex = elements.copyLayers.length - 1;
 
       if (state.activeIndex !== lastIndex) {
@@ -984,7 +986,7 @@ function handleWindowScroll(
       });
 
       requestAnimationFrame(() => {
-        playEntranceAnimation(state, elements);
+        playEntranceAnimation(section, state, elements);
       });
     }
 
@@ -1051,11 +1053,9 @@ function suspendServiceHighlights(
   hideScrollHint(state, elements);
 }
 
-function resumeServiceHighlights(
-  section: HTMLElement,
-  state: ServiceHighlightState,
-  elements: ServiceHighlightElements,
-): void {
+function resumeServiceHighlights(section: HTMLElement, state: ServiceHighlightState, 
+  elements: ServiceHighlightElements,): void {
+
   state.autoEntering = false;
   state.exitInterruptionArmed = false;
 
@@ -1077,10 +1077,7 @@ function resumeServiceHighlights(
   const sectionStart = getSectionStart(section);
   const travel = getSectionTravel(section);
 
-  const progress =
-    travel === 0
-      ? 0
-      : Math.min(Math.max((window.scrollY - sectionStart) / travel, 0), 1);
+  const progress = travel === 0 ? 0 : Math.min(Math.max((window.scrollY - sectionStart) / travel, 0), 1);
 
   const index = Math.round(progress * (elements.copyLayers.length - 1));
 
@@ -1090,11 +1087,12 @@ function resumeServiceHighlights(
     }
 
     requestAnimationFrame(() => {
-      playEntranceAnimation(state, elements);
+      playEntranceAnimation(section, state, elements);
     });
   } else {
     if (index !== 0 && !state.entrancePlayed) {
       clearPreparedEntrance(state, elements);
+      revealEdgeBlend(section);
     }
 
     if (index !== state.activeIndex) {
@@ -1162,11 +1160,11 @@ function initializeSection(section: HTMLElement): void {
 
     if (initialIndex === 0) {
       requestAnimationFrame(() => {
-        playEntranceAnimation(state, elements);
+        playEntranceAnimation(section, state, elements);
       });
     } else {
       clearPreparedEntrance(state, elements);
-
+      revealEdgeBlend(section);
       setActiveService(initialIndex, state, elements, false);
     }
 

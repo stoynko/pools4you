@@ -1,22 +1,72 @@
 .service-highlights {
   --service-step-height: 55svh;
-
   --service-title-row: 5.5rem;
   --service-description-gap: 1.5rem;
   --service-description-min-height: 7.5rem;
   --service-cta-gap: 1rem;
+  --service-edge-blend-height: clamp(3rem, 5vw, 5rem);
+  --service-edge-blur: 2px;
 
   position: relative;
+  height: calc(100svh + (var(--service-count) - 1) * var(--service-step-height));
+  background:var(--color-bg);
+}
 
-  height:
-    calc(
-      100svh +
-      (var(--service-count) - 1) *
-        var(--service-step-height)
+/* Section edge transitions */
+
+.service-highlights::before,
+.service-highlights::after {
+  content: "";
+  position: absolute;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+  z-index: 4;
+  left: 0;
+  width: 100%;
+  height: var(--service-edge-blend-height);
+  pointer-events: none;
+  backdrop-filter: blur(var(--service-edge-blur));
+  -webkit-backdrop-filter: blur(var(--service-edge-blur));
+}
+
+.service-highlights[data-edge-blend-ready="true"]::before,
+.service-highlights[data-edge-blend-ready="true"]::after {
+  opacity: 1;
+}
+
+.service-highlights::before {
+  top: 0;
+  transform: translateY(-98%);
+  background: linear-gradient(to bottom, var(--color-bg) 0%,
+      rgba(13, 14, 17, 0.96) 25%,
+      rgba(13, 14, 17, 0.68) 55%,
+      rgba(13, 14, 17, 0) 100%
     );
+}
 
-  background:
-    var(--color-bg);
+.service-highlights::after {
+  bottom: 0;
+  transform: translateY(98%);
+  background: linear-gradient(to bottom,
+      rgba(13, 14, 17, 0) 0%,
+      rgba(13, 14, 17, 0.68) 45%,
+      rgba(13, 14, 17, 0.96) 75%,
+      var(--color-bg) 100%
+    );
+}
+
+/* --------------------------------------------------
+ * Sticky viewport
+ * -------------------------------------------------- */
+
+.service-highlights__sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 42rem;
+  overflow: hidden;
+  background: var(--color-bg);
+  isolation: isolate;
 }
 
 /* --------------------------------------------------
@@ -27,25 +77,6 @@
 .service-highlights:not([data-service-highlights-initialized="true"]) [data-service-copy="0"] {
   opacity: 0;
   visibility: hidden;
-}
-
-/* --------------------------------------------------
- * Sticky viewport
- * -------------------------------------------------- */
-
-.service-highlights__sticky {
-  position: sticky;
-  top: 0;
-
-  height: 100svh;
-  min-height: 42rem;
-
-  overflow: hidden;
-
-  background:
-    var(--color-bg);
-
-  isolation: isolate;
 }
 
 /* --------------------------------------------------
