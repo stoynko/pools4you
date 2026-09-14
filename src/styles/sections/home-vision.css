@@ -32,7 +32,7 @@
   position: relative;
   width: 100%;
   margin: 0;
-  padding-bottom: 1.75rem;
+  padding-bottom: 0;
   color: var(--color-gold);
   font-family: var(--font-libertinus);
   font-size: clamp(2.75rem, 4.4vw, 6.5rem);
@@ -41,34 +41,6 @@
   letter-spacing: -0.035em;
   text-align: center;
   text-wrap: balance;
-}
-
-.home-vision__accents-title::after {
-  content: "";
-
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-
-  width: min(80%, 80rem);
-  height: 1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent 0%,
-      var(--color-gold) 25%,
-      var(--color-gold) 75%,
-      transparent 100%
-    );
-
-  opacity: 0;
-
-  transform:
-    translateX(-50%)
-    scaleX(0);
-
-  transform-origin: center;
 }
 
 .home-vision__accents-description {
@@ -104,7 +76,8 @@
   min-width: 0;
   flex-direction: column;
   align-items: center;
-  padding: clamp(0.75rem, 1.4vw, 1.25rem)
+  padding:
+    clamp(0.75rem, 1.4vw, 1.25rem)
     clamp(1.5rem, 2.75vw, 3.25rem);
   text-align: center;
 }
@@ -123,15 +96,21 @@
 
 .home-vision-item + .home-vision-item::before {
   content: "";
+
   position: absolute;
   top: clamp(0.5rem, 0.8vw, 0.75rem);
   bottom: clamp(0.5rem, 0.8vw, 0.75rem);
   left: 0;
+
   width: 1px;
+
   background: var(--color-gold);
+
   opacity: 0.7;
+
   transform: translateX(-50%) scaleY(1);
   transform-origin: top center;
+
   pointer-events: none;
 }
 
@@ -372,15 +351,59 @@
   }
 }
 
+@-webkit-keyframes vision-title-separator-reveal {
+  from {
+    opacity: 0;
+
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+  }
+
+  to {
+    opacity: 0.6;
+
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+}
+
+@keyframes vision-title-separator-reveal {
+  from {
+    opacity: 0;
+
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+  }
+
+  to {
+    opacity: 0.6;
+
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+  }
+}
+
 /*
  * Initial reveal state
  */
 
-.home-vision.is-reveal-ready .home-vision__accents-title,
-.home-vision.is-reveal-ready .home-vision__accents-description,
-.home-vision.is-reveal-ready .home-vision-item__icon,
-.home-vision.is-reveal-ready .home-vision-item__content {
+.home-vision.is-reveal-ready
+  .home-vision__accents-title,
+.home-vision.is-reveal-ready
+  .home-vision__accents-description,
+.home-vision.is-reveal-ready
+  .home-vision-item__icon,
+.home-vision.is-reveal-ready
+  .home-vision-item__content {
   opacity: 0;
+}
+
+.home-vision.is-reveal-ready
+  .home-vision__title-divider
+  .section-divider__line {
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: center;
 }
 
 .home-vision.is-reveal-ready
@@ -402,10 +425,29 @@
     var(--vision-title-duration, 800ms)
     cubic-bezier(0.25, 0.46, 0.45, 0.94)
     both;
+
   animation:
     slide-in-top
     var(--vision-title-duration, 800ms)
     cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+}
+
+.home-vision.is-header-revealed
+  .home-vision__title-divider
+  .section-divider__line {
+  -webkit-animation:
+    vision-title-separator-reveal
+    var(--vision-title-separator-duration, 300ms)
+    cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    var(--vision-title-separator-delay, 800ms)
+    both;
+
+  animation:
+    vision-title-separator-reveal
+    var(--vision-title-separator-duration, 300ms)
+    cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    var(--vision-title-separator-delay, 800ms)
     both;
 }
 
@@ -417,6 +459,7 @@
     cubic-bezier(0.25, 0.46, 0.45, 0.94)
     var(--vision-description-delay, 900ms)
     both;
+
   animation:
     vision-description-reveal
     var(--vision-description-duration, 650ms)
@@ -438,6 +481,7 @@
     var(--vision-item-duration, 800ms)
     cubic-bezier(0.25, 0.46, 0.45, 0.94)
     both;
+
   animation:
     slide-in-bottom
     var(--vision-item-duration, 800ms)
@@ -467,6 +511,7 @@
   .home-vision-item__content {
   -webkit-animation-delay:
     var(--vision-item-stagger, 100ms);
+
   animation-delay:
     var(--vision-item-stagger, 100ms);
 }
@@ -482,6 +527,7 @@
       var(--vision-item-stagger, 100ms) +
       var(--vision-item-stagger, 100ms)
     );
+
   animation-delay:
     calc(
       var(--vision-item-stagger, 100ms) +
@@ -501,6 +547,7 @@
       var(--vision-item-stagger, 100ms) +
       var(--vision-item-stagger, 100ms)
     );
+
   animation-delay:
     calc(
       var(--vision-item-stagger, 100ms) +
@@ -521,6 +568,7 @@
     var(--vision-separator-duration, 700ms)
     cubic-bezier(0.25, 0.46, 0.45, 0.94)
     both;
+
   animation:
     vision-separator-draw
     var(--vision-separator-duration, 700ms)
@@ -536,6 +584,7 @@
   .home-vision-item:nth-child(2)::before {
   -webkit-animation-delay:
     var(--vision-separator-initial-delay, 180ms);
+
   animation-delay:
     var(--vision-separator-initial-delay, 180ms);
 }
@@ -547,6 +596,7 @@
       var(--vision-separator-initial-delay, 180ms) +
       var(--vision-separator-stagger, 100ms)
     );
+
   animation-delay:
     calc(
       var(--vision-separator-initial-delay, 180ms) +
@@ -562,6 +612,7 @@
       var(--vision-separator-stagger, 100ms) +
       var(--vision-separator-stagger, 100ms)
     );
+
   animation-delay:
     calc(
       var(--vision-separator-initial-delay, 180ms) +
@@ -576,7 +627,8 @@
 
 @media (max-width: 1100px) {
   .home-vision__accents-band {
-    padding-block: clamp(4.5rem, 7vw, 6rem)
+    padding-block:
+      clamp(4.5rem, 7vw, 6rem)
       clamp(4.5rem, 8vw, 6rem);
   }
 
@@ -645,14 +697,19 @@
 
   .home-vision-item + .home-vision-item::before {
     content: "";
+
     top: 0;
     right: 0;
     bottom: auto;
     left: 0;
+
     width: 100%;
     height: 1px;
+
     background: var(--color-gold);
+
     opacity: 0.35;
+
     transform: scaleX(1);
     transform-origin: left center;
   }
@@ -670,6 +727,7 @@
     + .home-vision-item::before {
     -webkit-animation-name:
       vision-separator-draw-horizontal;
+
     animation-name:
       vision-separator-draw-horizontal;
   }
@@ -724,6 +782,13 @@
   }
 
   .home-vision.is-reveal-ready
+    .home-vision__title-divider
+    .section-divider__line {
+    opacity: 0.6;
+    transform: scaleX(1);
+  }
+
+  .home-vision.is-reveal-ready
     .home-vision-item
     + .home-vision-item::before {
     opacity: 0.7;
@@ -733,6 +798,8 @@
   .home-vision__accents-header,
   .home-vision__accents-title,
   .home-vision__accents-description,
+  .home-vision__title-divider
+    .section-divider__line,
   .home-vision-item,
   .home-vision-item__icon,
   .home-vision-item__title,
@@ -749,100 +816,5 @@
     + .home-vision-item::before {
     opacity: 0.35;
     transform: scaleX(1);
-  }
-}
-
-@keyframes vision-title-separator-reveal {
-  from {
-    opacity: 0;
-
-    transform:
-      translateX(-50%)
-      scaleX(0);
-  }
-
-  to {
-    opacity: 0.6;
-
-    transform:
-      translateX(-50%)
-      scaleX(1);
-  }
-}
-
-@-webkit-keyframes vision-title-separator-reveal {
-  from {
-    opacity: 0;
-
-    -webkit-transform:
-      translateX(-50%)
-      scaleX(0);
-
-    transform:
-      translateX(-50%)
-      scaleX(0);
-  }
-
-  to {
-    opacity: 0.6;
-
-    -webkit-transform:
-      translateX(-50%)
-      scaleX(1);
-
-    transform:
-      translateX(-50%)
-      scaleX(1);
-  }
-}
-
-@keyframes vision-title-separator-reveal {
-  from {
-    opacity: 0;
-
-    -webkit-transform:
-      translateX(-50%)
-      scaleX(0);
-
-    transform:
-      translateX(-50%)
-      scaleX(0);
-  }
-
-  to {
-    opacity: 0.6;
-
-    -webkit-transform:
-      translateX(-50%)
-      scaleX(1);
-
-    transform:
-      translateX(-50%)
-      scaleX(1);
-  }
-}
-
-.home-vision.is-header-revealed
-  .home-vision__accents-title::after {
-  -webkit-animation:
-    vision-title-separator-reveal
-    var(--vision-title-separator-duration, 300ms)
-    cubic-bezier(0.25, 0.46, 0.45, 0.94)
-    var(--vision-title-separator-delay, 800ms)
-    both;
-
-  animation:
-    vision-title-separator-reveal
-    var(--vision-title-separator-duration, 300ms)
-    cubic-bezier(0.25, 0.46, 0.45, 0.94)
-    var(--vision-title-separator-delay, 800ms)
-    both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-vision__accents-title::after {
-    opacity: 0.6;
-    transform: translateX(-50%) scaleX(1);
-    animation: none;
   }
 }

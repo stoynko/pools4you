@@ -1,0 +1,26 @@
+---
+interface Props {
+  overhang?: string;
+  class?: string;
+}
+
+const {
+  overhang = "3rem",
+  class: className,
+} = Astro.props;
+---
+
+<div
+  aria-hidden="true"
+  style={`--divider-overhang: ${overhang};`}
+  class:list={[
+    "pointer-events-none",
+    "w-[calc(100%+var(--divider-overhang))]",
+    "-translate-x-[calc(var(--divider-overhang)/2)]",
+    className,
+  ]}
+>
+  <div class=" section-divider__line h-px w-full
+      bg-[linear-gradient(90deg,transparent_0%,var(--color-gold)_25%,var(--color-gold)_75%,transparent_100%)]
+    "/>
+</div>

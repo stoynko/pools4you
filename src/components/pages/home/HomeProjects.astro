@@ -7,6 +7,7 @@ import { getPagePath } from "../../../config/pages/pagePaths";
 import { getPageTranslations } from "../../../lib/i18n";
 import CtaButton from "../../shared/CtaButton.astro";
 import HomeProjectCard from "./HomeProjectCard.astro";
+import SectionDivider from "../../shared/SectionDivider.astro";
 
 type Props = { language: Language; limit?: number; };
 const { language, limit = 5 } = Astro.props as Props;
@@ -25,6 +26,8 @@ function getProjectHref(project: CollectionEntry<"projects">): string {
 
   return `${basePath}/${project.data.slug}`;
 }
+
+const projectsDividerOverhang = language === "bg" ? "3rem" : "2rem";
 ---
 
 {
@@ -32,11 +35,18 @@ function getProjectHref(project: CollectionEntry<"projects">): string {
     <section class="home-projects u-no-select" data-home-projects>
       <div class="site-container-wide">
         <header class="home-projects__header">
-          <h2 class="home-projects__title">
-            {sectionTitle}
-          </h2>
+          
+          <div class="mx-auto w-fit max-w-[90vw] text-center">
 
-          <div class="home-projects__separator" aria-hidden="true"/>
+            <h2 class="home-projects__title">
+              {sectionTitle}
+            </h2>
+
+            <div class="mt-4">
+              <SectionDivider class="home-projects__title-divider" overhang={projectsDividerOverhang}
+              />
+            </div>
+          </div>
 
           <p class="home-projects__description">
             {sectionDescription}
