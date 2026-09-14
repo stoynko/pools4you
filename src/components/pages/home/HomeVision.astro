@@ -16,22 +16,23 @@ const vision = translation.vision;
 const titleDividerOverhang = language === "bg" ? "3rem" : "2rem";
 ---
 
-<section class="home-vision section-shell u-no-select" data-home-vision>
+<section class="home-vision section-shell section-header-reveal u-no-select" data-home-vision>
   <div class="home-vision__accents-band">
     <div class="site-container-wide">
       <header class="home-vision__accents-header">
-        
         <div class="mx-auto w-fit max-w-[90vw] text-center">
-          <h2 class="home-vision__accents-title">
+          <h2 class="home-vision__accents-title section-header-reveal__title">
             {vision.accentsTitle}
           </h2>
 
           <div class="mt-4">
-            <SectionDivider class="home-vision__title-divider" overhang={titleDividerOverhang}/>
+            <SectionDivider class="home-vision__title-divider section-header-reveal__divider"
+              overhang={titleDividerOverhang}
+            />
           </div>
         </div>
 
-        <p class="home-vision__accents-description">
+        <p class="home-vision__accents-description section-header-reveal__description">
           {vision.accentsDescription}
         </p>
       </header>

@@ -1,27 +1,27 @@
 import { revealController, type RevealContext } from "../../lib/animation/revealController";
+import { applySectionHeaderRevealTiming } from "../../lib/animation/sectionHeaderReveal";
 
 const HERO_SELECTOR = ".home-hero";
 const SCROLL_CUE_SELECTOR = "[data-home-hero-scroll-cue]";
 const HOME_VISION_SELECTOR = "[data-home-vision]";
 const HOME_VISION_GRID_SELECTOR = ".home-vision__grid";
+const HOME_PROJECTS_SELECTOR = "[data-home-projects]";
+const HOME_PROJECTS_HEADER_SELECTOR = ".home-projects__header";
+
 const SCROLL_CUE_DELAY = 3000;
 const SCROLL_END_DELAY = 180;
 const HERO_ACTIVE_RATIO = 0.5;
 const HOME_VISION_HEADER_REVEAL_RATIO = 0.2;
+const HOME_PROJECTS_HEADER_REVEAL_RATIO = 0.05;
 const HOME_VISION_GRID_REVEAL_RATIO = 0.05;
 
 const HOME_VISION_TIMING = {
-  titleDuration: 800,
-  titleSeparatorDelay: 800,
-  titleSeparatorDuration: 400,
-  descriptionDelay: 1350,
-  descriptionDuration: 750,
   accentsDelay: 1650,
   itemDuration: 900,
   itemStagger: 100,
   separatorDuration: 700,
   separatorInitialDelay: 180,
-  separatorStagger: 100
+  separatorStagger: 100,
 } as const;
 
 type HomeHeroState = {
@@ -144,15 +144,12 @@ function initializeHomeHero(hero: HTMLElement): void {
 }
 
 function initializeHomeVisionReveal(section: HTMLElement): void {
+
   if (section.dataset.homeVisionRevealInitialized === "true") {
     return;
   }
 
-  section.style.setProperty("--vision-title-duration", `${HOME_VISION_TIMING.titleDuration}ms`);
-  section.style.setProperty("--vision-title-separator-delay", `${HOME_VISION_TIMING.titleSeparatorDelay}ms`);
-  section.style.setProperty("--vision-title-separator-duration", `${HOME_VISION_TIMING.titleSeparatorDuration}ms`);
-  section.style.setProperty("--vision-description-delay", `${HOME_VISION_TIMING.descriptionDelay}ms`);
-  section.style.setProperty("--vision-description-duration", `${HOME_VISION_TIMING.descriptionDuration}ms`);
+  applySectionHeaderRevealTiming(section);
   section.style.setProperty("--vision-item-duration", `${HOME_VISION_TIMING.itemDuration}ms`);
   section.style.setProperty("--vision-item-stagger", `${HOME_VISION_TIMING.itemStagger}ms`);
   section.style.setProperty("--vision-separator-duration", `${HOME_VISION_TIMING.separatorDuration}ms`);
@@ -221,6 +218,34 @@ function initializeHomeVisionReveal(section: HTMLElement): void {
   });
 }
 
+function initializeHomeProjectsReveal(section: HTMLElement): void {
+  
+  if (section.dataset.homeProjectsRevealInitialized === "true") {
+    return;
+  }
+
+  const header = section.querySelector<HTMLElement>(HOME_PROJECTS_HEADER_SELECTOR);
+
+  if (!header) {
+    return;
+  }
+
+  section.dataset.homeProjectsRevealInitialized = "true";
+
+  applySectionHeaderRevealTiming(section);
+
+  revealController.observe(header, {
+    threshold: HOME_PROJECTS_HEADER_REVEAL_RATIO,
+    rootMargin: "0px 0px 10% 0px",
+
+    onReveal: () => {
+      section.classList.add(
+        "is-header-revealed"
+      );
+    },
+  });
+}
+
 /*
  * HOME PAGE INITIALIZATION
  */
@@ -231,4 +256,7 @@ export function initHomePageAnimations(): void {
 
   document.querySelectorAll<HTMLElement>(HOME_VISION_SELECTOR)
     .forEach(initializeHomeVisionReveal);
+
+  document.querySelectorAll<HTMLElement>(HOME_PROJECTS_SELECTOR)
+    .forEach(initializeHomeProjectsReveal);
 }

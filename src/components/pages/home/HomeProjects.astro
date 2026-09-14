@@ -32,23 +32,24 @@ const projectsDividerOverhang = language === "bg" ? "3rem" : "2rem";
 
 {
   featuredProjects.length > 0 && (
-    <section class="home-projects u-no-select" data-home-projects>
+    <section class="home-projects section-header-reveal u-no-select" data-home-projects>
       <div class="site-container-wide">
         <header class="home-projects__header">
           
           <div class="mx-auto w-fit max-w-[90vw] text-center">
 
-            <h2 class="home-projects__title">
+            <h2 class="home-projects__title section-header-reveal__title">
               {sectionTitle}
             </h2>
 
             <div class="mt-4">
-              <SectionDivider class="home-projects__title-divider" overhang={projectsDividerOverhang}
+              <SectionDivider class="home-projects__title-divider section-header-reveal__divider" 
+              overhang={projectsDividerOverhang}
               />
             </div>
           </div>
 
-          <p class="home-projects__description">
+          <p class="home-projects__description section-header-reveal__description">
             {sectionDescription}
           </p>
         </header>
