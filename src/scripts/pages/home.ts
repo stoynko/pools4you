@@ -1,3 +1,5 @@
+import { revealController, type RevealContext } from "../../lib/animation/revealController";
+
 const HERO_SELECTOR = ".home-hero";
 const SCROLL_CUE_SELECTOR = "[data-home-hero-scroll-cue]";
 const HOME_VISION_SELECTOR = "[data-home-vision]";
@@ -33,10 +35,6 @@ type HomeVisionRevealState = {
   isHeaderSequenceComplete: boolean;
   hasRevealedAccents: boolean;
 };
-
-function prefersReducedMotion(): boolean {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
 
 /*
  * HOME HERO
@@ -94,7 +92,7 @@ function initializeHomeHero(hero: HTMLElement): void {
         scrollCue.classList.add("is-visible");
       }
     }, SCROLL_CUE_DELAY);
-};
+  };
 
   const handleScrollStart = (): void => {
     hideScrollCue();
@@ -139,11 +137,11 @@ function initializeHomeHero(hero: HTMLElement): void {
   hero.classList.add("is-copy-pending");
 
   window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-          hero.classList.add("is-copy-visible");
-      });
+    window.requestAnimationFrame(() => {
+      hero.classList.add("is-copy-visible");
+    });
   });
-};
+}
 
 function initializeHomeVisionReveal(section: HTMLElement): void {
   if (section.dataset.homeVisionRevealInitialized === "true") {
@@ -156,10 +154,10 @@ function initializeHomeVisionReveal(section: HTMLElement): void {
   section.style.setProperty("--vision-description-delay", `${HOME_VISION_TIMING.descriptionDelay}ms`);
   section.style.setProperty("--vision-description-duration", `${HOME_VISION_TIMING.descriptionDuration}ms`);
   section.style.setProperty("--vision-item-duration", `${HOME_VISION_TIMING.itemDuration}ms`);
-  section.style.setProperty("--vision-item-stagger", `${HOME_VISION_TIMING.itemStagger}ms`,);
+  section.style.setProperty("--vision-item-stagger", `${HOME_VISION_TIMING.itemStagger}ms`);
   section.style.setProperty("--vision-separator-duration", `${HOME_VISION_TIMING.separatorDuration}ms`);
-  section.style.setProperty("--vision-separator-initial-delay", `${HOME_VISION_TIMING.separatorInitialDelay}ms`,);
-  section.style.setProperty("--vision-separator-stagger", `${HOME_VISION_TIMING.separatorStagger}ms`,);
+  section.style.setProperty("--vision-separator-initial-delay", `${HOME_VISION_TIMING.separatorInitialDelay}ms`);
+  section.style.setProperty("--vision-separator-stagger", `${HOME_VISION_TIMING.separatorStagger}ms`);
 
   section.dataset.homeVisionRevealInitialized = "true";
 
@@ -180,68 +178,47 @@ function initializeHomeVisionReveal(section: HTMLElement): void {
     section.classList.add("are-accents-revealed");
   };
 
-  const revealHeader = (): void => {
-    if (section.classList.contains("is-header-revealed")) {
-      return;
-    }
-    
-    section.classList.add("is-header-revealed");
+ const revealHeader = (_element: HTMLElement, { immediate }: RevealContext): void => {
+  if (section.classList.contains("is-header-revealed")) {
+    return;
+  }
 
-    window.setTimeout(() => {
-      state.isHeaderSequenceComplete = true;
-      tryRevealAccents();
-    }, HOME_VISION_TIMING.accentsDelay);
-  };
+  section.classList.add("is-header-revealed");
+
+  if (immediate) {
+    state.isHeaderSequenceComplete = true;
+    tryRevealAccents();
+    return;
+  }
+
+  window.setTimeout(() => {
+    state.isHeaderSequenceComplete = true;
+    tryRevealAccents();
+  }, HOME_VISION_TIMING.accentsDelay);
+};
 
   const markGridReady = (): void => {
     state.isGridReady = true;
     tryRevealAccents();
   };
 
-  if (prefersReducedMotion() || !("IntersectionObserver" in window)) {
-    section.classList.add("is-header-revealed");
-    state.isHeaderSequenceComplete = true;
-    state.isGridReady = true;
-    tryRevealAccents();
-    return;
-  }
-
   section.classList.add("is-reveal-ready");
 
-  const headerObserver = new IntersectionObserver(([entry]) => {
-    if (!entry || !entry.isIntersecting || entry.intersectionRatio < HOME_VISION_HEADER_REVEAL_RATIO) {
-      return;
-    }
-
-    headerObserver.disconnect();
-    revealHeader();
-  }, {
-    root: null,
-    threshold: [0, HOME_VISION_HEADER_REVEAL_RATIO, 0.5],
-    rootMargin: "0px 0px -8% 0px",
+  revealController.observe(section, {
+    threshold: HOME_VISION_HEADER_REVEAL_RATIO,
+    onReveal: revealHeader,
   });
-
-  headerObserver.observe(section);
 
   if (!grid) {
     markGridReady();
     return;
   }
 
-  const gridObserver = new IntersectionObserver(([entry]) => {
-    if (!entry || !entry.isIntersecting || entry.intersectionRatio < HOME_VISION_GRID_REVEAL_RATIO) {
-      return;
-    }
-
-    gridObserver.disconnect();
-    markGridReady();
-  }, {
-    root: null,
-    threshold: [0, HOME_VISION_GRID_REVEAL_RATIO, 0.25],
-    rootMargin: "0px 0px -10% 0px"},
-  );
-
-  gridObserver.observe(grid);
+  revealController.observe(grid, {
+    threshold: HOME_VISION_GRID_REVEAL_RATIO,
+    rootMargin: "0px 0px -10% 0px",
+    onReveal: markGridReady,
+  });
 }
 
 /*
