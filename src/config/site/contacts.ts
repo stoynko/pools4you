@@ -1,21 +1,21 @@
 import type { Language } from "../i18n/i18n";
 
 export const contacts = {
-  email: "pools4you@email.com",
+  email: "pools4you@abv.bg",
 
   phone: {
-    display: "+359 0123456789",
+    display: "+359 0878 190 980",
     href: "+3590123456789",
   },
 
   address: {
-    bg: "Бургас, България",
-    en: "Burgas, Bulgaria",
+    bg: "гр. Бургас ул. Крайезерна 1, ет. 3",
+    en: "Burgas, Kraiezerna 1, fl. 3",
   },
 
   hours: {
-    bg: "Понеделник - Петък 08:00 - 17:00",
-    en: "Monday - Friday 08:00 - 17:00",
+    bg: "Понеделник - Петък 09:00 - 18:00 | Събота 10:00 – 14:00",
+    en: "Monday - Friday 09:00 - 18:00 | Saturday 10:00 - 14:00",
   },
 
   map: {

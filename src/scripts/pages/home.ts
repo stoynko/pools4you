@@ -12,7 +12,6 @@ const SCROLL_CUE_DELAY = 3000;
 const SCROLL_END_DELAY = 180;
 const HERO_ACTIVE_RATIO = 0.5;
 const HOME_VISION_HEADER_REVEAL_RATIO = 0.2;
-const HOME_PROJECTS_HEADER_REVEAL_RATIO = 0.05;
 const HOME_VISION_GRID_REVEAL_RATIO = 0.05;
 
 const HOME_VISION_TIMING = {
@@ -36,9 +35,13 @@ type HomeVisionRevealState = {
   hasRevealedAccents: boolean;
 };
 
-/*
- * HOME HERO
- */
+const HOME_PROJECTS_REVEAL = {
+  headerThreshold: 0.05,
+  ctaThreshold: 0.25,
+} as const;
+
+
+/* HOME HERO */
 
 function initializeHomeHero(hero: HTMLElement): void {
   if (hero.dataset.homeHeroInitialized === "true") {
@@ -219,36 +222,68 @@ function initializeHomeVisionReveal(section: HTMLElement): void {
 }
 
 function initializeHomeProjectsReveal(section: HTMLElement): void {
-  
   if (section.dataset.homeProjectsRevealInitialized === "true") {
-    return;
-  }
-
-  const header = section.querySelector<HTMLElement>(HOME_PROJECTS_HEADER_SELECTOR);
-
-  if (!header) {
     return;
   }
 
   section.dataset.homeProjectsRevealInitialized = "true";
 
+  const header = section.querySelector<HTMLElement>(
+    HOME_PROJECTS_HEADER_SELECTOR,
+  );
+
+  const footer = section.querySelector<HTMLElement>(
+    ".home-projects__footer",
+  );
+
   applySectionHeaderRevealTiming(section);
 
-  revealController.observe(header, {
-    threshold: HOME_PROJECTS_HEADER_REVEAL_RATIO,
-    rootMargin: "0px 0px 10% 0px",
+  if (header) {
+  revealController.observe(section, {
+    threshold: HOME_PROJECTS_REVEAL.headerThreshold,
+    once: true,
 
     onReveal: () => {
-      section.classList.add(
-        "is-header-revealed"
-      );
+      section.classList.add("is-header-revealed");
     },
   });
 }
 
-/*
- * HOME PAGE INITIALIZATION
- */
+  if (footer) {
+    let stopObserving: () => void = () => {};
+
+    const revealImmediately = (): void => {
+      footer.classList.add(
+        "is-cta-revealed",
+        "is-cta-immediate",
+      );
+
+      stopObserving();
+    };
+
+    footer.classList.add("is-cta-reveal-ready");
+
+    footer.addEventListener("focusin", revealImmediately, {
+      once: true,
+    });
+
+    stopObserving = revealController.observe(footer, {
+      threshold: HOME_PROJECTS_REVEAL.ctaThreshold,
+      once: true,
+
+      onReveal: (_element, { immediate }) => {
+        if (immediate || footer.matches(":focus-within")) {
+          revealImmediately();
+          return;
+        }
+
+        footer.classList.add("is-cta-revealed");
+      },
+    });
+  }
+}
+
+/* HOME PAGE INITIALIZATION */
 
 export function initHomePageAnimations(): void {
   document.querySelectorAll<HTMLElement>(HERO_SELECTOR)
