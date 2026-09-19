@@ -7,10 +7,12 @@
   color: var(--color-text-secondary);
 }
 
-.footer-inner {
+.footer-content-viewport {
   overflow: hidden;
   overflow: clip;
+}
 
+.footer-inner {
   padding-block: 8rem 2rem;
 }
 
@@ -190,23 +192,6 @@
 }
 
 .site-footer.is-reveal-ready
-  .footer-columns > div:nth-child(1) {
-  transform: translate3d(-6rem, 6rem, 0);
-}
-
-.site-footer.is-reveal-ready
-  .footer-columns > div:nth-child(2),
-.site-footer.is-reveal-ready
-  .footer-columns > div:nth-child(3) {
-  transform: translate3d(0, 6rem, 0);
-}
-
-.site-footer.is-reveal-ready
-  .footer-columns > div:nth-child(4) {
-  transform: translate3d(6rem, 6rem, 0);
-}
-
-.site-footer.is-reveal-ready
   .footer-columns.is-visible > div:nth-child(1) {
   animation: footer-slide-in-bl 650ms
     cubic-bezier(0.445, 0.05, 0.55, 0.95) both;
@@ -377,7 +362,6 @@
 .site-footer.is-reveal-ready .footer-social-row,
 .site-footer.is-reveal-ready .footer-legal {
   opacity: 0;
-  transform: translate3d(0, 2rem, 0);
 }
 
 /*
@@ -425,7 +409,11 @@
 @keyframes footer-slide-in-bl {
   from {
     opacity: 0;
-    transform: translate3d(-6rem, 6rem, 0);
+    transform: translate3d(
+      var(--footer-reveal-x, 0px),
+      var(--footer-reveal-y, 0px),
+      0
+    );
   }
 
   to {
@@ -437,7 +425,7 @@
 @keyframes footer-slide-in-bottom {
   from {
     opacity: 0;
-    transform: translate3d(0, 6rem, 0);
+    transform: translate3d(0, var(--footer-reveal-y, 0px), 0);
   }
 
   to {
@@ -449,7 +437,11 @@
 @keyframes footer-slide-in-br {
   from {
     opacity: 0;
-    transform: translate3d(6rem, 6rem, 0);
+    transform: translate3d(
+      var(--footer-reveal-x, 0px),
+      var(--footer-reveal-y, 0px),
+      0
+    );
   }
 
   to {
@@ -608,17 +600,6 @@
 
   .footer-columns > div {
     width: 100%;
-  }
-
-  .site-footer.is-reveal-ready
-    .footer-columns > div:nth-child(1),
-  .site-footer.is-reveal-ready
-    .footer-columns > div:nth-child(2),
-  .site-footer.is-reveal-ready
-    .footer-columns > div:nth-child(3),
-  .site-footer.is-reveal-ready
-    .footer-columns > div:nth-child(4) {
-    transform: translate3d(0, 4rem, 0);
   }
 
   .site-footer.is-reveal-ready
