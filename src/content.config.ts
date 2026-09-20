@@ -37,6 +37,34 @@ const serviceHighlights = defineCollection({
   }),
 });
 
+const homeClients = defineCollection({
+  loader: glob({
+    base: "./src/content/index/clients",
+    pattern: "**/*.{md,mdx}",
+    generateId: ({ entry }) => entry.replace(/\.(md|mdx)$/, ""),
+  }),
+
+  schema: z.object({
+    name: z.string(),
+
+    logo: z
+      .string()
+      .default("/images/brand/pools4you-logo-icon.svg"),
+
+    ariaLabel: z.string().optional(),
+
+    website: z.url().optional(),
+
+    order: z
+      .number()
+      .int()
+      .nonnegative()
+      .default(999),
+
+    enabled: z.boolean().default(true),
+  }),
+});
+
 const projects = defineCollection({
   loader: glob({
     base: "./src/content/projects",
@@ -176,6 +204,7 @@ const suppliers = defineCollection({
 
 export const collections = {
   serviceHighlights,
+  homeClients,
   projects,
   facilitiesPages,
   facilities,

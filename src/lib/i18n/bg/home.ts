@@ -76,6 +76,9 @@ export const home = {
     areaLabel: "Площ",
     clientLabel: "Клиент"
   },
+  clients: {
+    label: "Клиенти които ни се довериха",
+  },
 
   cta: {
     title: "Готови ли сте за следващата стъпка?",

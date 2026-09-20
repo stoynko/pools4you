@@ -1,0 +1,190 @@
+.home-clients {
+  position: relative;
+
+  padding-block:
+    clamp(2.5rem, 5vw, 5rem);
+
+  overflow: hidden;
+
+  background:
+    var(--color-bg);
+}
+
+/*
+ * Section boundaries
+ */
+
+.home-clients::before,
+.home-clients::after {
+  content: "";
+
+  position: absolute;
+
+  left: 4%;
+  right: 4%;
+
+  height: 1px;
+
+  background:
+    linear-gradient(
+      to right,
+      transparent,
+      var(--color-gold),
+      transparent
+    );
+
+  opacity: 0.45;
+}
+
+.home-clients::before {
+  top: 0;
+}
+
+.home-clients::after {
+  bottom: 0;
+}
+
+/*
+ * Viewport
+ */
+
+.home-clients__viewport {
+  width: 100%;
+
+  overflow: hidden;
+}
+
+/*
+ * Continuous track
+ */
+
+.home-clients__track {
+  display: flex;
+  align-items: stretch;
+
+  width: max-content;
+
+  will-change: transform;
+}
+
+/*
+ * Client item
+ */
+
+.home-clients__item {
+  position: relative;
+
+  display: grid;
+  flex:
+    0 0
+    clamp(13rem, 18vw, 24rem);
+
+  place-items: center;
+
+  height:
+    clamp(9rem, 16vw, 18rem);
+
+  padding-inline:
+    clamp(2rem, 3vw, 4rem);
+}
+
+/*
+ * Vertical divider
+ */
+
+.home-clients__item::after {
+  content: "";
+
+  position: absolute;
+
+  top: 12%;
+  right: 0;
+  bottom: 12%;
+
+  width: 1px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent,
+      var(--color-gold) 50%,
+      transparent
+    );
+
+  opacity: 0.5;
+}
+
+/*
+ * Logo
+ */
+
+.home-clients__logo {
+  display: grid;
+
+  width: 100%;
+  height: 100%;
+
+  place-items: center;
+
+  padding:
+    clamp(1rem, 2vw, 2rem);
+
+  border-radius: 0.25rem;
+}
+
+a.home-clients__logo {
+  cursor: pointer;
+}
+
+.home-clients__logo img {
+  display: block;
+
+  width: auto;
+
+  height:
+    clamp(4.5rem, 6vw, 6.5rem);
+
+  max-width: 100%;
+
+  object-fit: contain;
+
+  opacity: 0.75;
+
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.home-clients__logo:hover img,
+.home-clients__logo:focus-visible img {
+  opacity: 1;
+
+  transform:
+    scale(1.04);
+}
+
+.home-clients__logo:focus-visible {
+  outline:
+    1px solid
+    var(--color-gold);
+
+  outline-offset:
+    -0.25rem;
+}
+
+/*
+ * Reduced motion
+ */
+
+@media (
+  prefers-reduced-motion:
+    reduce
+) {
+  .home-clients__track {
+    transform: none !important;
+  }
+
+  .home-clients__logo img {
+    transition: none;
+  }
+}

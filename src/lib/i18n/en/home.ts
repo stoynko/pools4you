@@ -77,6 +77,10 @@ export const home = {
     clientLabel: "Client"
   },
 
+  clients: {
+    label: "Clients that trusted us",
+  },
+
   cta: {
     title: "Ready to dive in?",
     body: "Your vision of the perfect sanctuary is just one conversation away. Let us bring light and water to your legacy.",

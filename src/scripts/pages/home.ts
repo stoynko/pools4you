@@ -1,13 +1,22 @@
 import { revealController, type RevealContext } from "../../lib/animation/revealController";
 import { applySectionHeaderRevealTiming } from "../../lib/animation/sectionHeaderReveal";
 
+/* SELECTORS */
 const HERO_SELECTOR = ".home-hero";
 const SCROLL_CUE_SELECTOR = "[data-home-hero-scroll-cue]";
 const HOME_VISION_SELECTOR = "[data-home-vision]";
 const HOME_VISION_GRID_SELECTOR = ".home-vision__grid";
 const HOME_PROJECTS_SELECTOR = "[data-home-projects]";
 const HOME_PROJECTS_HEADER_SELECTOR = ".home-projects__header";
+const HOME_CLIENTS_SELECTOR = "[data-home-clients]";
+const HOME_CLIENTS_VIEWPORT_SELECTOR = "[data-home-clients-viewport]";
+const HOME_CLIENTS_TRACK_SELECTOR = "[data-home-clients-track]";
+const HOME_CLIENT_SELECTOR = "[data-home-client]";
+const HOME_CLIENT_LOGO_SELECTOR = "[data-home-client-logo]";
+const HOME_CLIENT_CLONE_SELECTOR = '[data-home-client-clone="true"]';
 
+/* CONSTANTS */
+const HOME_CLIENTS_SPEED = 28;
 const SCROLL_CUE_DELAY = 3000;
 const SCROLL_END_DELAY = 180;
 const HERO_ACTIVE_RATIO = 0.5;
@@ -228,13 +237,9 @@ function initializeHomeProjectsReveal(section: HTMLElement): void {
 
   section.dataset.homeProjectsRevealInitialized = "true";
 
-  const header = section.querySelector<HTMLElement>(
-    HOME_PROJECTS_HEADER_SELECTOR,
-  );
+  const header = section.querySelector<HTMLElement>(HOME_PROJECTS_HEADER_SELECTOR);
 
-  const footer = section.querySelector<HTMLElement>(
-    ".home-projects__footer",
-  );
+  const footer = section.querySelector<HTMLElement>(".home-projects__footer");
 
   applySectionHeaderRevealTiming(section);
 
@@ -283,6 +288,223 @@ function initializeHomeProjectsReveal(section: HTMLElement): void {
   }
 }
 
+function initializeHomeClients(section: HTMLElement): void {
+  if (section.dataset.homeClientsInitialized === "true") {
+    return;
+  }
+
+  const viewport = section.querySelector<HTMLElement>(HOME_CLIENTS_VIEWPORT_SELECTOR);
+
+  const track = section.querySelector<HTMLElement>(HOME_CLIENTS_TRACK_SELECTOR);
+
+  if (!viewport || !track) {
+    return;
+  }
+
+  section.dataset.homeClientsInitialized = "true";
+
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let carouselTween:
+    | gsap.core.Tween
+    | null = null;
+
+  let resizeFrame:
+    | number
+    | undefined;
+
+  let isLogoHovered = false;
+  let isLogoFocused = false;
+
+  const removeClones = (): void => {
+    track.querySelectorAll<HTMLElement>(HOME_CLIENT_CLONE_SELECTOR)
+      .forEach((clone) => { clone.remove();
+      });
+  };
+
+  const createClone = (item: HTMLElement): HTMLElement => {
+    const clone = item.cloneNode(true) as HTMLElement;
+
+    clone.dataset.homeClientClone = "true";
+
+    clone.setAttribute("aria-hidden", "true");
+
+    clone.querySelectorAll<HTMLElement>([
+          "a",
+          "button",
+          "input",
+          "select",
+          "textarea",
+          "[tabindex]",
+        ].join(","),
+      )
+      .forEach((interactiveElement) => {
+        interactiveElement.tabIndex = -1;
+        }
+      );
+
+    return clone;
+  };
+
+  const appendCloneSet = (items: HTMLElement[]): void => {
+    items.forEach((item) => {
+      track.append(createClone(item));
+    });
+  };
+
+  const updatePlayback = (): void => {
+    if (!carouselTween) {
+      return;
+    }
+
+    if (isLogoHovered || isLogoFocused) {
+      carouselTween.pause();
+      return;
+    }
+
+    carouselTween.resume();
+  };
+
+  const buildCarousel = (): void => {
+    carouselTween?.kill();
+    carouselTween = null;
+    removeClones();
+    gsap.set(track, { x: 0 });
+
+    if (reducedMotionQuery.matches) {
+      return;
+    }
+
+    const originalItems = Array.from(track.querySelectorAll<HTMLElement>(HOME_CLIENT_SELECTOR));
+
+    if (originalItems.length === 0) {
+      return;
+    }
+
+    appendCloneSet(originalItems);
+
+    const firstOriginal = originalItems[0];
+
+    const firstClone = track.querySelector<HTMLElement>(HOME_CLIENT_CLONE_SELECTOR);
+
+    if (!firstOriginal || !firstClone) {
+      return;
+    }
+
+    const cycleDistance = firstClone.offsetLeft - firstOriginal.offsetLeft;
+
+    if (cycleDistance <= 0) {
+      removeClones();
+      return;
+    }
+
+    while (track.scrollWidth < viewport.clientWidth + cycleDistance) {
+      appendCloneSet(originalItems);
+    }
+
+    carouselTween = gsap.to(track, {
+        x: -cycleDistance,
+        duration: cycleDistance / HOME_CLIENTS_SPEED,
+        ease: "none",
+        repeat: -1,
+      }
+    );
+
+    updatePlayback();
+  };
+
+  section.addEventListener("pointerover", (event) => {
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+
+      const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
+
+      if (!logo || !section.contains(logo)) {
+        return;
+      }
+
+      if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
+        return;
+      }
+
+      isLogoHovered = true;
+      updatePlayback();
+    },
+  );
+
+  section.addEventListener("pointerout", (event) => {
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+
+      const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
+
+      if (!logo || !section.contains(logo)) {
+        return;
+      }
+
+      if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
+        return;
+      }
+
+      isLogoHovered = false;
+      updatePlayback();
+    }
+  );
+
+  section.addEventListener("focusin", (event) => {
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+
+      const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
+
+      if (!logo) {
+        return;
+      }
+
+      isLogoFocused = true;
+      updatePlayback();
+    }
+  );
+
+  section.addEventListener("focusout", (event) => {
+      if (!(event.target instanceof Element)) {
+        return;
+      }
+
+      const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
+
+      if (!logo) {
+        return;
+      }
+
+      if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
+        return;
+      }
+
+      isLogoFocused = false;
+      updatePlayback();
+    }
+  );
+
+  const resizeObserver = new ResizeObserver(() => {
+      if (resizeFrame !== undefined) {
+        window.cancelAnimationFrame(resizeFrame);
+      }
+
+      resizeFrame = window.requestAnimationFrame(() => {
+        resizeFrame = undefined;
+        buildCarousel();
+      });
+    });
+
+  buildCarousel();
+  resizeObserver.observe(viewport);
+  reducedMotionQuery.addEventListener("change", buildCarousel);
+}
+
 /* HOME PAGE INITIALIZATION */
 
 export function initHomePageAnimations(): void {
@@ -294,4 +516,7 @@ export function initHomePageAnimations(): void {
 
   document.querySelectorAll<HTMLElement>(HOME_PROJECTS_SELECTOR)
     .forEach(initializeHomeProjectsReveal);
+
+  document.querySelectorAll<HTMLElement>(HOME_CLIENTS_SELECTOR)
+    .forEach(initializeHomeClients);
 }

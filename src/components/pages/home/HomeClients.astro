@@ -1,0 +1,100 @@
+---
+import { getCollection } from "astro:content";
+
+import type { Language } from "../../../config/i18n/i18n";
+import { getPageTranslations } from "../../../lib/i18n";
+
+type Props = {
+  language: Language;
+};
+
+const { language } = Astro.props as Props;
+
+const translation = getPageTranslations(
+  language,
+  "home",
+);
+
+const clients = (
+  await getCollection(
+    "homeClients",
+    ({ data }) => data.enabled,
+  )
+).sort(
+  (a, b) =>
+    a.data.order -
+    b.data.order,
+);
+---
+
+{
+  clients.length > 0 && (
+    <section
+      class="home-clients u-no-select"
+      aria-label={translation.clients.label}
+      data-home-clients
+    >
+      <div
+        class="home-clients__viewport"
+        data-home-clients-viewport
+      >
+        <div
+          class="home-clients__track"
+          role="list"
+          data-home-clients-track
+        >
+          {
+            clients.map((client) => {
+              const ariaLabel =
+                client.data.ariaLabel ??
+                client.data.name;
+
+              return (
+                <div
+                  class="home-clients__item"
+                  role="listitem"
+                  data-home-client
+                  data-client-id={client.id}
+                >
+                  {
+                    client.data.website ? (
+                      <a
+                        class="home-clients__logo"
+                        href={client.data.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={ariaLabel}
+                        data-home-client-logo
+                      >
+                        <img
+                          src={client.data.logo}
+                          alt=""
+                          loading="lazy"
+                          draggable="false"
+                        />
+                      </a>
+                    ) : (
+                      <span
+                        class="home-clients__logo"
+                        role="img"
+                        aria-label={ariaLabel}
+                        data-home-client-logo
+                      >
+                        <img
+                          src={client.data.logo}
+                          alt=""
+                          loading="lazy"
+                          draggable="false"
+                        />
+                      </span>
+                    )
+                  }
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </section>
+  )
+}

@@ -8,6 +8,7 @@ import HomeHero from "../components/pages/home/HomeHero.astro";
 import HomeVision from "../components/pages/home/HomeVision.astro"
 import ServiceHighlights from "../components/pages/home/ServiceHighlights.astro";
 import HomeProjects from "../components/pages/home/HomeProjects.astro";
+import HomeClients from "../components/pages/home/HomeClients.astro";
 import HomeCta from "../components/pages/home/HomeCta.astro";
 
 type Props = {
@@ -27,6 +28,8 @@ const { language, pageKey } = Astro.props as Props;
   <ServiceHighlights language={language} />
 
   <HomeProjects language={language}/>
+
+  <HomeClients language={language}/>
 
   <HomeCta language={language} />
   
