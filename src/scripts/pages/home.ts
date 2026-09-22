@@ -1,3 +1,5 @@
+import gsap from "gsap";
+
 import { revealController, type RevealContext } from "../../lib/animation/revealController";
 import { applySectionHeaderRevealTiming } from "../../lib/animation/sectionHeaderReveal";
 
@@ -22,6 +24,7 @@ const SCROLL_END_DELAY = 180;
 const HERO_ACTIVE_RATIO = 0.5;
 const HOME_VISION_HEADER_REVEAL_RATIO = 0.2;
 const HOME_VISION_GRID_REVEAL_RATIO = 0.05;
+const HOME_CLIENTS_HEADER_REVEAL_RATIO = 0.05;
 
 const HOME_VISION_TIMING = {
   accentsDelay: 1650,
@@ -47,6 +50,12 @@ type HomeVisionRevealState = {
 const HOME_PROJECTS_REVEAL = {
   headerThreshold: 0.05,
   ctaThreshold: 0.25,
+} as const;
+
+const HOME_CLIENTS_HEADER_TIMING = {
+  titleDuration: 800,
+  dividerDelay: 800,
+  dividerDuration: 400,
 } as const;
 
 
@@ -293,6 +302,8 @@ function initializeHomeClients(section: HTMLElement): void {
     return;
   }
 
+  initializeHomeClientsReveal(section);
+  
   const viewport = section.querySelector<HTMLElement>(HOME_CLIENTS_VIEWPORT_SELECTOR);
 
   const track = section.querySelector<HTMLElement>(HOME_CLIENTS_TRACK_SELECTOR);
@@ -503,6 +514,40 @@ function initializeHomeClients(section: HTMLElement): void {
   buildCarousel();
   resizeObserver.observe(viewport);
   reducedMotionQuery.addEventListener("change", buildCarousel);
+}
+
+function initializeHomeClientsReveal(section: HTMLElement): void {
+  if (section.dataset.homeClientsRevealInitialized === "true") {
+    return;
+  }
+
+  section.dataset.homeClientsRevealInitialized = "true";
+
+  applySectionHeaderRevealTiming(section);
+
+  section.style.setProperty(
+    "--section-header-title-duration",
+    `${HOME_CLIENTS_HEADER_TIMING.titleDuration}ms`,
+  );
+
+  section.style.setProperty(
+    "--section-header-divider-delay",
+    `${HOME_CLIENTS_HEADER_TIMING.dividerDelay}ms`,
+  );
+
+  section.style.setProperty(
+    "--section-header-divider-duration",
+    `${HOME_CLIENTS_HEADER_TIMING.dividerDuration}ms`,
+  );
+
+  revealController.observe(section, {
+    threshold: HOME_CLIENTS_HEADER_REVEAL_RATIO,
+    once: true,
+
+    onReveal: () => {
+      section.classList.add("is-header-revealed");
+    },
+  });
 }
 
 /* HOME PAGE INITIALIZATION */
