@@ -18,13 +18,26 @@ const HOME_CLIENT_LOGO_SELECTOR = "[data-home-client-logo]";
 const HOME_CLIENT_CLONE_SELECTOR = '[data-home-client-clone="true"]';
 
 /* CONSTANTS */
-const HOME_CLIENTS_SPEED = 28;
+const HOME_CLIENTS_CAROUSEL_SPEED = 28;
 const SCROLL_CUE_DELAY = 3000;
 const SCROLL_END_DELAY = 180;
 const HERO_ACTIVE_RATIO = 0.5;
 const HOME_VISION_HEADER_REVEAL_RATIO = 0.2;
 const HOME_VISION_GRID_REVEAL_RATIO = 0.05;
 const HOME_CLIENTS_HEADER_REVEAL_RATIO = 0.05;
+const HOME_CLIENTS_DECELERATION_DURATION = 0.65;
+const HOME_CLIENTS_ACCELERATION_DURATION = 0.8;
+const HOME_CLIENTS_SPEED_EASE = "power2.out";
+
+/* MEDIA QUERIES */
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+/* REVEAL SETTINGS */
+const HOME_CLIENTS_CAROUSEL_REVEAL_RATIO = 0.3;
+const HOME_VISION_GRID_ROOT_MARGIN = "0px 0px -10% 0px";
+
+/* CLIENT DIVIDERS */
+const HOME_CLIENTS_DIVIDER_EDGE_DISTANCE = 40;
 
 const HOME_VISION_TIMING = {
   accentsDelay: 1650,
@@ -267,24 +280,19 @@ function initializeHomeProjectsReveal(section: HTMLElement): void {
     let stopObserving: () => void = () => {};
 
     const revealImmediately = (): void => {
-      footer.classList.add(
-        "is-cta-revealed",
-        "is-cta-immediate",
-      );
-
+      footer.classList.add("is-cta-revealed", "is-cta-immediate");
       stopObserving();
     };
 
     footer.classList.add("is-cta-reveal-ready");
 
     footer.addEventListener("focusin", revealImmediately, {
-      once: true,
+      once: true
     });
 
     stopObserving = revealController.observe(footer, {
       threshold: HOME_PROJECTS_REVEAL.ctaThreshold,
       once: true,
-
       onReveal: (_element, { immediate }) => {
         if (immediate || footer.matches(":focus-within")) {
           revealImmediately();
@@ -292,7 +300,7 @@ function initializeHomeProjectsReveal(section: HTMLElement): void {
         }
 
         footer.classList.add("is-cta-revealed");
-      },
+      }
     });
   }
 }
@@ -314,7 +322,37 @@ function initializeHomeClients(section: HTMLElement): void {
 
   section.dataset.homeClientsInitialized = "true";
 
-  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
+
+  let stopObservingReveal: () => void = () => {};
+
+  const revealCarousel = (immediate = false): void => {
+    if (immediate) {
+      section.classList.add("is-carousel-reveal-immediate");
+    }
+
+    section.classList.add("is-carousel-revealed");
+    stopObservingReveal();
+  };
+
+  section.classList.add("is-carousel-reveal-ready");
+
+  section.addEventListener("focusin", () => revealCarousel(true),
+    { once: true }
+  );
+
+  stopObservingReveal = revealController.observe(viewport, {
+    threshold: HOME_CLIENTS_CAROUSEL_REVEAL_RATIO,
+    onReveal: (_element, { immediate }) => {
+      revealCarousel(immediate);
+    }
+});
+
+reducedMotionQuery.addEventListener("change", () => {
+  if (reducedMotionQuery.matches) {
+    revealCarousel(true);
+  }
+});
 
   let carouselTween:
     | gsap.core.Tween
@@ -347,12 +385,11 @@ function initializeHomeClients(section: HTMLElement): void {
           "select",
           "textarea",
           "[tabindex]",
-        ].join(","),
+        ].join(",")
       )
       .forEach((interactiveElement) => {
         interactiveElement.tabIndex = -1;
-        }
-      );
+      });
 
     return clone;
   };
@@ -364,31 +401,75 @@ function initializeHomeClients(section: HTMLElement): void {
   };
 
   const updatePlayback = (): void => {
-    if (!carouselTween) {
-      return;
-    }
+  if (!carouselTween) {
+    return;
+  }
 
-    if (isLogoHovered || isLogoFocused) {
-      carouselTween.pause();
-      return;
-    }
+  const shouldStop = isLogoHovered || isLogoFocused;
 
-    carouselTween.resume();
-  };
+  gsap.to(carouselTween, {
+    timeScale: shouldStop ? 0 : 1,
+    duration: shouldStop
+      ? HOME_CLIENTS_DECELERATION_DURATION
+      : HOME_CLIENTS_ACCELERATION_DURATION,
+    ease: HOME_CLIENTS_SPEED_EASE,
+    overwrite: true
+  });
+};
+
+let dividerItems: {
+  element: HTMLElement;
+  position: number;
+}[] = [];
+
+const measureDividers = (): void => {
+  const trackLeft = track.getBoundingClientRect().left;
+
+  dividerItems = Array.from(
+    track.querySelectorAll<HTMLElement>(HOME_CLIENT_SELECTOR)).map((element) => ({
+      element, position: element.getBoundingClientRect().right - trackLeft - 0.5
+  }));
+};
+
+const updateDividers = (): void => {
+  const viewportBounds = viewport.getBoundingClientRect();
+  const trackLeft = track.getBoundingClientRect().left;
+  const trackOffset = trackLeft - viewportBounds.left;
+
+  const edgeDistance = Math.min(HOME_CLIENTS_DIVIDER_EDGE_DISTANCE, viewportBounds.width / 2);
+
+  if (edgeDistance <= 0) 
+    return;
+
+  dividerItems.forEach(({ element, position }) => {
+    const x = trackOffset + position;
+    const distanceFromEdge = Math.min(x, viewportBounds.width - x);
+    const progress = gsap.utils.clamp(0, 1, distanceFromEdge / edgeDistance);
+    const scale = progress * progress * (3 - 2 * progress);
+
+    element.style.setProperty("--client-divider-scale", String(scale));
+  });
+};
 
   const buildCarousel = (): void => {
     carouselTween?.kill();
     carouselTween = null;
     removeClones();
     gsap.set(track, { x: 0 });
+    dividerItems = [];
 
-    if (reducedMotionQuery.matches) {
-      return;
-    }
+    track.querySelectorAll<HTMLElement>(HOME_CLIENT_SELECTOR)
+      .forEach((element) => {
+        element.style.removeProperty("--client-divider-scale");
+      });
+      
+      if (reducedMotionQuery.matches) {
+        return;
+      }
 
-    const originalItems = Array.from(track.querySelectorAll<HTMLElement>(HOME_CLIENT_SELECTOR));
+      const originalItems = Array.from(track.querySelectorAll<HTMLElement>(HOME_CLIENT_SELECTOR));
 
-    if (originalItems.length === 0) {
+      if (originalItems.length === 0) {
       return;
     }
 
@@ -413,108 +494,111 @@ function initializeHomeClients(section: HTMLElement): void {
       appendCloneSet(originalItems);
     }
 
+    measureDividers();
+    updateDividers();
+
     carouselTween = gsap.to(track, {
-        x: -cycleDistance,
-        duration: cycleDistance / HOME_CLIENTS_SPEED,
-        ease: "none",
-        repeat: -1,
-      }
-    );
+    x: -cycleDistance,
+    duration: cycleDistance / HOME_CLIENTS_CAROUSEL_SPEED,
+    ease: "none",
+    repeat: -1,
+    onUpdate: updateDividers
+    });
 
     updatePlayback();
   };
 
   section.addEventListener("pointerover", (event) => {
-      if (!(event.target instanceof Element)) {
-        return;
-      }
+    if (!(event.target instanceof Element)) {
+      return;
+    }
 
-      const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
+    const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
 
-      if (!logo || !section.contains(logo)) {
-        return;
-      }
+    if (!logo || !section.contains(logo)) {
+      return;
+    }
 
-      if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
-        return;
-      }
+    if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
+      return;
+    }
 
-      isLogoHovered = true;
+    isLogoHovered = true;
       updatePlayback();
-    },
+    }
   );
 
   section.addEventListener("pointerout", (event) => {
-      if (!(event.target instanceof Element)) {
-        return;
-      }
+    if (!(event.target instanceof Element)) {
+      return;
+    }
 
-      const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
+    const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
 
-      if (!logo || !section.contains(logo)) {
-        return;
-      }
+    if (!logo || !section.contains(logo)) {
+      return;
+    }
 
-      if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
-        return;
-      }
+    if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
+      return;
+    }
 
-      isLogoHovered = false;
-      updatePlayback();
+    isLogoHovered = false;
+    updatePlayback();
     }
   );
 
   section.addEventListener("focusin", (event) => {
-      if (!(event.target instanceof Element)) {
-        return;
-      }
+    if (!(event.target instanceof Element)) {
+      return;
+    }
 
-      const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
+    const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
 
-      if (!logo) {
-        return;
-      }
+    if (!logo) {
+      return;
+    }
 
-      isLogoFocused = true;
-      updatePlayback();
+    isLogoFocused = true;
+    updatePlayback();
     }
   );
 
   section.addEventListener("focusout", (event) => {
-      if (!(event.target instanceof Element)) {
-        return;
-      }
+    if (!(event.target instanceof Element)) {
+      return;
+    }
 
-      const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
+    const logo = event.target.closest<HTMLElement>(HOME_CLIENT_LOGO_SELECTOR);
 
-      if (!logo) {
-        return;
-      }
+    if (!logo) {
+      return;
+    }
 
-      if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
-        return;
-      }
+    if (event.relatedTarget instanceof Node && logo.contains(event.relatedTarget)) {
+      return;
+    }
 
-      isLogoFocused = false;
-      updatePlayback();
+    isLogoFocused = false;
+    updatePlayback();
     }
   );
 
   const resizeObserver = new ResizeObserver(() => {
-      if (resizeFrame !== undefined) {
-        window.cancelAnimationFrame(resizeFrame);
-      }
+    if (resizeFrame !== undefined) {
+      window.cancelAnimationFrame(resizeFrame);
+    }
 
-      resizeFrame = window.requestAnimationFrame(() => {
-        resizeFrame = undefined;
-        buildCarousel();
+    resizeFrame = window.requestAnimationFrame(() => {
+      resizeFrame = undefined;
+      buildCarousel();
       });
     });
 
-  buildCarousel();
-  resizeObserver.observe(viewport);
-  reducedMotionQuery.addEventListener("change", buildCarousel);
-}
+    buildCarousel();
+    resizeObserver.observe(viewport);
+    reducedMotionQuery.addEventListener("change", buildCarousel);
+  }
 
 function initializeHomeClientsReveal(section: HTMLElement): void {
   if (section.dataset.homeClientsRevealInitialized === "true") {
@@ -527,17 +611,17 @@ function initializeHomeClientsReveal(section: HTMLElement): void {
 
   section.style.setProperty(
     "--section-header-title-duration",
-    `${HOME_CLIENTS_HEADER_TIMING.titleDuration}ms`,
+    `${HOME_CLIENTS_HEADER_TIMING.titleDuration}ms`
   );
 
   section.style.setProperty(
     "--section-header-divider-delay",
-    `${HOME_CLIENTS_HEADER_TIMING.dividerDelay}ms`,
+    `${HOME_CLIENTS_HEADER_TIMING.dividerDelay}ms`
   );
 
   section.style.setProperty(
     "--section-header-divider-duration",
-    `${HOME_CLIENTS_HEADER_TIMING.dividerDuration}ms`,
+    `${HOME_CLIENTS_HEADER_TIMING.dividerDuration}ms`
   );
 
   revealController.observe(section, {
