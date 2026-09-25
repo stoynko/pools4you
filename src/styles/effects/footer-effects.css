@@ -2,7 +2,6 @@
   position: relative;
   margin-top: 8rem;
   overflow: visible;
-
   background-color: var(--color-bg);
   color: var(--color-text-secondary);
 }
@@ -16,72 +15,40 @@
   padding-block: 8rem 2rem;
 }
 
-/*
- * Footer brand
- */
-
+/* FOOTER BRAND */
 .footer-brand-shell {
   position: absolute;
   top: 0;
   left: 50%;
   z-index: 5;
-
   transform: translate(-50%, -50%);
-
   pointer-events: none;
 }
 
 .footer-brand-row {
   --footer-logo-height: clamp(7rem, 8vw, 9.5rem);
   --footer-logo-ratio: 3.07303;
-
-  --footer-logo-width: calc(
-    var(--footer-logo-height) * var(--footer-logo-ratio)
-  );
-
-  /*
-   * Dividers vertical alignment
-   */
-  --footer-divider-y: calc(
-    var(--footer-logo-height) * 0.59
-  );
-
-  --footer-divider-left-gap: calc(
-    var(--footer-logo-height) * 0.28
-  );
-
-  --footer-divider-right-gap: calc(
-    var(--footer-logo-height) * 0.16
-  );
-
-  --footer-divider-left-width: calc(
-    var(--footer-logo-height) * 0.36
-  );
-
+  --footer-logo-width: calc(var(--footer-logo-height) * var(--footer-logo-ratio));
+  --footer-divider-y: calc(var(--footer-logo-height) * 0.59);
+  --footer-divider-left-gap: calc(var(--footer-logo-height) * 0.28);
+  --footer-divider-right-gap: calc(var(--footer-logo-height) * 0.16);
+  --footer-divider-left-width: calc(var(--footer-logo-height) * 0.6);
   --footer-divider-left-duration: 250ms;
-  --footer-divider-right-duration: 520ms;
-  --footer-divider-right-delay:
-    var(--footer-divider-left-duration);
-
+  --footer-divider-right-duration: 600ms;
+  --footer-divider-right-delay: var(--footer-divider-left-duration);
   position: relative;
-
   display: block;
   width: 100%;
   height: var(--footer-logo-height);
 }
 
-/*
- * Footer logo
- */
-
+/* FOOTER LOGO */
 .footer-logo {
   position: relative;
   z-index: 1;
-
   display: block;
   width: var(--footer-logo-width);
   height: var(--footer-logo-height);
-
   pointer-events: auto;
 }
 
@@ -90,53 +57,44 @@
   width: 100%;
   height: 100%;
   max-width: none;
-
   object-fit: contain;
   object-position: left center;
 }
 
-/*
- * Footer brand dividers
- */
-
+/* FOOTER BRAND DIVIDERS */
 .footer-brand-divider {
   position: absolute;
   top: var(--footer-divider-y);
   z-index: 2;
-
   height: 1.5px;
-
-  background-color: var(--color-gold);
   opacity: 0.9;
-
   will-change: transform;
 }
 
-/*
- * Divider before LTD.
- */
-
+/* DIVIDER BEFORE LTD */
 .footer-brand-divider--left {
-  left: calc(
-    (var(--footer-logo-width) / 2) -
-    var(--footer-divider-left-gap) -
-    var(--footer-divider-left-width)
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--color-gold) 65%,
+    var(--color-gold) 100%
   );
 
+  left: calc((var(--footer-logo-width) / 2) - 
+        var(--footer-divider-left-gap) - var(--footer-divider-left-width));
   width: var(--footer-divider-left-width);
   transform-origin: left center;
 }
 
-/*
- * Divider after LTD.
- */
-
+/* DIVIDER AFTER LTD */
 .footer-brand-divider--right {
-  left: calc(
-    (var(--footer-logo-width) / 2) +
-    var(--footer-divider-right-gap)
+  background: linear-gradient(
+    to right,
+    var(--color-gold) 0%,
+    var(--color-gold) 88%,
+    transparent 100%
   );
-
+  left: calc((var(--footer-logo-width) / 2) + var(--footer-divider-right-gap));
   right: 0;
   transform-origin: left center;
 }
@@ -148,41 +106,29 @@
 .footer-brand-shell--animated.is-visible
   .footer-brand-divider--left {
   transform: scaleX(1);
-
-  transition:
-    transform var(--footer-divider-left-duration) linear;
+  transition: transform var(--footer-divider-left-duration) linear;
 }
 
 .footer-brand-shell--animated.is-visible
   .footer-brand-divider--right {
   transform: scaleX(1);
-
-  transition:
-    transform var(--footer-divider-right-duration) linear
-      var(--footer-divider-right-delay);
+  transition: transform var(--footer-divider-right-duration) linear var(--footer-divider-right-delay);
 }
 
-/*
- * Footer columns
- */
-
+/* FOOTER COLUMNS */
 .footer-columns {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   align-items: start;
   justify-items: center;
-
   width: 100%;
-
   gap: clamp(3rem, 6vw, 7rem);
 }
 
 .footer-columns > div {
   width: max-content;
   max-width: 100%;
-
   text-align: left;
-
   will-change: transform, opacity;
 }
 
@@ -217,9 +163,7 @@
 
 .footer-heading {
   margin-bottom: 1.15rem;
-
   color: var(--color-text);
-
   font-family: var(--font-inter);
   font-size: clamp(1.2rem, 1.15vw, 1.45rem);
   font-weight: 700;
@@ -228,37 +172,28 @@
 
 .footer-link-effect {
   position: relative;
-
   display: inline-flex;
   align-items: center;
-
   color: var(--color-text-secondary);
-
   font-size: clamp(1.05rem, 1vw, 1.2rem);
   font-weight: 400;
   line-height: 1.5;
   white-space: nowrap;
   text-decoration: none;
-
   transition: color 180ms ease;
 }
 
 .footer-link-effect::before {
   content: attr(data-label);
-
   position: absolute;
   inset: 0;
-
   display: inline-flex;
   width: 0;
   align-items: center;
   overflow: hidden;
-
   color: var(--color-gold);
-
   white-space: nowrap;
   pointer-events: none;
-
   transition: width 300ms ease;
 }
 
@@ -276,15 +211,11 @@
   transition: none;
 }
 
-/*
- * Footer social links
- */
-
+/* FOOTER SOCIAL LINKS */
 .footer-social-row {
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 1.5rem;
   margin-top: 3rem;
 }
@@ -293,14 +224,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 1rem;
 }
 
 .footer-social-divider {
   width: 3rem;
   height: 1px;
-
   background-color: var(--color-gold);
   opacity: 1;
 }
@@ -311,11 +240,8 @@
   height: 2.5rem;
   align-items: center;
   justify-content: center;
-
   color: var(--color-text);
-
   text-decoration: none;
-
   transition: color 180ms ease;
 }
 
@@ -335,12 +261,9 @@
   height: 1.5rem;
   flex: 0 0 1.5rem;
   place-items: center;
-
   font-size: 1.5rem;
   line-height: 1;
-
   transform-origin: center;
-
   transition: transform 180ms ease;
 }
 
@@ -355,21 +278,11 @@
   transform: scale(1.18);
 }
 
-/*
- * Initial hidden state for lower footer content
- */
-
+/* INITIALIZE HIDDEN STATE FOR LEGAL FOOTER CONTENT */
 .site-footer.is-reveal-ready .footer-social-row,
 .site-footer.is-reveal-ready .footer-legal {
   opacity: 0;
 }
-
-/*
- * Reveal the social and legal rows when the columns become visible.
- *
- * This avoids relying only on separate IntersectionObserver triggers
- * for elements positioned at the very bottom of the document.
- */
 
 .site-footer.is-reveal-ready
   .footer-columns.is-visible
@@ -385,11 +298,6 @@
     cubic-bezier(0.445, 0.05, 0.55, 0.95) 440ms both;
 }
 
-/*
- * Compatibility with the existing JavaScript if it adds
- * is-visible directly to either lower footer element.
- */
-
 .site-footer.is-reveal-ready
   .footer-social-row.is-visible {
   animation: footer-slide-in-bottom 650ms
@@ -402,10 +310,7 @@
     cubic-bezier(0.445, 0.05, 0.55, 0.95) 440ms both;
 }
 
-/*
- * Footer animation keyframes
- */
-
+/* FOOTER ANIMATION KEYFRAMES */
 @keyframes footer-slide-in-bl {
   from {
     opacity: 0;
@@ -450,21 +355,15 @@
   }
 }
 
-/*
- * Footer legal information
- */
-
+/* FOOTER LEGAL INFORMATION */
 .footer-legal {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   gap: 0.3rem;
   margin-top: 0.5rem;
   padding-top: 0.5rem;
-
   color: var(--color-text-secondary);
-
   font-family: var(--font-inter);
   font-size: 0.875rem;
   font-weight: 400;
@@ -474,9 +373,7 @@
 
 .footer-legal-copyright {
   margin: 0;
-
   color: inherit;
-
   font: inherit;
 }
 
@@ -484,17 +381,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 0.5rem;
-
   color: inherit;
-
   font: inherit;
 }
 
 .footer-legal-link {
   color: inherit;
-
   font: inherit;
   line-height: inherit;
 }
@@ -509,9 +402,7 @@
   opacity: 0.75;
 }
 
-/*
- * Tablet
- */
+/* RESPONSIVENESS - TABLET */
 
 @media (max-width: 1024px) {
   .site-footer {
@@ -524,14 +415,12 @@
 
   .footer-brand-row {
     --footer-logo-height: clamp(6rem, 12vw, 8rem);
-
     --footer-divider-left-duration: 220ms;
     --footer-divider-right-duration: 440ms;
   }
 
   .footer-columns {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-
     gap: 3rem 5rem;
   }
 
@@ -551,9 +440,7 @@
   }
 }
 
-/*
- * Mobile
- */
+/* RESPONSIVENESS - MOBILE */
 
 @media (max-width: 640px) {
   .site-footer {
@@ -562,31 +449,19 @@
 
   .footer-inner {
     width: min(100% - 2rem, 80rem);
-
     padding-block: 7rem 1.5rem;
   }
 
   .footer-brand-shell {
     width: min(100% - 2rem, 80rem);
-
     transform: translate(-50%, -45%);
   }
 
   .footer-brand-row {
     --footer-logo-height: clamp(4.5rem, 19vw, 6rem);
-
-    --footer-divider-left-gap: calc(
-      var(--footer-logo-height) * 0.37
-    );
-
-    --footer-divider-right-gap: calc(
-      var(--footer-logo-height) * 0.29
-    );
-
-    --footer-divider-left-width: calc(
-      var(--footer-logo-height) * 0.27
-    );
-
+    --footer-divider-left-gap: calc(var(--footer-logo-height) * 0.37);
+    --footer-divider-right-gap: calc(var(--footer-logo-height) * 0.29);
+    --footer-divider-left-width: calc(var(--footer-logo-height) * 0.27);
     --footer-divider-left-duration: 180ms;
     --footer-divider-right-duration: 360ms;
   }
@@ -594,7 +469,6 @@
   .footer-columns {
     grid-template-columns: 1fr;
     justify-items: start;
-
     gap: 2.5rem;
   }
 
@@ -647,9 +521,7 @@
   }
 }
 
-/*
- * Reduced motion
- */
+/* REDUCED MOTION */
 
 @media (prefers-reduced-motion: reduce) {
   .footer-brand-shell--animated .footer-brand-divider,

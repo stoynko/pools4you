@@ -1,15 +1,15 @@
 .home-clients {
   position: relative;
-  padding-block: clamp(2.5rem, 5vw, 5rem);
+  padding-block: clamp(4rem, 7vw, 7rem);
   overflow: hidden;
-  background: var(--color-bg);
+  background: var(--color-bg-subtle);
 }
 
 /* SECTION HEADER */
 .home-clients__header {
   width: fit-content;
   max-width: 90vw;
-  margin: 0 auto clamp(2rem, 3vw, 3rem);
+  margin: 0 auto clamp(4rem, 7vw, 7rem);
   text-align: center;
 }
 

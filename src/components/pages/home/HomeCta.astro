@@ -5,9 +5,7 @@ import { mailTo } from "../../../lib/i18n/contact/mailing";
 
 import SectionCta from "../../shared/SectionCta.astro";
 
-type Props = {
-  language: Language;
-};
+type Props = { language: Language; };
 
 const { language } = Astro.props as Props;
 const translation = getPageTranslations(language, "home");
