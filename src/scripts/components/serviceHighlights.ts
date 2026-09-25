@@ -18,7 +18,7 @@ const POSITION_TOLERANCE = 4;
 const EXIT_RELEASE_VIEWPORT_RATIO = 0.1;
 const EXIT_RELEASE_DURATION = 0.3;
 const ENTRY_TRIGGER_VIEWPORT_RATIO = 0.85;
-const ENTRY_SNAP_DURATION = 1;
+const ENTRY_SNAP_DURATION = 0.75;
 const IMAGE_FADE_DURATION = 0.85;
 const IMAGE_KEN_BURNS_DURATION = 1;
 const IMAGE_KEN_BURNS_SCALE = 1.06;
@@ -526,6 +526,8 @@ function autoEnterSection(section: HTMLElement, state: ServiceHighlightState, el
   const scrollPosition = { y: window.scrollY };
 
   const targetY = getSectionStart(section);
+
+  playEntranceAnimation(section, state, elements);
 
   gsap.to(scrollPosition, {
     y: targetY,
