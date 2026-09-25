@@ -3,37 +3,48 @@ import { getCollection } from "astro:content";
 
 import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
+import SectionDivider from "../../shared/SectionDivider.astro";
 
 type Props = {
   language: Language;
+  dividerOverhang?: string;
 };
 
-const { language } = Astro.props as Props;
-
-const translation = getPageTranslations(
+const {
   language,
-  "home",
-);
+  dividerOverhang = "3rem",
+} = Astro.props as Props;
+
+const translation = getPageTranslations(language, "home");
 
 const clients = (
-  await getCollection(
-    "homeClients",
-    ({ data }) => data.enabled,
-  )
-).sort(
-  (a, b) =>
-    a.data.order -
-    b.data.order,
-);
+  await getCollection("homeClients", ({ data }) => data.enabled)
+).sort((a, b) => a.data.order - b.data.order);
 ---
 
 {
   clients.length > 0 && (
     <section
-      class="home-clients u-no-select"
-      aria-label={translation.clients.label}
+      class="home-clients section-header-reveal u-no-select"
+      aria-labelledby="home-clients-label"
       data-home-clients
     >
+      <header class="home-clients__header">
+        <h2
+          id="home-clients-label"
+          class="home-clients__label section-header-reveal__title"
+        >
+          {translation.clients.label}
+        </h2>
+
+        <div class="mt-4">
+          <SectionDivider
+            class="section-header-reveal__divider"
+            overhang={dividerOverhang}
+          />
+        </div>
+      </header>
+
       <div
         class="home-clients__viewport"
         data-home-clients-viewport
@@ -46,8 +57,7 @@ const clients = (
           {
             clients.map((client) => {
               const ariaLabel =
-                client.data.ariaLabel ??
-                client.data.name;
+                client.data.ariaLabel ?? client.data.name;
 
               return (
                 <div
