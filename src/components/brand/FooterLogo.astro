@@ -1,14 +1,12 @@
 ---
 import { Image } from "astro:assets";
+
 import footerLogo from "../../../public/images/brand/pool4you-footer-logo.svg";
 ---
 
-<div class="footer-logo">
-  <Image
-    src={footerLogo}
-    alt=""
-    aria-hidden="true"
-    class="footer-logo-image"
+<div class="relative z-[1] block h-[var(--footer-logo-height)] w-[var(--footer-logo-width)] pointer-events-auto">
+  <Image src={footerLogo} alt="" aria-hidden="true"
+    class="block h-full w-full max-w-none object-contain object-left"
     loading="lazy"
     decoding="async"
   />

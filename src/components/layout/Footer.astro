@@ -1,10 +1,17 @@
 ---
-import type { Language } from "../../config/i18n/i18n.ts";
-import { getPagePath } from "../../config/pages/pagePaths.ts";
+import { getCollection } from "astro:content";
+
+import type { Language } from "../../config/i18n/i18n";
+import { getPagePath } from "../../config/pages/pagePaths";
+import { footerSections } from "../../config/site/footer";
+
+import { getFacilityPath } from "../../lib/facilities/facilityPaths";
 import { getPageTranslations } from "../../lib/i18n";
+
 import FooterLogo from "../brand/FooterLogo.astro";
-import Icon from "../ui/icons/Icon.astro";
-import type { IconName } from "../ui/icons/iconPaths";
+import FooterColumn from "./footer/FooterColumn.astro";
+import FooterLegal from "./footer/FooterLegal.astro";
+import FooterSocials from "./footer/FooterSocials.astro";
 
 const { language } = Astro.props as {
   language: Language;
@@ -12,296 +19,65 @@ const { language } = Astro.props as {
 
 const translation = getPageTranslations(language, "footer");
 
-const homePath = getPagePath("home", language);
-const servicesPath = getPagePath("services", language);
-const projectsPath = getPagePath("projects", language);
-const aboutPath = getPagePath("about", language);
-const contactsPath = getPagePath("contacts", language);
+const facilities = await getCollection(
+  "facilities",
+  ({ data }) => data.language === language
+);
 
-const poolsPath =
-  language === "bg" ? "/suorazhenia/baseyni" : "/en/facilities/pools";
+const facilityLinks = facilities
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((facility) => ({
+    label: facility.data.title,
+    href: getFacilityPath(facility)
+  }));
 
-const spaPath = language === "bg" ? "/suorazhenia/spa" : "/en/facilities/spa";
+const sections = footerSections.map((section) => {
+  const title = translation[section.titleKey];
 
-const saunasPath =
-  language === "bg" ? "/suorazhenia/sauni" : "/en/facilities/saunas";
+  if (section.source === "facilities") {
+    return { key: section.key, title, links: facilityLinks};
+  }
 
-const aquaparksPath =
-  language === "bg" ? "/suorazhenia/akvaparkove" : "/en/facilities/aquaparks";
-
-const fallbackPath = homePath;
-const facebookUrl = import.meta.env.PUBLIC_FACEBOOK_URL || fallbackPath;
-const instagramUrl = import.meta.env.PUBLIC_INSTAGRAM_URL || fallbackPath;
-const tiktokUrl = import.meta.env.PUBLIC_TIKTOK_URL || fallbackPath;
-
-const socialLinks = [
-  {
-    label: "Facebook",
-    href: facebookUrl,
-    icon: "facebook",
-  },
-  {
-    label: "Instagram",
-    href: instagramUrl,
-    icon: "instagram",
-  },
-  {
-    label: "TikTok",
-    href: tiktokUrl,
-    icon: "tiktok",
-  },
-] satisfies ReadonlyArray<{
-  label: string;
-  href: string;
-  icon: IconName;
-}>;
+  return { key: section.key, title, links: section.links.map((link) => ({
+      label: translation[link.labelKey],
+      href: getPagePath(
+        link.page,
+        language)
+    }))
+  };
+});
 ---
 
-<footer class="site-footer u-no-select" data-footer-reveal>
-  <div
-    class="footer-brand-shell footer-brand-shell--animated site-container-wide"
-    data-footer-divider-reveal
-  >
-    <div class="footer-brand-row">
+<footer class="site-footer relative mt-24 overflow-visible bg-site text-text-secondary 
+               min-[641px]:mt-28 min-[1025px]:mt-32u-no-select" 
+               data-footer-reveal>
+
+  <div class="footer-brand-shell footer-brand-shell--animated site-container-wide pointer-events-none absolute
+              left-1/2 top-0 z-[5] -translate-x-1/2 -translate-y-[45%] min-[641px]:-translate-y-1/2" 
+              data-footer-divider-reveal>
+
+    <div class="footer-brand-row relative block h-[var(--footer-logo-height)] w-full">
       <FooterLogo />
-
-      <div
-        class="footer-brand-divider footer-brand-divider--left"
-        aria-hidden="true"
-      >
-      </div>
-
-      <div
-        class="footer-brand-divider footer-brand-divider--right"
-        aria-hidden="true"
-      >
-      </div>
+      <div class="footer-brand-divider footer-brand-divider--left" aria-hidden="true"/>
+      <div class="footer-brand-divider footer-brand-divider--right" aria-hidden="true"/>
     </div>
   </div>
 
   <div class="footer-content-viewport">
-    <div class="footer-inner site-container-narrow">
-      <div class="footer-columns">
-        <div>
-          <h3 class="footer-heading">
-            {translation.categoryServices}
-          </h3>
-
-          <ul class="space-y-2.5">
-          <li>
-            <a
-              href={servicesPath}
-              data-label={translation.subServicesDesign}
-              class="footer-link-effect"
-            >
-              {translation.subServicesDesign}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={servicesPath}
-              data-label={translation.subServicesConstruction}
-              class="footer-link-effect"
-            >
-              {translation.subServicesConstruction}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={servicesPath}
-              data-label={translation.subServicesRenovation}
-              class="footer-link-effect"
-            >
-              {translation.subServicesRenovation}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={servicesPath}
-              data-label={translation.subServicesMaintenance}
-              class="footer-link-effect"
-            >
-              {translation.subServicesMaintenance}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={servicesPath}
-              data-label={translation.subServicesConsulting}
-              class="footer-link-effect"
-            >
-              {translation.subServicesConsulting}
-            </a>
-          </li>
-          </ul>
-      </div>
-
-      <div>
-        <h3 class="footer-heading">
-          {translation.categorySolutions}
-        </h3>
-
-        <ul class="space-y-2.5">
-          <li>
-            <a
-              href={poolsPath}
-              data-label={translation.subSolutionsPools}
-              class="footer-link-effect"
-            >
-              {translation.subSolutionsPools}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={spaPath}
-              data-label={translation.subSolutionsSpa}
-              class="footer-link-effect"
-            >
-              {translation.subSolutionsSpa}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={saunasPath}
-              data-label={translation.subSolutionsSaunas}
-              class="footer-link-effect"
-            >
-              {translation.subSolutionsSaunas}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={aquaparksPath}
-              data-label={translation.subSolutionsAquaparks}
-              class="footer-link-effect"
-            >
-              {translation.subSolutionsAquaparks}
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="footer-heading">
-          {translation.categoryProjects}
-        </h3>
-
-        <ul class="space-y-2.5">
-          <li>
-            <a
-              href={projectsPath}
-              data-label={translation.subProjectsHospitality}
-              class="footer-link-effect"
-            >
-              {translation.subProjectsHospitality}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={projectsPath}
-              data-label={translation.subProjectsPublic}
-              class="footer-link-effect"
-            >
-              {translation.subProjectsPublic}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={projectsPath}
-              data-label={translation.subProjectsPrivate}
-              class="footer-link-effect"
-            >
-              {translation.subProjectsPrivate}
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="footer-heading">
-          {translation.categoryCompany}
-        </h3>
-
-        <ul class="space-y-2.5">
-          <li>
-            <a
-              href={aboutPath}
-              data-label={translation.subCompanyAbout}
-              class="footer-link-effect"
-            >
-              {translation.subCompanyAbout}
-            </a>
-          </li>
-
-          <li>
-            <a
-              href={contactsPath}
-              data-label={translation.subCompanyContacts}
-              class="footer-link-effect"
-            >
-              {translation.subCompanyContacts}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="footer-social-row">
-      <div class="footer-social-divider" aria-hidden="true"></div>
-
-      <div class="footer-socials" aria-label="Social links">
+    <div class="footer-inner site-container-narrow pb-6 pt-28 min-[641px]:pb-8 min-[641px]:pt-[7.5rem] min-[1025px]:pt-32">
+      <div class="footer-columns grid w-full grid-cols-2 items-start justify-items-start gap-x-4 gap-y-10
+              min-[641px]:justify-items-center min-[641px]:gap-x-20 min-[641px]:gap-y-12
+              min-[1025px]:grid-cols-[repeat(auto-fit,minmax(11rem,1fr))] min-[1025px]:gap-[clamp(3rem,6vw,7rem)]">
         {
-          socialLinks.map((social) => (
-            <a
-              href={social.href}
-              class="footer-social-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={social.label}
-            >
-              <Icon name={social.icon} class="footer-social-icon" />
-            </a>
+          sections.map((section) => (
+            <FooterColumn title={section.title} links={section.links}/>
           ))
         }
       </div>
 
-      <div class="footer-social-divider" aria-hidden="true"></div>
-    </div>
+      <FooterSocials language={language} />
+      <FooterLegal language={language} />
 
-    <div class="footer-legal">
-      <p class="footer-legal-copyright">
-        © 2026 Pools 4 You LTD. {translation.rightsReserved}
-      </p>
-
-      <div class="footer-legal-links">
-        <a
-          href={fallbackPath}
-          data-label={translation.terms}
-          class="footer-link-effect footer-legal-link"
-        >
-          {translation.terms}
-        </a>
-
-        <span class="footer-legal-separator" aria-hidden="true"> | </span>
-
-        <a
-          href={fallbackPath}
-          data-label={translation.privacy}
-          class="footer-link-effect footer-legal-link"
-        >
-          {translation.privacy}
-        </a>
-              </div>
-      </div>
     </div>
   </div>
 </footer>

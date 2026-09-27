@@ -4,7 +4,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import PageHero from "../../components/shared/PageHero.astro";
 import FacilityContentSections from "../../components/pages/facilities/FacilityContentSections.astro";
 import type { Language } from "../../config/i18n/i18n";
-import { getPagePath } from "../../config/pages/pagePaths";
+import { getFacilityPath } from "../../lib/facilities/facilityPaths";
 import { getFacilityImage } from "../../lib/facilities/facilityImages";
 
 type FacilityEntry = CollectionEntry<"facilities">;
@@ -25,12 +25,6 @@ const bgFacility = translatedFacilities.find((entry) => {
 const enFacility = translatedFacilities.find((entry) => {
   return entry.data.language === "en";
 });
-
-function getFacilityPath(entry: FacilityEntry) {
-  const basePath = getPagePath("facilities", entry.data.language);
-
-  return `${basePath}/${entry.data.slug}`;
-}
 
 const alternates = {
   bg: bgFacility ? getFacilityPath(bgFacility) : undefined,
@@ -54,12 +48,7 @@ const heroImage = getFacilityImage(
 const { Content } = await render(facility);
 ---
 
-<MainLayout
-  language={language}
-  pageKey="facilities"
-  seo={pageSeo}
-  alternates={alternates}
->
+<MainLayout language={language} pageKey="facilities" seo={pageSeo} alternates={alternates}>
   <main class="facility-page">
     <PageHero
       title={facility.data.title}

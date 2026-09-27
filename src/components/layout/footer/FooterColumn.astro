@@ -1,0 +1,35 @@
+---
+type FooterLink = {
+  label: string;
+  href: string;
+};
+
+const { title, links } = Astro.props as {
+  title: string;
+  links: readonly FooterLink[];
+};
+---
+
+<div class="footer-column w-full min-w-0 text-left will-change-[transform,opacity] 
+            min-[641px]:w-max min-[641px]:max-w-full">
+  <h3 class="mb-[1.15rem] font-inter text-[clamp(1.05rem,4vw,1.25rem)] font-bold leading-[1.2] 
+             text-text min-[641px]:text-[clamp(1.2rem,1.15vw,1.45rem)]">
+    {title}
+  </h3>
+
+  <ul class="space-y-2.5">
+    {
+      links.map((link) => (
+        <li>
+          <a href={link.href} data-label={link.label} 
+             class="footer-link-effect relative inline-flex items-center whitespace-normal text-[clamp(0.95rem,3.6vw,1.1rem)]
+              font-normal leading-[1.5] text-text-secondary no-underline transition-colors duration-[180ms]
+              hover:text-text focus-visible:text-text min-[641px]:whitespace-nowrap min-[641px]:text-[clamp(1.05rem,1vw,1.2rem)]
+              motion-reduce:transition-none">
+            {link.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

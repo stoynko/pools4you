@@ -9,18 +9,12 @@ export type DeepString<T> = {
 
 export type TranslationSchema = DeepString<typeof bg>;
 
-const translations = { en, bg } as const satisfies Record<
-  Language,
-  TranslationSchema
->;
+const translations = { en, bg } as const satisfies Record<Language, TranslationSchema>;
 
 export function getTranslations(language: Language): TranslationSchema {
   return translations[language] ?? translations[DEFAULT_LANGUAGE];
 }
 
-export function getPageTranslations<K extends keyof TranslationSchema>(
-  language: Language,
-  page: K,
-): TranslationSchema[K] {
+export function getPageTranslations<K extends keyof TranslationSchema>(language: Language, page: K): TranslationSchema[K] {
   return getTranslations(language)[page];
 }

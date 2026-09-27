@@ -1,0 +1,64 @@
+---
+import type { Language } from "../../../config/i18n/i18n";
+import { getPagePath } from "../../../config/pages/pagePaths";
+
+import Icon from "../../ui/icons/Icon.astro";
+import type { IconName } from "../../ui/icons/iconPaths";
+
+const { language } = Astro.props as {
+  language: Language;
+};
+
+const fallbackPath = getPagePath("home", language);
+
+const socialLinks = [
+  {
+    label: "Facebook",
+    href: import.meta.env.PUBLIC_FACEBOOK_URL || fallbackPath,
+    icon: "facebook"
+  },
+  {
+    label: "Instagram",
+    href: import.meta.env.PUBLIC_INSTAGRAM_URL || fallbackPath,
+    icon: "instagram"
+  },
+  {
+    label: "TikTok",
+    href: import.meta.env.PUBLIC_TIKTOK_URL || fallbackPath,
+    icon: "tiktok"
+  }
+] satisfies ReadonlyArray<{
+  label: string;
+  href: string;
+  icon: IconName;
+}>;
+---
+
+<div class="footer-social-row mt-10 flex items-center justify-center gap-4 
+            will-change-[transform,opacity] min-[641px]:mt-12 min-[641px]:gap-6">
+
+  <div class="h-px w-9 bg-brand-gold min-[641px]:w-12" aria-hidden="true"/>
+
+  <div class="flex items-center justify-center gap-4" aria-label="Social links"
+  >
+    {
+      socialLinks.map((social) => (
+        <a href={social.href} class=" group inline-flex size-10 items-center justify-center
+            text-text no-underline transition-colors duration-[180ms] hover:text-brand-gold 
+            focus-visible:text-brand-gold focus-visible:outline focus-visible:outline-1
+            focus-visible:outline-brand-gold focus-visible:outline-offset-[0.2rem]
+            motion-reduce:transition-none"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={social.label}
+        >
+          <Icon name={social.icon} 
+                class="size-6 origin-center transition-transform duration-[180ms] group-hover:scale-[1.18]
+                       group-focus-visible:scale-[1.18] motion-reduce:transition-none"/>
+        </a>
+      ))
+    }
+  </div>
+
+  <div class=" h-px w-9 bg-brand-gold min-[641px]:w-12" aria-hidden="true"/>
+</div>

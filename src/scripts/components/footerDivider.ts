@@ -1,214 +1,179 @@
+/* SELECTORS */
+const FOOTER_SELECTOR = "[data-footer-reveal]";
 const FOOTER_BRAND_SELECTOR = "[data-footer-divider-reveal]";
+const FOOTER_COLUMNS_SELECTOR = ".footer-columns";
+const FOOTER_COLUMN_SELECTOR = ".footer-column";
+const FOOTER_SOCIAL_SELECTOR = ".footer-social-row";
+const FOOTER_LEGAL_SELECTOR = ".footer-legal";
+
 const INITIALIZED_ATTRIBUTE = "footerRevealInitialized";
-const LEGAL_REVEAL_DELAY = 450;
+
+/* CONSTANTS */
+const MOBILE_MEDIA_QUERY = "(max-width: 640px)";
+const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
+
+const COLUMN_REVEAL_STAGGER_MS = 80;
+const LEGAL_REVEAL_DELAY_MS = 120;
 
 type RevealDirection = "left" | "bottom" | "right";
 
-function prepareRevealStart(
-  element: HTMLElement | null,
-  direction: RevealDirection = "bottom",
-): void {
-  if (
-    !element ||
-    element.style.getPropertyValue("--footer-reveal-y")
-  ) {
+function setRevealDelay(element: HTMLElement, delayMs: number): void {
+  element.style.setProperty("--footer-reveal-delay",`${delayMs}ms`);
+}
+
+function prepareRevealStart(element: HTMLElement | null, direction: RevealDirection = "bottom"): void {
+  if (!element) {
     return;
   }
 
-  // Measure before the reveal animation applies its transform.
   const rect = element.getBoundingClientRect();
+
   const viewportWidth = document.documentElement.clientWidth;
   const viewportHeight = window.innerHeight;
 
-  const offsetX =
-    direction === "left"
-      ? -rect.right
-      : direction === "right"
-        ? viewportWidth - rect.left
-        : 0;
+  let offsetX = 0;
+
+  if (direction === "left") {
+    offsetX = -rect.right;
+  } else if (direction === "right") {
+    offsetX = viewportWidth - rect.left;
+  }
 
   const offsetY = Math.max(0, viewportHeight - rect.top);
 
-  element.style.setProperty(
-    "--footer-reveal-x",
-    `${offsetX}px`,
-  );
-
-  element.style.setProperty(
-    "--footer-reveal-y",
-    `${offsetY}px`,
-  );
+  element.style.setProperty("--footer-reveal-x", `${offsetX}px`);
+  element.style.setProperty("--footer-reveal-y",`${offsetY}px`);
 }
 
-function revealImmediately(
-  brandElement: HTMLElement,
-  columnsElement: HTMLElement | null,
-  socialElement: HTMLElement | null,
-  legalElement: HTMLElement | null,
-): void {
+function revealImmediately(brandElement: HTMLElement, columnsElement: HTMLElement | null, 
+  socialElement: HTMLElement | null, legalElement: HTMLElement | null): void {
   brandElement.classList.add("is-visible");
+
   columnsElement?.classList.add("is-visible");
   socialElement?.classList.add("is-visible");
   legalElement?.classList.add("is-visible");
 }
 
-function createRevealObserver(
-  element: HTMLElement,
-  callback: () => void,
-  options: IntersectionObserverInit,
-): IntersectionObserver {
-  const observer = new IntersectionObserver((entries) => {
-    const entry = entries[0];
+function createRevealObserver(element: HTMLElement, callback: () => void, options: IntersectionObserverInit): void {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const entry = entries[0];
 
-    if (!entry?.isIntersecting) {
-      return;
-    }
+      if (!entry?.isIntersecting) {
+        return;
+      }
 
-    callback();
-    observer.disconnect();
-  }, options);
+      callback();
+      observer.disconnect();
+    }, options
+  );
 
   observer.observe(element);
-
-  return observer;
 }
 
-function initializeFooterReveal(
-  brandElement: HTMLElement,
-): void {
-  if (
-    brandElement.dataset[INITIALIZED_ATTRIBUTE] === "true"
-  ) {
+function getColumnDirection(index: number, totalColumns: number, isMobile: boolean): RevealDirection {
+  if (isMobile || totalColumns <= 1) {
+    return "bottom";
+  }
+
+  if (index === 0) {
+    return "left";
+  }
+
+  if (index === totalColumns - 1) {
+    return "right";
+  }
+
+  return "bottom";
+}
+
+function initializeColumnsReveal(columnsElement: HTMLElement): void {
+  createRevealObserver(
+    columnsElement,
+    () => {
+      const columns = columnsElement.querySelectorAll<HTMLElement>(FOOTER_COLUMN_SELECTOR);
+
+      const isMobile = window.matchMedia(MOBILE_MEDIA_QUERY).matches;
+
+      columns.forEach((column, index) => {
+        const direction = getColumnDirection(index, columns.length, isMobile);
+        prepareRevealStart(column, direction);
+        setRevealDelay(column, index * COLUMN_REVEAL_STAGGER_MS);
+      });
+
+      columnsElement.classList.add("is-visible");
+    },
+    {
+      threshold: 0.15,
+      rootMargin: "0px 0px -8% 0px"
+    }
+  );
+}
+
+function initializeElementReveal(element: HTMLElement, delayMs = 0): void {
+  createRevealObserver(element, () => {
+      prepareRevealStart(element, "bottom");
+      setRevealDelay(element, delayMs);
+
+      element.classList.add("is-visible");
+    },
+    {
+      threshold: 0.25,
+      rootMargin: "0px 0px -6% 0px"
+    }
+  );
+}
+
+function initializeFooterReveal(brandElement: HTMLElement): void {
+
+  if (brandElement.dataset[INITIALIZED_ATTRIBUTE] === "true") {
     return;
   }
 
   brandElement.dataset[INITIALIZED_ATTRIBUTE] = "true";
 
-  const footerElement = brandElement.closest<HTMLElement>(
-    "[data-footer-reveal]",
-  );
+  const footerElement = brandElement.closest<HTMLElement>(FOOTER_SELECTOR);
 
   if (!footerElement) {
-    brandElement.classList.add("is-visible");
+    brandElement.classList.add("is-visible" );
     return;
   }
 
-  const columnsElement =
-    footerElement.querySelector<HTMLElement>(
-      ".footer-columns",
-    );
+  const columnsElement = footerElement.querySelector<HTMLElement>(FOOTER_COLUMNS_SELECTOR);
+  const socialElement = footerElement.querySelector<HTMLElement>(FOOTER_SOCIAL_SELECTOR);
+  const legalElement =footerElement.querySelector<HTMLElement>(FOOTER_LEGAL_SELECTOR);
+  const prefersReducedMotion = window.matchMedia(REDUCED_MOTION_QUERY).matches;
 
-  const socialElement =
-    footerElement.querySelector<HTMLElement>(
-      ".footer-social-row",
-    );
-
-  const legalElement =
-    footerElement.querySelector<HTMLElement>(
-      ".footer-legal",
-    );
-
-  const prefersReducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)",
-  ).matches;
-
-  if (
-    prefersReducedMotion ||
-    !("IntersectionObserver" in window)
-  ) {
-    revealImmediately(
-      brandElement,
-      columnsElement,
-      socialElement,
-      legalElement,
-    );
-
+  if ( prefersReducedMotion || !("IntersectionObserver" in window)) {
+    revealImmediately(brandElement, columnsElement, socialElement, legalElement);
     return;
   }
 
   footerElement.classList.add("is-reveal-ready");
 
-  createRevealObserver(
-    footerElement,
-    () => {
+  createRevealObserver(footerElement, () => {
       brandElement.classList.add("is-visible");
     },
     {
       threshold: 0,
-      rootMargin: "0px 0px -5% 0px",
-    },
+      rootMargin: "0px 0px -5% 0px"
+    }
   );
 
   if (columnsElement) {
-    createRevealObserver(
-      columnsElement,
-      () => {
-        const columns =
-          columnsElement.querySelectorAll<HTMLElement>(
-            ":scope > div",
-          );
-
-        const isMobile = window.matchMedia(
-          "(max-width: 640px)",
-        ).matches;
-
-        columns.forEach((column, index) => {
-          const direction: RevealDirection = isMobile
-            ? "bottom"
-            : index === 0
-              ? "left"
-              : index === columns.length - 1
-                ? "right"
-                : "bottom";
-
-          prepareRevealStart(column, direction);
-        });
-
-        // The CSS sibling selectors also reveal these rows.
-        prepareRevealStart(socialElement);
-        prepareRevealStart(legalElement);
-
-        columnsElement.classList.add("is-visible");
-      },
-      {
-        threshold: 0.15,
-        rootMargin: "0px 0px -8% 0px",
-      },
-    );
+    initializeColumnsReveal(columnsElement);
   }
 
   if (socialElement) {
-    createRevealObserver(
-      socialElement,
-      () => {
-        prepareRevealStart(socialElement);
-        socialElement.classList.add("is-visible");
-
-        if (legalElement) {
-          window.setTimeout(() => {
-            prepareRevealStart(legalElement);
-            legalElement.classList.add("is-visible");
-          }, LEGAL_REVEAL_DELAY);
-        }
-      },
-      {
-        threshold: 0.3,
-        rootMargin: "0px 0px -8% 0px",
-      },
-    );
-
-    return;
+    initializeElementReveal(socialElement);
   }
 
-  prepareRevealStart(legalElement);
-  legalElement?.classList.add("is-visible");
+  if (legalElement) {
+    initializeElementReveal(legalElement, LEGAL_REVEAL_DELAY_MS);
+  }
 }
 
 export function initFooterDivider(): void {
-  const brandElements =
-    document.querySelectorAll<HTMLElement>(
-      FOOTER_BRAND_SELECTOR,
-    );
-
+  const brandElements =  document.querySelectorAll<HTMLElement>(FOOTER_BRAND_SELECTOR);
   brandElements.forEach(initializeFooterReveal);
 }
