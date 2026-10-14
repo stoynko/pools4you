@@ -1,0 +1,28 @@
+---
+import Icon from "../ui/icons/Icon.astro";
+
+type Props = {
+  variant?: "home" | "services";
+};
+
+const { variant = "home" } = Astro.props as Props;
+const isHome = variant === "home";
+---
+
+<div
+  class:list={[
+    "pointer-events-none invisible grid place-items-center text-brand-gold opacity-0",
+    "transition-[opacity,visibility] ease-[ease]",
+    "[&.is-visible]:visible [&.is-visible]:opacity-100",
+    "motion-reduce:transition-none",
+    isHome ? ["home-hero-scroll-cue absolute bottom-4 left-1/2 z-20",
+          "h-12 w-12 -translate-x-1/2 duration-500",
+          "md:bottom-[clamp(1.5rem,4vh,3rem)]",
+          "md:h-[3.25rem] md:w-[3.25rem]"]
+      : "service-highlights__scroll-hint",
+  ]}
+  data-home-hero-scroll-cue={isHome ? "" : undefined}
+  data-service-scroll-hint={!isHome ? "" : undefined}
+  aria-hidden="true">
+  <Icon name="chevronDown" class="scroll-cue-chevron" />
+</div>

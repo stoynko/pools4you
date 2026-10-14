@@ -1,0 +1,48 @@
+---
+import Icon from "../../ui/icons/Icon.astro";
+import type { IconName } from "../../ui/icons/iconPaths";
+
+type Props = {
+  id: string;
+  icon: IconName;
+  title: string;
+  body: string;
+};
+
+const { id, icon, title, body } = Astro.props as Props;
+
+const isNationwide = id === "nationwide";
+---
+
+<article id={`advantages-${id}`} class="advantages-item relative flex min-w-0 flex-col items-center
+         px-[clamp(1.5rem,2.75vw,3.25rem)] py-[clamp(0.75rem,1.4vw,1.25rem)] text-center
+         first:pl-0 last:pr-0 [@media(max-width:1100px)]:odd:pl-0 [@media(max-width:1100px)]:even:pr-0
+         [@media(max-width:640px)]:items-start [@media(max-width:640px)]:px-0
+         [@media(max-width:640px)]:py-10 [@media(max-width:640px)]:text-left">
+  <div class="advantages-item__icon grid h-[clamp(2.9rem,3.1vw,3.5rem)] w-full flex-none
+              place-items-center text-brand-gold [@media(max-width:640px)]:w-auto
+              [@media(max-width:640px)]:h-[3.25rem] [@media(max-width:640px)]:[place-items:center_start]"
+       aria-hidden="true">
+    <Icon name={icon} class={isNationwide
+      ? "block w-[clamp(2.9rem,3.1vw,3.5rem)] h-[clamp(2.2rem,2.4vw,2.7rem)] [@media(max-width:640px)]:w-[3.25rem] [@media(max-width:640px)]:h-10 [&_svg]:[stroke-linecap:round] [&_svg]:[stroke-linejoin:round]"
+      : "block w-[clamp(2.4rem,2.6vw,3rem)] h-[clamp(2.4rem,2.6vw,3rem)]"}
+    />
+  </div>
+
+  <div class="advantages-item__content flex w-full min-w-0 flex-col items-center
+              pt-[clamp(1.25rem,1.6vw,1.75rem)] [@media(max-width:640px)]:items-start
+              [@media(max-width:640px)]:pt-5">
+    <h3 class="m-0 flex min-h-[2.4em] w-full items-start justify-center font-inter
+               text-[clamp(1.2rem,1.3vw,1.5rem)] font-bold leading-[1.2] text-center text-balance text-text
+               [@media(max-width:640px)]:min-h-0 [@media(max-width:640px)]:justify-start
+               [@media(max-width:640px)]:text-left">
+      {title}
+    </h3>
+
+    <p class="m-0 mt-[clamp(0.65rem,0.85vw,0.9rem)] w-full max-w-[25rem] font-inter
+              text-[clamp(0.95rem,0.9vw,1.075rem)] font-normal leading-[1.7] text-center text-text-secondary
+              [@media(max-width:640px)]:max-w-[36rem] [@media(max-width:640px)]:text-left">
+      {body}
+    </p>
+  </div>
+</article>

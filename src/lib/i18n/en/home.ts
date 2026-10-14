@@ -5,12 +5,12 @@ export const home = {
     ctaPrimary: "Request a Quote",
     ctaSecondary: "View Projects",
   },
-
-  vision: {
-    accentsTitle: "The right choice for your vision",
-    accentsDescription: "At Pools 4 You, we believe that water is more than an element. It is an experience that shapes the environment, defines the space, and transforms the way people relax. From the initial planning stage, we create a clear visual representation of the future space, giving you confidence when making decisions. Our practical experience, engineering precision, and commitment to enduring aesthetics are reflected in every stage, from complete construction to long-term maintenance.",
-
-    accents: [
+ 
+  advantages: {
+    title: "The right choice for your vision",
+    description: "At Pools 4 You, we believe that water is more than an element. It is an experience that shapes the environment, defines the space, and transforms the way people relax. From the initial planning stage, we create a clear visual representation of the future space, giving you confidence when making decisions. Our practical experience, engineering precision, and commitment to enduring aesthetics are reflected in every stage, from complete construction to long-term maintenance.",
+ 
+    items: [
       {
         id: "concept-design",
         icon: "conceptDesign",
@@ -37,7 +37,7 @@ export const home = {
       },
     ],
   },
-
+ 
   services: {
     title: "Services",
     intro: "From concept and design to construction, maintenance and operations",
@@ -65,7 +65,7 @@ export const home = {
       },
     ],
   },
-
+ 
   featuredProjects: {
     title: "Featured Projects",
     intro: "A glimpse into our completed projects, demonstrating our experience and attention to detail.",
@@ -76,11 +76,11 @@ export const home = {
     areaLabel: "Area",
     clientLabel: "Client"
   },
-
+ 
   clients: {
     label: "Clients that trusted us",
   },
-
+ 
   cta: {
     title: "Ready to dive in?",
     body: "Your vision of the perfect sanctuary is just one conversation away. Let us bring light and water to your legacy.",

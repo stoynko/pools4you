@@ -6,8 +6,8 @@ import { applySectionHeaderRevealTiming } from "../../lib/animation/sectionHeade
 /* SELECTORS */
 const HERO_SELECTOR = ".home-hero";
 const SCROLL_CUE_SELECTOR = "[data-home-hero-scroll-cue]";
-const HOME_VISION_SELECTOR = "[data-home-vision]";
-const HOME_VISION_GRID_SELECTOR = ".home-vision__grid";
+const HOME_ADVANTAGES_SELECTOR = "[data-home-advantages]";
+const HOME_ADVANTAGES_GRID_SELECTOR = ".advantages__grid";
 const HOME_PROJECTS_SELECTOR = "[data-home-projects]";
 const HOME_PROJECTS_HEADER_SELECTOR = ".home-projects__header";
 const HOME_CLIENTS_SELECTOR = "[data-home-clients]";
@@ -22,8 +22,8 @@ const HOME_CLIENTS_CAROUSEL_SPEED = 28;
 const SCROLL_CUE_DELAY = 3000;
 const SCROLL_END_DELAY = 180;
 const HERO_ACTIVE_RATIO = 0.5;
-const HOME_VISION_HEADER_REVEAL_RATIO = 0.2;
-const HOME_VISION_GRID_REVEAL_RATIO = 0.05;
+const HOME_ADVANTAGES_HEADER_REVEAL_RATIO = 0.2;
+const HOME_ADVANTAGES_GRID_REVEAL_RATIO = 0.05;
 const HOME_CLIENTS_HEADER_REVEAL_RATIO = 0.05;
 const HOME_CLIENTS_DECELERATION_DURATION = 0.65;
 const HOME_CLIENTS_ACCELERATION_DURATION = 0.8;
@@ -34,13 +34,13 @@ const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
 /* REVEAL SETTINGS */
 const HOME_CLIENTS_CAROUSEL_REVEAL_RATIO = 0.3;
-const HOME_VISION_GRID_ROOT_MARGIN = "0px 0px -10% 0px";
+const HOME_ADVANTAGES_GRID_ROOT_MARGIN = "0px 0px -10% 0px";
 
 /* CLIENT DIVIDERS */
 const HOME_CLIENTS_DIVIDER_EDGE_DISTANCE = 40;
 
-const HOME_VISION_TIMING = {
-  accentsDelay: 1650,
+const HOME_ADVANTAGES_TIMING = {
+  itemsDelay: 1650,
   itemDuration: 900,
   itemStagger: 100,
   separatorDuration: 700,
@@ -54,10 +54,10 @@ type HomeHeroState = {
   scrollEndTimer?: number;
 };
 
-type HomeVisionRevealState = {
+type HomeAdvantagesRevealState = {
   isGridReady: boolean;
   isHeaderSequenceComplete: boolean;
-  hasRevealedAccents: boolean;
+  hasRevealedItems: boolean;
 };
 
 const HOME_PROJECTS_REVEAL = {
@@ -177,36 +177,36 @@ function initializeHomeHero(hero: HTMLElement): void {
   });
 }
 
-function initializeHomeVisionReveal(section: HTMLElement): void {
+function initializeHomeAdvantagesReveal(section: HTMLElement): void {
 
-  if (section.dataset.homeVisionRevealInitialized === "true") {
+  if (section.dataset.homeAdvantagesRevealInitialized === "true") {
     return;
   }
 
   applySectionHeaderRevealTiming(section);
-  section.style.setProperty("--vision-item-duration", `${HOME_VISION_TIMING.itemDuration}ms`);
-  section.style.setProperty("--vision-item-stagger", `${HOME_VISION_TIMING.itemStagger}ms`);
-  section.style.setProperty("--vision-separator-duration", `${HOME_VISION_TIMING.separatorDuration}ms`);
-  section.style.setProperty("--vision-separator-initial-delay", `${HOME_VISION_TIMING.separatorInitialDelay}ms`);
-  section.style.setProperty("--vision-separator-stagger", `${HOME_VISION_TIMING.separatorStagger}ms`);
+  section.style.setProperty("--advantages-item-duration", `${HOME_ADVANTAGES_TIMING.itemDuration}ms`);
+  section.style.setProperty("--advantages-item-stagger", `${HOME_ADVANTAGES_TIMING.itemStagger}ms`);
+  section.style.setProperty("--advantages-separator-duration", `${HOME_ADVANTAGES_TIMING.separatorDuration}ms`);
+  section.style.setProperty("--advantages-separator-initial-delay", `${HOME_ADVANTAGES_TIMING.separatorInitialDelay}ms`);
+  section.style.setProperty("--advantages-separator-stagger", `${HOME_ADVANTAGES_TIMING.separatorStagger}ms`);
 
-  section.dataset.homeVisionRevealInitialized = "true";
+  section.dataset.homeAdvantagesRevealInitialized = "true";
 
-  const grid = section.querySelector<HTMLElement>(HOME_VISION_GRID_SELECTOR);
+  const grid = section.querySelector<HTMLElement>(HOME_ADVANTAGES_GRID_SELECTOR);
 
-  const state: HomeVisionRevealState = {
+  const state: HomeAdvantagesRevealState = {
     isGridReady: false,
     isHeaderSequenceComplete: false,
-    hasRevealedAccents: false
+    hasRevealedItems: false
   };
 
-  const tryRevealAccents = (): void => {
-    if (state.hasRevealedAccents || !state.isGridReady || !state.isHeaderSequenceComplete) {
+  const tryRevealItems = (): void => {
+    if (state.hasRevealedItems || !state.isGridReady || !state.isHeaderSequenceComplete) {
       return;
     }
 
-    state.hasRevealedAccents = true;
-    section.classList.add("are-accents-revealed");
+    state.hasRevealedItems = true;
+    section.classList.add("are-items-revealed");
   };
 
  const revealHeader = (_element: HTMLElement, { immediate }: RevealContext): void => {
@@ -218,25 +218,25 @@ function initializeHomeVisionReveal(section: HTMLElement): void {
 
   if (immediate) {
     state.isHeaderSequenceComplete = true;
-    tryRevealAccents();
+    tryRevealItems();
     return;
   }
 
   window.setTimeout(() => {
     state.isHeaderSequenceComplete = true;
-    tryRevealAccents();
-  }, HOME_VISION_TIMING.accentsDelay);
+    tryRevealItems();
+  }, HOME_ADVANTAGES_TIMING.itemsDelay);
 };
 
   const markGridReady = (): void => {
     state.isGridReady = true;
-    tryRevealAccents();
+    tryRevealItems();
   };
 
   section.classList.add("is-reveal-ready");
 
   revealController.observe(section, {
-    threshold: HOME_VISION_HEADER_REVEAL_RATIO,
+    threshold: HOME_ADVANTAGES_HEADER_REVEAL_RATIO,
     onReveal: revealHeader,
   });
 
@@ -246,7 +246,7 @@ function initializeHomeVisionReveal(section: HTMLElement): void {
   }
 
   revealController.observe(grid, {
-    threshold: HOME_VISION_GRID_REVEAL_RATIO,
+    threshold: HOME_ADVANTAGES_GRID_REVEAL_RATIO,
     rootMargin: "0px 0px -10% 0px",
     onReveal: markGridReady,
   });
@@ -640,8 +640,8 @@ export function initHomePageAnimations(): void {
   document.querySelectorAll<HTMLElement>(HERO_SELECTOR)
     .forEach(initializeHomeHero);
 
-  document.querySelectorAll<HTMLElement>(HOME_VISION_SELECTOR)
-    .forEach(initializeHomeVisionReveal);
+  document.querySelectorAll<HTMLElement>(HOME_ADVANTAGES_SELECTOR)
+    .forEach(initializeHomeAdvantagesReveal);
 
   document.querySelectorAll<HTMLElement>(HOME_PROJECTS_SELECTOR)
     .forEach(initializeHomeProjectsReveal);

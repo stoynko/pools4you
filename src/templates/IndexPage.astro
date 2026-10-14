@@ -5,7 +5,7 @@ import type { PageKey } from "../config/pages/pageDefinitions";
 import type { Language } from "../config/i18n/i18n";
 
 import HomeHero from "../components/pages/home/HomeHero.astro";
-import HomeVision from "../components/pages/home/HomeVision.astro"
+import HomeAdvantages from "../components/pages/home/HomeAdvantages.astro";
 import ServiceHighlights from "../components/pages/home/ServiceHighlights.astro";
 import HomeProjects from "../components/pages/home/HomeProjects.astro";
 import HomeClients from "../components/pages/home/HomeClients.astro";
@@ -20,17 +20,15 @@ const { language, pageKey } = Astro.props as Props;
 ---
 
 <Layout language={language} pageKey={pageKey}>
-  
   <HomeHero language={language} />
 
-  <HomeVision language={language} />
+  <HomeAdvantages language={language} />
 
   <ServiceHighlights language={language} />
 
-  <HomeProjects language={language}/>
+  <HomeProjects language={language} />
 
-  <HomeClients language={language}/>
+  <HomeClients language={language} />
 
   <HomeCta language={language} />
-  
 </Layout>

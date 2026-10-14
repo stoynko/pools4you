@@ -28,28 +28,61 @@ const {
   align = "left",
   divider = "short",
   frostedPanel = false,
-  class: className,
+  class: className
 } = Astro.props as Props;
 
 const hasImage = Boolean(image);
 const isCentered = align === "center";
 const hasDivider = divider !== "none";
+
+const dividerClasses: Record<HeroDivider, string> = {
+  none: "",
+  short: "w-[4.5rem] md:w-24",
+  medium: "w-28 md:w-48",
+  wide: "w-40 md:w-64",
+};
+
+const containerSpacing = hasImage ? 
+    [ "min-h-[var(--hero-visual-height)]",
+      "pt-[clamp(5rem,13vh,7rem)]",
+      "pb-[clamp(3rem,8vh,4.5rem)]",
+      "md:pt-[clamp(6rem,15vh,10rem)]",
+      "md:pb-[clamp(4rem,8vh,6rem)]",
+      "xl:pt-[clamp(7rem,18vh,14rem)]",
+      "xl:pb-[clamp(4rem,8vh,7rem)]"]
+  : [ "min-h-0",
+      "pt-[clamp(4rem,13vw,5.5rem)]",
+      "pb-[clamp(3.5rem,11vw,5rem)]",
+      "md:pt-[clamp(4.5rem,8vw,7rem)]",
+      "md:pb-[clamp(4rem,7vw,6rem)]",
+      "xl:pt-[clamp(5rem,8vw,9rem)]",
+      "xl:pb-[clamp(4rem,7vw,7rem)]"];
 ---
 
-<section
-  class:list={[
-    "hero-section u-no-select",
-    hasImage && "hero-section-with-image",
+<section class:list={[
+    "hero-section u-no-select relative isolate w-full overflow-hidden",
+    "[--hero-visual-height:calc(100vh_-_var(--header-height))]",
+    "supports-[height:100dvh]:[--hero-visual-height:calc(100dvh_-_var(--header-height))]",
+    hasImage
+      ? "hero-section-with-image min-h-[var(--hero-visual-height)] bg-black text-white"
+      : "min-h-0 bg-site text-text",
     className,
   ]}
 >
   {
     hasImage && image && (
-      <div class="hero-media" aria-hidden="true">
+      <div
+        class="hero-media pointer-events-none absolute inset-x-0 top-0
+          -z-30 h-[var(--hero-visual-height)] overflow-hidden"
+        aria-hidden="true"
+      >
         <Image
           src={image}
           alt={imageAlt}
-          class:list={["hero-image", imagePositionClass]}
+          class:list={["hero-image absolute inset-0 h-full w-full object-cover",
+            "motion-reduce:transform-none",
+            imagePositionClass
+          ]}
           widths={[640, 960, 1280, 1600, 1920, 2400]}
           sizes="100vw"
           loading="eager"
@@ -57,46 +90,91 @@ const hasDivider = divider !== "none";
           fetchpriority="high"
         />
 
-        <div class="hero-image-overlay"></div>
-        <div class="hero-fade-top"></div>
-        <div class="hero-fade-bottom"></div>
+        <div class="hero-image-overlay absolute inset-0 z-10 bg-black/45"></div>
+
+        <div class="hero-fade-top pointer-events-none absolute inset-x-0 top-0
+            z-20 h-16 bg-gradient-to-b
+            from-[var(--color-bg)]
+            via-[color-mix(in_srgb,var(--color-bg)_35%,transparent)]
+            to-transparent"
+        />
+
+        <div class="
+            hero-fade-bottom pointer-events-none absolute inset-x-0 bottom-0
+            z-20 h-20 bg-gradient-to-t
+            from-[var(--color-bg)]
+            via-[color-mix(in_srgb,var(--color-bg)_30%,transparent)]
+            to-transparent"
+        />
       </div>
     )
   }
 
-  <div class="hero-container">
-    <div
-      class:list={[
-        "hero-copy",
-        isCentered && "hero-copy-centered",
-        frostedPanel && "hero-blur-panel",
+  <div class:list={[
+      "hero-container relative z-10 mx-auto max-w-[2160px]",
+      "w-[calc(100%_-_2_*_clamp(1rem,5vw,1.5rem))]",
+      "md:w-[calc(100%_-_2_*_clamp(1.5rem,4vw,3rem))]",
+      "xl:w-[calc(100%_-_2_*_clamp(1.25rem,3vw,4rem))]",
+      "min-[1920px]:w-[calc(100%_-_2_*_clamp(3rem,4vw,6rem))]",
+      containerSpacing
+    ]}
+  >
+    <div class:list={[
+        "hero-copy relative w-full",
+        "md:w-[min(100%,68rem)]",
+        "xl:w-[min(100%,78rem)]",
+        "min-[1920px]:w-[min(100%,88rem)]",
+        isCentered && "hero-copy-centered mx-auto text-center",
+        frostedPanel && [
+          "hero-blur-panel",
+          "before:content-[''] before:pointer-events-none before:absolute",
+          "before:-inset-4 before:-z-10 before:rounded-2xl",
+          "before:bg-black/10 before:backdrop-blur-[2px]",
+          "sm:before:-inset-5 lg:before:-inset-6",
+          "max-[420px]:before:-inset-3",
+          "max-[420px]:before:rounded-xl",
+        ]
       ]}
     >
-      <h1 class="hero-title u-no-select">
+      <h1 class="
+          hero-title u-no-select
+          max-w-full font-libertinus font-bold
+          leading-[1.08] tracking-tight text-brand-gold
+          text-[clamp(2.5rem,11vw,4rem)]
+          max-[420px]:text-[clamp(2.25rem,10.5vw,3.2rem)]
+          md:max-w-[18ch] md:leading-[1.06]
+          md:text-[clamp(3rem,6vw,5.25rem)]
+          xl:max-w-[22ch]
+          xl:text-[clamp(2.75rem,4.4vw,6.5rem)]
+          min-[1920px]:text-[clamp(4.75rem,4.2vw,7rem)]">
         {title}
       </h1>
 
       {
         hasDivider && (
-          <div
-            class:list={[
-              "hero-divider",
-              `hero-divider-${divider}`,
-              isCentered && "hero-divider-centered",
+          <div class:list={[
+              "hero-divider mt-6 h-0.5 bg-brand-gold md:mt-9",
+              dividerClasses[divider],
+              isCentered && "mx-auto"
             ]}
-          ></div>
+          />
         )
       }
-
       {
         body && (
-          <p
-            class:list={[
-              "hero-lead u-no-select",
-              hasImage ? "hero-lead-on-image" : "hero-lead-on-page",
-              hasDivider
-                ? "hero-lead-after-divider"
-                : "hero-lead-no-divider",
+          <p class:list={[
+              "hero-lead u-no-select w-full",
+              "font-bold tracking-[0.015em]",
+              "leading-[1.6] md:leading-[1.5]",
+              "text-[clamp(1rem,4.4vw,1.15rem)]",
+              "md:w-[min(100%,52rem)]",
+              "md:text-[clamp(1.05rem,1.6vw,1.3rem)]",
+              "xl:w-[min(100%,60rem)]",
+              "xl:text-[clamp(1.05rem,1.1vw,1.5rem)]",
+              "min-[1920px]:w-[min(100%,68rem)]",
+              hasImage ? "text-white" : "text-text",
+              hasDivider ? "mt-6 md:mt-8" : "mt-6 md:mt-7",
+              isCentered && "mx-auto"
             ]}
           >
             {body}
@@ -106,23 +184,33 @@ const hasDivider = divider !== "none";
 
       {
         benefits.length > 0 && (
-          <ul
-            class:list={[
-              "hero-benefits",
-              isCentered && "hero-benefits-centered",
+          <ul class:list={[
+              "hero-benefits mt-6 grid gap-3 md:mt-7",
+              isCentered && [
+                "mx-auto max-w-[60rem]",
+                "min-[1920px]:max-w-[68rem]"
+              ],
             ]}
           >
             {benefits.map((benefit) => (
-              <li
-                class:list={[
-                  "hero-benefit-item",
-                  isCentered && "hero-benefit-item-centered",
+              <li class:list={[
+                  "hero-benefit-item grid",
+                  "grid-cols-[0.55rem_minmax(0,1fr)] gap-[0.85rem]",
+                  "font-inter font-medium leading-[1.55] text-text",
+                  "text-[clamp(0.95rem,4vw,1.08rem)]",
+                  "md:grid-cols-[0.75rem_minmax(0,1fr)] md:gap-5",
+                  "md:leading-[1.5]",
+                  "md:text-[clamp(1rem,1vw,1.25rem)]",
+                  isCentered && "text-left",
                 ]}
               >
-                <span
-                  class="hero-benefit-marker"
+                <span class="
+                    hero-benefit-marker
+                    mt-[0.6rem] h-[0.4rem] w-[0.4rem] bg-brand-gold
+                    md:mt-2.5 md:h-2 md:w-2
+                  "
                   aria-hidden="true"
-                ></span>
+                />
 
                 <span>{benefit}</span>
               </li>

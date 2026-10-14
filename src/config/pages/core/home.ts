@@ -5,7 +5,7 @@ export const homePage = {
   key: "home",
   paths: {
     bg: "/",
-    en: "/en",
+    en: "/en"
   },
   template: "home",
   seo: homeSeo,

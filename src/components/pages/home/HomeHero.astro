@@ -3,7 +3,7 @@ import type { Language } from "../../../config/i18n/i18n";
 import { getPageTranslations } from "../../../lib/i18n";
 
 import PageHero from "../../shared/PageHero.astro";
-import Icon from "../../ui/icons/Icon.astro";
+import ScrollCue from "../../shared/ScrollCue.astro";
 
 import heroImage from "../../../assets/images/pages/home/hero.png";
 
@@ -12,17 +12,8 @@ type Props = {
 };
 
 const { language } = Astro.props as Props;
-
-const translation =
-  getPageTranslations(
-    language,
-    "home",
-  );
-
-const imageAlt =
-  language === "bg"
-    ? "Луксозен плувен басейн"
-    : "Luxury swimming pool";
+const translation = getPageTranslations(language, "home");
+const imageAlt = language === "bg" ? "Луксозен плувен басейн" : "Luxury swimming pool";
 ---
 
 <PageHero
@@ -35,26 +26,11 @@ const imageAlt =
   divider="none"
   class="home-hero"
 >
-  <div
-    slot="overlay"
-    class="home-hero-scroll-cue"
-    data-home-hero-scroll-cue
-    aria-hidden="true"
-  >
-    <Icon
-      name="chevronDown"
-      class="scroll-cue-chevron"
-    />
-  </div>
+  <ScrollCue slot="overlay" />
 </PageHero>
 
 <script>
   import { initHomePageAnimations } from "../../../scripts/pages/home";
-
   initHomePageAnimations();
-
-  document.addEventListener(
-    "astro:page-load",
-    initHomePageAnimations,
-  );
+  document.addEventListener("astro:page-load", initHomePageAnimations);
 </script>

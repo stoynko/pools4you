@@ -4,7 +4,7 @@ import { Image } from "astro:assets";
 
 import type { Language } from "../../../config/i18n/i18n";
 import { serviceHighlightImages } from "../../../lib/index/serviceHighlightsImages";
-import Icon from "../../ui/icons/Icon.astro";
+import ScrollCue from "../../shared/ScrollCue.astro";
 import CtaButton from "../../shared/CtaButton.astro";
 
 interface Props { language: Language; }
@@ -62,9 +62,7 @@ const services = ( await getCollection("serviceHighlights", ({ data }) => data.l
       <div class="service-highlights__controls" aria-hidden="true">
 
         {/* SCROLL CUE ICON */}
-        <div class="service-highlights__scroll-hint" data-service-scroll-hint>
-          <Icon name="chevronDown" class="scroll-cue-chevron"/>
-        </div>
+        <ScrollCue variant="services" />
       </div>
     </div>
   </div>

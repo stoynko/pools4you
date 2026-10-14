@@ -1,0 +1,70 @@
+---
+import type { Language } from "../../../config/i18n/i18n";
+import { getPageTranslations } from "../../../lib/i18n";
+import type { IconName } from "../../ui/icons/iconPaths";
+
+import HomeAdvantagesItem from "./HomeAdvantagesItem.astro";
+import SectionDivider from "../../shared/SectionDivider.astro";
+
+type Props = { language: Language; };
+
+const { language } = Astro.props as Props;
+
+const translation = getPageTranslations(language, "home");
+const advantages = translation.advantages;
+
+const titleDividerOverhang = language === "bg" ? "3rem" : "2rem";
+---
+
+<section class="advantages section-shell section-header-reveal u-no-select" data-home-advantages>
+  <div class="relative pt-16 pb-[clamp(7rem,10vw,11rem)] [background:var(--color-surface-subtle)]
+              [@media(max-width:1100px)]:pt-[clamp(4.5rem,7vw,6rem)]
+              [@media(max-width:1100px)]:pb-[clamp(4.5rem,8vw,6rem)]
+              [@media(max-width:640px)]:pt-16 [@media(max-width:640px)]:pb-[3.75rem]">
+    <div class="site-container-wide">
+      <header class="mx-auto flex w-full max-w-[90rem] flex-col items-center text-center
+                     [@media(max-width:1100px)]:max-w-[60rem]">
+        <div class="mx-auto w-fit max-w-[90vw] text-center">
+          <h2 class="section-header-reveal__title relative m-0 w-full pb-0 font-libertinus
+                     text-[clamp(2.75rem,4.4vw,6.5rem)] font-bold leading-[1.08]
+                     tracking-[-0.035em] text-center text-balance text-brand-gold
+                     [@media(max-width:1100px)]:text-[clamp(2.35rem,5vw,3.75rem)]
+                     [@media(max-width:640px)]:text-[clamp(2.1rem,9vw,3rem)]
+                     [@media(max-width:640px)]:leading-[1.12]">
+            {advantages.title}
+          </h2>
+
+          <div class="mt-4">
+            <SectionDivider class="section-header-reveal__divider"
+              overhang={titleDividerOverhang}
+            />
+          </div>
+        </div>
+
+        <p class="section-header-reveal__description mx-auto mb-0 mt-5 w-full max-w-[86rem]
+                  font-inter text-[clamp(1.1rem,1.35vw,1.45rem)] font-normal leading-[1.65]
+                  text-center text-balance text-text-secondary
+                  [@media(max-width:1100px)]:max-w-[52rem]
+                  [@media(max-width:640px)]:mt-6 [@media(max-width:640px)]:text-[1rem]">
+          {advantages.description}
+        </p>
+      </header>
+
+      <div class="advantages__grid mt-[clamp(3.5rem,5vw,6.5rem)] grid w-full grid-cols-4
+                  [@media(max-width:1100px)]:grid-cols-2 [@media(max-width:1100px)]:gap-y-16
+                  [@media(max-width:1100px)]:mt-[clamp(4rem,7vw,5.5rem)]
+                  [@media(max-width:640px)]:grid-cols-1 [@media(max-width:640px)]:mt-14">
+        {
+          advantages.items.map((item) => (
+            <HomeAdvantagesItem
+              id={item.id}
+              icon={item.icon as IconName}
+              title={item.title}
+              body={item.body}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
