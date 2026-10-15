@@ -103,6 +103,13 @@
  
   will-change: opacity;
 }
+
+.service-highlights__images {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  isolation: isolate;
+}
  
 .service-highlights__image img {
   display: block;
