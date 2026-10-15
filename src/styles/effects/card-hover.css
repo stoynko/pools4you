@@ -9,13 +9,14 @@
     box-shadow 620ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.card-hover::before {
+.card-hover::before,
+.card-hover-border::before {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 30;
   pointer-events: none;
-  border: 1.5px solid transparent;
+  border: 2px solid transparent;
   border-radius: inherit;
   transition:
     border-color 620ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -31,7 +32,9 @@
 }
 
 .card-hover:hover::before,
-.card-hover:focus-within::before {
+.card-hover:focus-within::before,
+.home-project-card.is-active .card-hover-border::before,
+.home-project-card:not(.is-active):hover .card-hover-border::before {
   border-color: color-mix(
     in srgb,
     var(--color-gold) 90%,
@@ -48,12 +51,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .card-hover,
-  .card-hover::before {
+  .card-hover::before,
+  .card-hover-border::before {
     transition: none;
-  }
-
-  .card-hover:hover,
-  .card-hover:focus-within {
-    transform: none;
   }
 }

@@ -27,15 +27,15 @@ const quote = project.data.featuredQuote;
 
       {/* PROJECT CARD FRONT */}
 
-      <section class="home-project-card__face home-project-card__front">
+      <section class="home-project-card__face home-project-card__front card-hover-border">
         <div class="home-project-card__image">
           <Image src={project.data.thumbnailImage}
-  alt={project.data.title}
-  loading={index === 0 ? "eager" : "lazy"}
-  decoding="async"
-  widths={[480, 720, 960, 1280]}
-  sizes="(max-width: 760px) 100vw, 70vw"
-/>
+            alt={project.data.title}
+            loading={index === 0 ? "eager" : "lazy"}
+            decoding="async"
+            widths={[480, 720, 960, 1280]}
+            sizes="(max-width: 760px) 100vw, 70vw"
+          />
           <div class="home-project-card__image-shade"/>
         </div>
 
@@ -60,7 +60,7 @@ const quote = project.data.featuredQuote;
 
       {/* PROJECT CARD BACKSIDE */}
 
-      <section class="home-project-card__face home-project-card__back" inert>
+      <section class="home-project-card__face home-project-card__back card-hover-border" inert>
         <div class="home-project-card__back-image">
           <Image src={project.data.heroImage}
             alt="" loading="lazy" decoding="async"
