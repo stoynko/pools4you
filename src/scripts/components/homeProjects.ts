@@ -130,16 +130,25 @@ function getCardFlipState(card: ProjectCard): CardFlipState {
   let state = cardFlipStates.get(card);
 
   if (!state) {
-    state = {
-      angle: 0,
-      lastDirection: 1,
-      isRotating: false,
-    };
-
+    state = { angle: 0, lastDirection: 1, isRotating: false};
     cardFlipStates.set(card, state);
   }
 
   return state;
+}
+
+function syncCardFaceInertness(card: ProjectCard): void {
+  const isFlipped = card.classList.contains("is-flipped");
+  const front = card.querySelector<HTMLElement>(".home-project-card__front");
+  const back = card.querySelector<HTMLElement>(".home-project-card__back");
+  const hiddenFace = isFlipped ? front : back;
+
+  if (hiddenFace && document.activeElement instanceof HTMLElement && hiddenFace.contains(document.activeElement)) {
+    card.closest<HTMLElement>(BOOK_SELECTOR)?.focus({ preventScroll: true});
+  }
+
+  front?.toggleAttribute("inert", isFlipped);
+  back?.toggleAttribute("inert", !isFlipped);
 }
 
 function trackCardRotation(flipper: HTMLElement, state: CardFlipState): void {
@@ -308,13 +317,11 @@ function setCardState(card: ProjectCard, isActive: boolean): void {
   card.classList.toggle("is-active", isActive);
   card.classList.remove("is-flipped");
 
-  card.setAttribute("aria-current", String(isActive));
-  card.setAttribute("aria-expanded", String(isActive));
-
   if (flipper) {
     trackCardRotation(flipper, state);
   }
 
+  syncCardFaceInertness(card);
   resetRotateHint(card);
 }
 
@@ -353,14 +360,11 @@ function toggleCardFlip(card: ProjectCard, clientX?: number, fromRotateButton = 
   state.angle += direction * CARD_FLIP_ANGLE;
   state.lastDirection = direction;
 
-  flipper.style.setProperty(
-    "--project-flip-angle",
-    `${state.angle}deg`,
-  );
-
+  flipper.style.setProperty("--project-flip-angle", `${state.angle}deg`);
   card.classList.toggle("is-flipped", !isFlipped);
 
   trackCardRotation(flipper, state);
+  syncCardFaceInertness(card);
   resetRotateHint(card);
 }
 
@@ -373,8 +377,16 @@ function activateCard(cards: ProjectCard[], card: ProjectCard,
   }
 
   cards.forEach((item) => {
-    setCardState(item, item === card);
-  });
+  const shouldBeActive = item === card;
+  const isCurrentlyActive = item.classList.contains("is-active");
+  const isFlipped = item.classList.contains("is-flipped");
+
+  if (shouldBeActive === isCurrentlyActive && !isFlipped) {
+    return;
+  }
+
+  setCardState(item, shouldBeActive);
+});
 }
 
 function initializeCardTilt(card: ProjectCard): void {

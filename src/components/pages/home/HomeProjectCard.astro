@@ -21,8 +21,6 @@ const quote = project.data.featuredQuote;
   class:list={["home-project-card", { "is-active": isActive}]}
   data-home-project-card
   data-index={index}
-  aria-current={isActive ? "true" : "false"}
-  aria-expanded={isActive ? "true" : "false"}
 >
   <div class="home-project-card__scene">
     <div class="home-project-card__flipper">
@@ -32,13 +30,12 @@ const quote = project.data.featuredQuote;
       <section class="home-project-card__face home-project-card__front">
         <div class="home-project-card__image">
           <Image src={project.data.thumbnailImage}
-            alt={project.data.title}
-            loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-            widths={[480, 720, 960, 1280]}
-            sizes="(max-width: 760px) 100vw, 70vw"
-          />
-
+  alt={project.data.title}
+  loading={index === 0 ? "eager" : "lazy"}
+  decoding="async"
+  widths={[480, 720, 960, 1280]}
+  sizes="(max-width: 760px) 100vw, 70vw"
+/>
           <div class="home-project-card__image-shade"/>
         </div>
 
@@ -63,7 +60,7 @@ const quote = project.data.featuredQuote;
 
       {/* PROJECT CARD BACKSIDE */}
 
-      <section class="home-project-card__face home-project-card__back">
+      <section class="home-project-card__face home-project-card__back" inert>
         <div class="home-project-card__back-image">
           <Image src={project.data.heroImage}
             alt="" loading="lazy" decoding="async"
