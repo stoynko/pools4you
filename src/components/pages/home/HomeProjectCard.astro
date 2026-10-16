@@ -1,3 +1,4 @@
+
 ---
 import { Image } from "astro:assets";
 import type { CollectionEntry } from "astro:content";
@@ -5,20 +6,22 @@ import Icon from "../../ui/icons/Icon.astro";
 import CtaButton from "../../shared/CtaButton.astro";
 
 type Props = {
-    project: CollectionEntry<"projects">;
-    href: string;
-    index: number;
-    isActive?: boolean;
-    viewProjectLabel: string;
+  project: CollectionEntry<"projects">;
+  href: string;
+  index: number;
+  isActive?: boolean;
+  viewProjectLabel: string;
 };
 
-const { project, href, index, isActive = false, viewProjectLabel } = Astro.props as Props;
+const { project, href, index, isActive = false, viewProjectLabel } =
+  Astro.props as Props;
+
 const summary = project.data.featuredExcerpt ?? project.data.description;
 const quote = project.data.featuredQuote;
 ---
 
 <article
-  class:list={["home-project-card", { "is-active": isActive}]}
+  class:list={["home-project-card", { "is-active": isActive }]}
   data-home-project-card
   data-index={index}
 >
@@ -28,68 +31,91 @@ const quote = project.data.featuredQuote;
       {/* PROJECT CARD FRONT */}
 
       <section class="home-project-card__face home-project-card__front card-hover-border">
-        <div class="home-project-card__image">
-          <Image src={project.data.thumbnailImage}
-            alt={project.data.title}
-            loading={index === 0 ? "eager" : "lazy"}
-            decoding="async"
-            widths={[480, 720, 960, 1280]}
-            sizes="(max-width: 760px) 100vw, 70vw"
-          />
-          <div class="home-project-card__image-shade"/>
-        </div>
+        <div class="home-project-card__stage">
 
-        <div class="home-project-card__spine" aria-hidden="true">
-          <span> { project.data.title} </span>
-        </div>
-
-        <button type="button" class="home-project-card__rotate home-project-card__rotate--front"
-          aria-label="Rotate project card"
-        >
-          <Icon name="rotateCard" class="home-project-card__rotate-icon"/>
-        </button>
-
-        <div class="home-project-card__ribbon">
-          <div class="home-project-card__ribbon-copy">
-            <span> { project.data.location} </span>
-
-            <strong> {project.data.title}</strong>
+          <div class="home-project-card__image">
+            <Image
+              src={project.data.thumbnailImage}
+              alt={project.data.title}
+              loading={index === 0 ? "eager" : "lazy"}
+              decoding="async"
+              widths={[480, 720, 960, 1280]}
+              sizes="(max-width: 760px) 100vw, 70vw"
+            />
           </div>
+
+          <div class="home-project-card__image-shade"></div>
+
+          <button
+            type="button"
+            class="home-project-card__rotate home-project-card__rotate--front"
+            aria-label="Rotate project card"
+          >
+            <Icon name="rotateCard" class="home-project-card__rotate-icon" />
+          </button>
+
+          <div class="home-project-card__ribbon">
+            <div class="home-project-card__ribbon-copy">
+              <span>{project.data.location}</span>
+              <strong>{project.data.title}</strong>
+            </div>
+          </div>
+
         </div>
+
+        {/* Keep spine outside the fixed-width stage */}
+        <div class="home-project-card__spine" aria-hidden="true">
+          <span>{project.data.title}</span>
+        </div>
+
       </section>
 
       {/* PROJECT CARD BACKSIDE */}
 
-      <section class="home-project-card__face home-project-card__back card-hover-border" inert>
-        <div class="home-project-card__back-image">
-          <Image src={project.data.heroImage}
-            alt="" loading="lazy" decoding="async"
-            widths={[720, 960, 1280, 1600]}
-            sizes="(max-width: 760px) 100vw, 70vw"
-            style={`object-position:${project.data.heroImagePosition};`}
-          />
-        </div>
+      <section
+        class="home-project-card__face home-project-card__back card-hover-border"
+        inert
+      >
+        <div class="home-project-card__stage">
 
-        <div class=" home-project-card__back-overlay"/>
+          <div class="home-project-card__back-image">
+            <Image
+              src={project.data.heroImage}
+              data-project-back-image
+              alt=""
+              loading="lazy"
+              decoding="async"
+              widths={[720, 960, 1280, 1600]}
+              sizes="(max-width: 760px) 100vw, 70vw"
+              style={`object-position:${project.data.heroImagePosition};`}
+            />
+          </div>
 
-        <button type="button" class=" home-project-card__rotate home-project-card__rotate--back"
-          aria-label="Rotate project card"
-        >
-          <Icon name="rotateCard" class="home-project-card__rotate-icon"/>
-        </button>
+          <div class="home-project-card__back-overlay"></div>
 
-        <div class="home-project-card__details">
-          <h3> { project.data.title} </h3>
+          <button
+            type="button"
+            class="home-project-card__rotate home-project-card__rotate--back"
+            aria-label="Rotate project card"
+          >
+            <Icon name="rotateCard" class="home-project-card__rotate-icon" />
+          </button>
 
-          { quote && ( <blockquote>“{quote}”</blockquote>) }
+          <div class="home-project-card__details">
+            <h3>{project.data.title}</h3>
 
-          <p> {summary} </p>
+            {quote && <blockquote>“{quote}”</blockquote>}
 
-          {/* VIEW PROJECT CTA */}
-          <CtaButton href={href} label={viewProjectLabel} 
-                     ariaLabel={`${viewProjectLabel}: ${project.data.title}`} 
-                     class="home-project-card__cta mt-[clamp(1.75rem,4vh,2.75rem)]"
-          />
+            <p>{summary}</p>
+
+            {/* VIEW PROJECT CTA */}
+            <CtaButton
+              href={href}
+              label={viewProjectLabel}
+              ariaLabel={`${viewProjectLabel}: ${project.data.title}`}
+              class="home-project-card__cta mt-[clamp(1.75rem,4vh,2.75rem)]"
+            />
+          </div>
 
         </div>
       </section>

@@ -376,6 +376,8 @@ function activateCard(cards: ProjectCard[], card: ProjectCard,
     return;
   }
 
+  void decodeProjectBackImage(card);
+
   cards.forEach((item) => {
   const shouldBeActive = item === card;
   const isCurrentlyActive = item.classList.contains("is-active");
@@ -452,6 +454,43 @@ function initializeCardTilt(card: ProjectCard): void {
 
 /* PROJECT BOOK */
 
+function measureExpandedCard(book: HTMLElement, cards: ProjectCard[]): void {
+  const activeCard = cards.find((card) =>
+    card.classList.contains("is-active")
+  );
+
+  if (!activeCard) {
+    return;
+  }
+
+  const width = activeCard.getBoundingClientRect().width;
+
+  if (width > 0) {
+    book.style.setProperty("--project-stage-width", `${width}px`);
+  }
+}
+
+const decodedProjectImages = new WeakSet<HTMLImageElement>();
+
+async function decodeProjectBackImage(card: ProjectCard): Promise<void> {
+  const image = card.querySelector<HTMLImageElement>("[data-project-back-image]");
+
+  if (!image || decodedProjectImages.has(image)) {
+    return;
+  }
+
+  if (image.loading === "lazy") {
+    image.loading = "eager";
+  }
+
+  try {
+    await image.decode();
+    decodedProjectImages.add(image);
+  } catch {
+    // Preserve normal browser loading behavior.
+  }
+}
+
 function initializeProjectBook(book: HTMLElement): void {
   if (book.dataset.homeProjectsInitialized === "true") {
     return;
@@ -467,9 +506,28 @@ function initializeProjectBook(book: HTMLElement): void {
 
   book.dataset.homeProjectsInitialized = "true";
 
+  const initialActiveCard = cards.find((card) =>
+    card.classList.contains("is-active"),
+  );
+
+  if (initialActiveCard) {
+    void decodeProjectBackImage(initialActiveCard);
+  }
+
+  measureExpandedCard(book, cards);
   initializeProjectEntrance(book, cards);
   cards.forEach(initializeCardTilt);
   initializeRotateHints(cards);
+
+  const updateStageDimensions = (): void => {
+    if (book.classList.contains("is-transitioning")) {
+      return;
+    }
+
+    measureExpandedCard(book, cards);
+  };
+
+  window.addEventListener("resize", updateStageDimensions, { passive: true });
 
   book.addEventListener("click", (event: MouseEvent) => {
     const target = event.target;

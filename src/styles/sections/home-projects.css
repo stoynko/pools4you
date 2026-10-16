@@ -3,7 +3,9 @@
     --project-card-radius: 1rem;
     --project-expand-speed: 760ms;
     --project-flip-speed: 600ms;
+
     --project-ease: cubic-bezier(0.2, 0.82, 0.18, 1);
+    --project-accordion-ease: cubic-bezier(0.45, 0, 0.15, 1);
 
     position: relative;
     overflow: hidden;
@@ -86,8 +88,8 @@
     perspective: 1500px;
 
     transition:
-      flex-basis var(--project-expand-speed) var(--project-ease),
-      flex-grow var(--project-expand-speed) var(--project-ease);
+      flex-basis var(--project-expand-speed) var(--project-accordion-ease),
+      flex-grow var(--project-expand-speed) var(--project-accordion-ease);
   }
 
   .home-project-card.is-active {
@@ -137,22 +139,10 @@
   background: var(--color-bg-subtle);
 
   box-shadow:
-    0 1.125rem 2.8125rem rgb(0 0 0 / 24%);
+    0 1.5rem 4rem rgb(0 0 0 / 30%);
 
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-
-  transition: box-shadow 300ms ease;
-}
-
-  .home-project-card.is-active .home-project-card__face {
-  box-shadow:
-    0 1.5rem 4rem rgb(0 0 0 / 34%);
-}
-
-  .home-project-card:not(.is-active):hover .home-project-card__face {
-  box-shadow:
-    0 1.125rem 2.8125rem rgb(0 0 0 / 28%);
 }
 
   .home-project-card__front {
@@ -164,6 +154,21 @@
     transform: rotateY(180deg);
     background: var(--color-bg-secondary);
     cursor: pointer;
+  }
+
+  /* STABLE CARD CONTENT */
+
+  .home-project-card__stage {
+    position: absolute;
+    top: 0;
+    left: 50%;
+
+    box-sizing: border-box;
+
+    width: var(--project-stage-width, 47.5rem);
+    height: 100%;
+
+    transform: translateX(-50%);
   }
 
   /* FRONT IMAGE */
@@ -696,7 +701,7 @@
       flex: none;
 
       transition:
-        height var(--project-expand-speed) var(--project-ease);
+        height var(--project-expand-speed) var(--project-accordion-ease);
     }
 
     .home-project-card.is-active {
@@ -781,4 +786,14 @@
       animation: none;
     }
   }
+}
+
+.home-project-card__stage {
+  width: 100%;
+  height: min(34rem, 68svh);
+
+  top: 50%;
+  left: 0;
+
+  transform: translateY(-50%);
 }
