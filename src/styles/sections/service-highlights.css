@@ -1,18 +1,54 @@
 .service-highlights {
   --service-step-height: 55svh;
+  --service-hold-steps: 0.75;
   --service-title-row: 5.5rem;
   --service-description-gap: 1.5rem;
   --service-description-min-height: 7.5rem;
-  --service-cta-gap: 1rem;
+  --service-cta-gap: 3rem;
   --service-edge-blend-height: clamp(3rem, 5vw, 5rem);
-  --service-edge-blur: 2px;
  
+  /* SECTION GRADIENTS */
+
+  --service-edge-gradient-top:
+    linear-gradient(to bottom, var(--color-bg) 0%,
+      color-mix(in srgb, var(--color-bg) 96%, transparent) 25%,
+      color-mix(in srgb, var(--color-bg) 68%, transparent) 55%,
+      transparent 100%
+    );
+
+  --service-edge-gradient-bottom:
+    linear-gradient(to bottom, transparent 0%,
+      color-mix(in srgb, var(--color-bg) 68%, transparent) 45%,
+      color-mix(in srgb, var(--color-bg) 96%, transparent) 75%,
+      var(--color-bg) 100%
+    );
+
+  --service-overlay-gradient:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--color-bg) 92%, transparent) 0%,
+      color-mix(in srgb, var(--color-bg) 78%, transparent) 30%,
+      color-mix(in srgb, var(--color-bg) 42%, transparent) 58%,
+      color-mix(in srgb, var(--color-bg) 28%, transparent) 100%
+    ),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--color-bg) 14%, transparent) 0%,
+      color-mix(in srgb, var(--color-bg) 4%, transparent) 52%,
+      color-mix(in srgb, var(--color-bg) 50%, transparent) 100%
+    );
+
+  --service-overlay-gradient-mobile:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--color-bg) 8%, transparent) 0%,
+      color-mix(in srgb, var(--color-bg) 40%, transparent) 35%,
+      color-mix(in srgb, var(--color-bg) 94%, transparent) 100%
+    );
+
   position: relative;
-  height: calc(100svh + (var(--service-count) - 1) * var(--service-step-height));
+  height: calc( 100svh + (var(--service-count) - 1 + 2 * var(--service-hold-steps)) * var(--service-step-height));
   background:var(--color-bg);
 }
  
-/* Section edge transitions */
+/* SECTION EDGE TRANSITIONS */
  
 .service-highlights::before,
 .service-highlights::after {
@@ -35,27 +71,16 @@
 .service-highlights::before {
   top: 0;
   transform: translateY(-98%);
-  background: linear-gradient(to bottom, var(--color-bg) 0%,
-      rgba(13, 14, 17, 0.96) 25%,
-      rgba(13, 14, 17, 0.68) 55%,
-      rgba(13, 14, 17, 0) 100%
-    );
+  background: var(--service-edge-gradient-top);
 }
  
 .service-highlights::after {
   bottom: 0;
   transform: translateY(98%);
-  background: linear-gradient(to bottom,
-      rgba(13, 14, 17, 0) 0%,
-      rgba(13, 14, 17, 0.68) 45%,
-      rgba(13, 14, 17, 0.96) 75%,
-      var(--color-bg) 100%
-    );
+  background: var(--service-edge-gradient-bottom);
 }
  
-/* --------------------------------------------------
- * Sticky viewport
- * -------------------------------------------------- */
+/* STICKY VIEWPORT */
  
 .service-highlights__sticky {
   position: sticky;
@@ -67,9 +92,7 @@
   isolation: isolate;
 }
  
-/* --------------------------------------------------
- * Initial entrance state
- * -------------------------------------------------- */
+/* INITIAL ENTRANCE STATE */
  
 .service-highlights:not([data-service-highlights-initialized="true"]) [data-service-image="0"],
 .service-highlights:not([data-service-highlights-initialized="true"]) [data-service-copy="0"] {
@@ -77,30 +100,21 @@
   visibility: hidden;
 }
  
-/* --------------------------------------------------
- * Images
- * -------------------------------------------------- */
+/* IMAGES */
  
 .service-highlights__media {
   position: absolute;
   z-index: 0;
- 
   inset: 0;
- 
   overflow: hidden;
 }
  
 .service-highlights__image {
   position: absolute;
- 
   inset: 0;
- 
   opacity: 0;
- 
   overflow: hidden;
- 
   pointer-events: none;
- 
   will-change: opacity;
 }
 
@@ -113,12 +127,10 @@
  
 .service-highlights__image img {
   display: block;
- 
   width: 100%;
   height: 100%;
- 
   object-fit: cover;
- 
+
   filter:
     saturate(0.65)
     brightness(0.78);
@@ -127,226 +139,108 @@
     center center;
  
   will-change: transform;
- 
-  backface-visibility:
-    hidden;
+  backface-visibility: hidden;
 }
  
-/* --------------------------------------------------
- * Overlay
- * -------------------------------------------------- */
+/* OVERLAY */
  
 .service-highlights__overlay {
   position: absolute;
   z-index: 1;
- 
   inset: 0;
- 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(
-        13,
-        14,
-        17,
-        0.92
-      )
-        0%,
-      rgba(
-        13,
-        14,
-        17,
-        0.78
-      )
-        30%,
-      rgba(
-        13,
-        14,
-        17,
-        0.42
-      )
-        58%,
-      rgba(
-        13,
-        14,
-        17,
-        0.28
-      )
-        100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(
-        13,
-        14,
-        17,
-        0.14
-      )
-        0%,
-      rgba(
-        13,
-        14,
-        17,
-        0.04
-      )
-        52%,
-      rgba(
-        13,
-        14,
-        17,
-        0.5
-      )
-        100%
-    );
- 
+  background: var(--service-overlay-gradient);
   pointer-events: none;
 }
  
-/* --------------------------------------------------
- * Main layout
- * -------------------------------------------------- */
+/* MAIN LAYOUT */
  
 .service-highlights__content {
   position: relative;
   z-index: 2;
- 
   height: 100%;
- 
   display: flex;
- 
   align-items: center;
 }
  
-/* --------------------------------------------------
- * Copy
- * -------------------------------------------------- */
+/* COPY */
  
 .service-highlights__copy {
   position: relative;
- 
-  width:
-    min(
-      52rem,
-      100%
-    );
- 
+  width: min(52rem, 100%);
   min-height: 23rem;
 }
  
 .service-highlights__copy-layer {
   position: absolute;
- 
   top: 0;
   left: 0;
- 
   width: 100%;
- 
   display: grid;
- 
+
   grid-template-rows:
     var(--service-title-row)
-    auto
+    var(--service-description-min-height)
     auto;
- 
+
   row-gap: 0;
- 
-  opacity: 0;
-  visibility: hidden;
- 
   pointer-events: none;
 }
- 
+
 .service-highlights__copy-layer.is-active {
-  opacity: 1;
-  visibility: visible;
- 
   pointer-events: auto;
 }
  
-/* --------------------------------------------------
- * Title
- * -------------------------------------------------- */
+/* TITLE */
  
 .service-highlights__title {
+  visibility: hidden;
+  opacity: 0;
   width: 100%;
- 
   margin: 0;
- 
   align-self: center;
- 
-  color:
-    var(--color-text);
- 
-  font-family:
-    var(--font-libertinus);
- 
-  font-size:
-    clamp(
-      3rem,
-      4.15vw,
-      5rem
-    );
- 
+  color: var(--color-text);
+  font-family: var(--font-libertinus);
+  font-size: clamp(3rem, 4.15vw, 5rem);
   font-weight: 400;
- 
   line-height: 1;
- 
-  letter-spacing:
-    -0.035em;
- 
+  letter-spacing: -0.035em;
   white-space: nowrap;
- 
-  will-change:
-    transform,
-    opacity;
+  will-change: opacity;
+}
+
+.service-highlights__copy-layer.is-active
+.service-highlights__title {
+  opacity: 1;
+  visibility: visible;
 }
  
-/* --------------------------------------------------
- * Description
- * -------------------------------------------------- */
+/* DESCRIPTION */
  
 .service-highlights__description-box {
   width: 66.6667%;
- 
-  min-height:
-    var(
-      --service-description-min-height
-    );
- 
-  height: auto;
- 
-  padding-top:
-    var(
-      --service-description-gap
-    );
- 
+  height: 100%;
+  min-height: 0;
+  padding-top: var(--service-description-gap);
+  box-sizing: border-box;
   overflow: visible;
 }
  
 .service-highlights__description {
+  opacity: 0;
+  visibility: hidden;
   width: 100%;
- 
   margin: 0;
- 
-  color:
-    var(--color-text);
- 
-  font-size:
-    clamp(
-      1rem,
-      1.1vw,
-      1.18rem
-    );
- 
+  color: var(--color-text);
+  font-size: clamp(1rem, 1.1vw, 1.18rem);
   font-weight: 400;
- 
   line-height: 1.7;
- 
+  will-change: opacity;
+}
+
+.service-highlights__copy-layer.is-active
+.service-highlights__description {
   opacity: 0.92;
- 
-  will-change:
-    transform,
-    opacity;
+  visibility: visible;
 }
  
 /* CTA ROW */
@@ -358,60 +252,41 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  visibility: hidden;
+  pointer-events: none;
 }
- 
+
+.service-highlights__copy-layer.is-active
+.service-highlights__cta-row {
+  visibility: visible;
+  pointer-events: auto;
+}
  
 /* SCROLL CUE */
  
 .service-highlights__controls {
   position: absolute;
   z-index: 3;
- 
-  left:
-    var(
-      --container-wide-gutter
-    );
- 
-  right:
-    var(
-      --container-wide-gutter
-    );
- 
-  bottom:
-    clamp(
-      1.75rem,
-      3.5vh,
-      3rem
-    );
- 
+  left: var(--container-wide-gutter);
+  right:var(--container-wide-gutter);
+  bottom: clamp(1.75rem, 3.5vh, 3rem);
   display: flex;
- 
   align-items: center;
   justify-content: center;
- 
   pointer-events: none;
 }
  
-/* --------------------------------------------------
- * Scroll hint
- * -------------------------------------------------- */
+/* SCROLL HINT */
  
 .service-highlights__scroll-hint {
   display: grid;
- 
   width: 3.25rem;
   height: 3.25rem;
- 
   place-items: center;
- 
-  color:
-    var(--color-gold);
- 
+  color: var(--color-gold);
   opacity: 0;
   visibility: hidden;
- 
   pointer-events: none;
- 
   transition:
     opacity 300ms ease,
     visibility 300ms ease;
@@ -419,7 +294,6 @@
  
 .service-highlights__scroll-hint.is-visible {
   opacity: 1;
- 
   visibility: visible;
 }
  
@@ -427,24 +301,13 @@
  * Medium desktop
  * -------------------------------------------------- */
  
-@media (
-  max-width: 80rem
-) {
+@media (max-width: 80rem) {
   .service-highlights__copy {
-    width:
-      min(
-        48rem,
-        100%
-      );
+    width: min(48rem, 100%);
   }
  
   .service-highlights__title {
-    font-size:
-      clamp(
-        2.7rem,
-        4.25vw,
-        4.25rem
-      );
+    font-size: clamp(2.7rem, 4.25vw, 4.25rem);
   }
  
   .service-highlights__description-box,
@@ -453,42 +316,23 @@
   }
 }
  
-/* --------------------------------------------------
- * Tablet
- * -------------------------------------------------- */
+/* TABLET */
  
-@media (
-  max-width: 70rem
-) {
+@media (max-width: 70rem) {
   .service-highlights {
-    --service-title-row:
-      5rem;
- 
-    --service-description-gap:
-      1.25rem;
- 
-    --service-description-min-height:
-      7rem;
- 
-    --service-cta-gap:
-      1rem;
+    --service-title-row: 5rem;
+    --service-description-gap: 1.25rem;
+    --service-description-min-height: 7rem;
+    --service-cta-gap: 1rem;
   }
  
   .service-highlights__copy {
-    width:
-      min(
-        44rem,
-        100%
-      );
+    width: min(44rem, 100%);
   }
  
   .service-highlights__title {
     font-size:
-      clamp(
-        2.4rem,
-        4.5vw,
-        3.65rem
-      );
+      clamp(2.4rem, 4.5vw, 3.65rem);
   }
  
   .service-highlights__description-box,
@@ -497,36 +341,19 @@
   }
  
   .service-highlights__description {
-    font-size:
-      clamp(
-        0.98rem,
-        1.35vw,
-        1.1rem
-      );
- 
+    font-size: clamp(0.98rem, 1.35vw, 1.1rem);
     line-height: 1.65;
   }
 }
  
-/* --------------------------------------------------
- * Small tablet
- * -------------------------------------------------- */
+/* SMALL TABLET */
  
-@media (
-  max-width: 56rem
-) {
+@media (max-width: 56rem) {
   .service-highlights {
-    --service-title-row:
-      4.5rem;
- 
-    --service-description-gap:
-      1rem;
- 
-    --service-description-min-height:
-      6.5rem;
- 
-    --service-cta-gap:
-      0.9rem;
+    --service-title-row: 4.5rem;
+    --service-description-gap: 1rem;
+    --service-description-min-height: 6.5rem;
+    --service-cta-gap: 0.9rem;
   }
  
   .service-highlights__copy {
@@ -534,15 +361,8 @@
   }
  
   .service-highlights__title {
-    font-size:
-      clamp(
-        2.15rem,
-        5.2vw,
-        3rem
-      );
- 
-    letter-spacing:
-      -0.025em;
+    font-size: clamp(2.15rem, 5.2vw, 3rem);
+    letter-spacing: -0.025em;
   }
  
   .service-highlights__description-box,
@@ -555,24 +375,12 @@
  * Mobile
  * -------------------------------------------------- */
  
-@media (
-  max-width: 48rem
-) {
+@media (max-width: 48rem) {
   .service-highlights {
-    --service-step-height:
-      45svh;
- 
-    --service-title-row:
-      4rem;
- 
-    --service-description-gap:
-      1rem;
- 
-    --service-description-min-height:
-      6rem;
- 
-    --service-cta-gap:
-      0.9rem;
+    --service-step-height: 45svh;
+    --service-title-row: 4rem;
+    --service-description-gap: 1rem;
+    --service-description-min-height: 6rem;
   }
  
   .service-highlights__sticky {
@@ -580,36 +388,19 @@
   }
  
   .service-highlights__content {
-    align-items:
-      flex-end;
- 
-    padding-bottom:
-      clamp(
-        7rem,
-        14vh,
-        9rem
-      );
+    align-items: flex-end;
+    padding-bottom: clamp(7rem, 14vh, 9rem);
   }
  
   .service-highlights__copy {
     width: 100%;
- 
     min-height: 19rem;
   }
  
   .service-highlights__title {
-    font-size:
-      clamp(
-        1.65rem,
-        6.3vw,
-        2.6rem
-      );
- 
+    font-size: clamp(1.65rem, 6.3vw, 2.6rem);
     line-height: 1;
- 
-    letter-spacing:
-      -0.025em;
- 
+    letter-spacing: -0.025em;
     white-space: nowrap;
   }
  
@@ -620,16 +411,7 @@
  
   .service-highlights__description {
     font-size: 0.95rem;
- 
     line-height: 1.55;
-  }
- 
-  .service-highlights__cta {
-    min-width: 11rem;
- 
-    padding:
-      0.8rem
-      1.1rem;
   }
  
   .service-highlights__controls {
@@ -642,62 +424,22 @@
   }
  
   .service-highlights__overlay {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(
-          13,
-          14,
-          17,
-          0.08
-        )
-          0%,
-        rgba(
-          13,
-          14,
-          17,
-          0.4
-        )
-          35%,
-        rgba(
-          13,
-          14,
-          17,
-          0.94
-        )
-          100%
-      );
+    background: var(--service-overlay-gradient-mobile);
   }
 }
  
-/* --------------------------------------------------
- * Very small mobile
- * -------------------------------------------------- */
+/* VERY SMALL MOBILE */
  
-@media (
-  max-width: 30rem
-) {
+@media (max-width: 30rem) {
   .service-highlights {
-    --service-title-row:
-      3.5rem;
- 
-    --service-description-gap:
-      0.85rem;
- 
-    --service-description-min-height:
-      5.5rem;
- 
-    --service-cta-gap:
-      0.85rem;
+    --service-title-row: 3.5rem;
+    --service-description-gap: 0.85rem;
+    --service-description-min-height: 5.5rem;
+    --service-cta-gap: 0.85rem;
   }
  
   .service-highlights__title {
-    font-size:
-      clamp(
-        1.45rem,
-        6vw,
-        2rem
-      );
+    font-size: clamp(1.45rem, 6vw, 2rem);
   }
  
   .service-highlights__description-box,
@@ -707,14 +449,7 @@
  
   .service-highlights__description {
     font-size: 0.9rem;
- 
     line-height: 1.5;
-  }
- 
-  .service-highlights__cta {
-    min-width: 10.5rem;
- 
-    font-size: 0.85rem;
   }
  
   .service-highlights__scroll-hint {
@@ -723,9 +458,7 @@
   }
 }
  
-/* --------------------------------------------------
- * Reduced motion
- * -------------------------------------------------- */
+/* REDUCED MOTION */
  
 @media (prefers-reduced-motion: reduce) {
   .service-highlights__scroll-hint{

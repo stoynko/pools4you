@@ -1,53 +1,32 @@
 import gsap from "gsap";
- 
-/**
- * Service highlights
- *
- * The user is always in control of the scroll. This script never calls
- * `scrollTo`, never intercepts wheel/touch/keyboard input and never snaps.
- *
- * How it works:
- *  - The section is tall and its inner panel is `position: sticky`, so plain
- *    native scrolling pins the panel (the first image fills the screen).
- *  - Once pinned, the extra scroll "runway" is read as progress (0 → 1).
- *    Crossing a step threshold fades the next slide in; scrolling back fades
- *    the previous one in again.
- *  - After the last slide the panel simply unpins and the page continues to
- *    scroll at the user's own pace.
- *
- * The scroll position is the single source of truth, so wheel, trackpad,
- * touch, keyboard, scrollbar drag, anchors and the scroll-to-top button all
- * behave the same way.
- */
- 
+
 const SECTION_SELECTOR = "[data-service-highlights]";
 const STICKY_SELECTOR = ".service-highlights__sticky";
 const IMAGE_SELECTOR = "[data-service-image]";
 const COPY_SELECTOR = "[data-service-copy]";
 const CTA_SELECTOR = "[data-service-cta]";
 const SCROLL_HINT_SELECTOR = "[data-service-scroll-hint]";
- 
-/**
- * Thresholds are expressed in "steps": 0 = first slide fully pinned,
- * 1 = second slide's position, and so on (one step = --service-step-height).
- * Advancing happens ADVANCE_AT steps after the current slide's position,
- * going back happens RETREAT_AT steps after the previous slide's position.
- * ADVANCE_AT > RETREAT_AT gives a hysteresis band so that stopping right on
- * a threshold can never make the slides flicker back and forth.
- */
+
 const ADVANCE_AT = 0.35;
 const RETREAT_AT = 0.15;
- 
+
+const HOLD_STEPS_FALLBACK = 0.75;
+const HOLD_STEPS_VARIABLE = "--service-hold-steps";
+
 const PIN_TOLERANCE = 1;
 const ENTRANCE_TRIGGER_VIEWPORT_RATIO = 0.6;
 const SCROLL_HINT_DELAY_MS = 3000;
  
+/* SERVICE SLIDES - IMAGE ANIMATION CONSTANTS*/
 const IMAGE_FADE_DURATION = 0.7;
 const IMAGE_KEN_BURNS_DURATION = 1;
 const IMAGE_KEN_BURNS_SCALE = 1.06;
-const COPY_OUT_DURATION = 0.25;
-const COPY_IN_DURATION = 0.45;
-const COPY_IN_DELAY = 0.2;
+
+/* SERVICE SLIDES - TITLE, DESCRIPTION, CTA ANIMATION CONSTANTS*/
+const COPY_OUT_DURATION = 0.18;
+const COPY_IN_DURATION = 0.35;
+const COPY_DESCRIPTION_DELAY = 0.1;
+const COPY_BLUR_PX = 4;
  
 const ENTRANCE_TITLE_DURATION = 0.78;
 const ENTRANCE_DESCRIPTION_DURATION = 0.72;
@@ -69,6 +48,7 @@ type ServiceHighlightState = {
   entrancePrepared: boolean;
   entrancePlayed: boolean;
   descriptionOpacity: number;
+  holdSteps: number;
 };
  
 type ServiceHighlightContext = {
@@ -80,7 +60,7 @@ type ServiceHighlightContext = {
  
 type SectionMetrics = {
   top: number;
-  progress: number;
+  steps: number;
   pinned: boolean;
 };
  
@@ -124,25 +104,29 @@ function revealEdgeBlend(section: HTMLElement): void {
   section.dataset.edgeBlendReady = "true";
 }
  
-/* GEOMETRY (all derived from the section's own box, no window-height maths) */
- 
+function readHoldSteps(section: HTMLElement): number {
+  const raw = parseFloat(getComputedStyle(section).getPropertyValue(HOLD_STEPS_VARIABLE));
+
+  return Number.isFinite(raw) && raw >= 0 ? raw : HOLD_STEPS_FALLBACK;
+}
+
 function measureSection(context: ServiceHighlightContext): SectionMetrics {
   const rect = context.section.getBoundingClientRect();
   const stickyHeight = context.sticky.offsetHeight;
   const travel = Math.max(rect.height - stickyHeight, 0);
+  const lastIndex = context.elements.copyLayers.length - 1;
+  const holdSteps = context.state.holdSteps;
+  const totalSteps = lastIndex + holdSteps * 2;
   const progress = travel > 0 ? Math.min(Math.max(-rect.top / travel, 0), 1) : 0;
- 
+  const steps = Math.min(Math.max(progress * totalSteps - holdSteps, 0), lastIndex);
+
   return {
     top: rect.top,
-    progress,
+    steps,
     pinned: rect.top <= PIN_TOLERANCE && rect.bottom >= stickyHeight - PIN_TOLERANCE,
   };
 }
- 
-/**
- * Maps scroll progress to a slide index with hysteresis (see ADVANCE_AT /
- * RETREAT_AT). Works for any jump size: anchors, scrollbar drags, reloads.
- */
+
 function resolveIndex(steps: number, current: number, lastIndex: number): number {
   let index = Math.min(Math.max(current, 0), lastIndex);
  
@@ -157,7 +141,7 @@ function resolveIndex(steps: number, current: number, lastIndex: number): number
   return index;
 }
  
-/* STATIC STATE (no animation) */
+/* STATIC STATE */
  
 function setStaticImageState(context: ServiceHighlightContext, activeIndex: number): void {
   const { elements, state } = context;
@@ -182,17 +166,17 @@ function setStaticImageState(context: ServiceHighlightContext, activeIndex: numb
     });
   });
 }
- 
-function setStaticCopyState(context: ServiceHighlightContext, activeIndex: number): void {
-  const { elements } = context;
- 
-  gsap.killTweensOf(elements.copyLayers);
- 
-  elements.copyLayers.forEach((layer, index) => {
-    gsap.set(layer, { autoAlpha: index === activeIndex ? 1 : 0, y: 0 });
-  });
+
+function getCopyText(layer: HTMLElement): HTMLElement[] {
+  return Array.from(layer.querySelectorAll<HTMLElement>(".service-highlights__title, .service-highlights__description"));
 }
- 
+
+function setStaticCopyState(context: ServiceHighlightContext): void {
+  const texts = context.elements.copyLayers.flatMap(getCopyText);
+  gsap.killTweensOf(texts);
+  gsap.set(texts, { clearProps: "opacity,visibility,filter"});
+}
+
 function syncCopyAccessibility(context: ServiceHighlightContext, activeIndex: number): void {
   context.elements.images.forEach((layer, index) => {
     layer.classList.toggle("is-active", index === activeIndex);
@@ -211,18 +195,7 @@ function syncCopyAccessibility(context: ServiceHighlightContext, activeIndex: nu
     }
   });
 }
- 
-/* ANIMATED TRANSITIONS */
- 
-/**
- * Crossfade: the incoming layer fades in ON TOP of the outgoing one, which
- * stays fully opaque underneath until the fade is done. Fading both at the
- * same time would let the dark section background show through mid-way.
- *
- * Every transition puts its incoming layer above all earlier ones, so rapid
- * scrolling (or reversing direction mid-fade) can never leave a stuck, half
- * transparent "ghost" layer on top.
- */
+
 function animateImages(context: ServiceHighlightContext, nextIndex: number): void {
   const { elements, state } = context;
   const nextLayer = elements.images[nextIndex];
@@ -230,8 +203,7 @@ function animateImages(context: ServiceHighlightContext, nextIndex: number): voi
   if (!nextLayer) {
     return;
   }
- 
-  // Only the previous crossfade is cancelled; an entrance fade is left alone.
+
   state.imageTimeline?.kill();
  
   state.zIndexCounter += 1;
@@ -262,7 +234,7 @@ function animateImages(context: ServiceHighlightContext, nextIndex: number): voi
     nextLayer,
     { opacity: startOpacity },
     { opacity: 1, duration: IMAGE_FADE_DURATION, ease: "power2.inOut" },
-    0,
+    0
   );
  
   if (nextImage) {
@@ -270,53 +242,71 @@ function animateImages(context: ServiceHighlightContext, nextIndex: number): voi
       nextImage,
       { scale: 1 },
       { scale: IMAGE_KEN_BURNS_SCALE, duration: IMAGE_KEN_BURNS_DURATION, ease: "power1.out" },
-      0,
+      0
     );
   }
  
   state.imageTimeline = timeline;
 }
- 
-/**
- * Copy: outgoing text leaves first, the incoming text follows slightly
- * later, so the two titles are never readable on top of each other.
- */
+
 function animateCopy(context: ServiceHighlightContext, nextIndex: number): void {
-  const { elements } = context;
+  const { elements, state } = context;
   const nextLayer = elements.copyLayers[nextIndex];
- 
+
   if (!nextLayer) {
     return;
   }
- 
-  gsap.killTweensOf(elements.copyLayers);
- 
-  const others = elements.copyLayers.filter((_, index) => index !== nextIndex);
- 
-  gsap.to(others, {
-    autoAlpha: 0,
-    y: -12,
-    duration: COPY_OUT_DURATION,
-    ease: "power2.in",
-    overwrite: "auto",
+
+  const incoming = getCopyText(nextLayer);
+
+  const outgoing = elements.copyLayers.flatMap((layer, index) =>
+      index === nextIndex ? [] : getCopyText(layer),
+  );
+
+  const all = [...outgoing, ...incoming];
+
+  gsap.killTweensOf(all);
+
+  all.forEach((element) => {
+    const opacity = Number(gsap.getProperty(element, "opacity")) || 0;
+    gsap.set(element, { autoAlpha: opacity });
   });
- 
-  const alreadyVisible = Number(gsap.getProperty(nextLayer, "opacity")) > 0.05;
- 
-  if (!alreadyVisible) {
-    gsap.set(nextLayer, { autoAlpha: 0, y: 16 });
-  }
- 
-  gsap.to(nextLayer, {
-    autoAlpha: 1,
-    y: 0,
-    duration: COPY_IN_DURATION,
-    delay: alreadyVisible ? 0 : COPY_IN_DELAY,
-    ease: "power3.out",
-    overwrite: "auto",
+
+  outgoing.forEach((element) => {
+    const opacity = Number(gsap.getProperty(element, "opacity")) || 0;
+
+    if (opacity <= 0.01) {
+      return;
+    }
+
+    gsap.to(element, {
+      autoAlpha: 0,
+      duration: COPY_OUT_DURATION,
+      ease: "none",
+      overwrite: "auto"
+    });
+  });
+
+  incoming.forEach((element, position) => {
+    const currentOpacity = Number(gsap.getProperty(element, "opacity")) || 0;
+    const isDescription = position === 1;
+    const targetOpacity = isDescription ? state.descriptionOpacity : 1;
+    const alreadyVisible = currentOpacity > 0.05;
+
+    if (!alreadyVisible) {
+      gsap.set(element, { autoAlpha: 0 });
+    }
+
+    gsap.to(element, {
+      autoAlpha: targetOpacity,
+      duration: COPY_IN_DURATION,
+      delay: alreadyVisible ? 0 : position * COPY_DESCRIPTION_DELAY,
+      ease: "power1.out",
+      overwrite: "auto"
+    });
   });
 }
- 
+
 /* ACTIVE SERVICE */
  
 function setActiveService(context: ServiceHighlightContext, index: number, animate: boolean): void {
@@ -328,15 +318,16 @@ function setActiveService(context: ServiceHighlightContext, index: number, anima
   }
  
   state.activeIndex = nextIndex;
-  syncCopyAccessibility(context, nextIndex);
- 
+
   if (animate) {
     animateImages(context, nextIndex);
     animateCopy(context, nextIndex);
   } else {
     setStaticImageState(context, nextIndex);
-    setStaticCopyState(context, nextIndex);
+    setStaticCopyState(context);
   }
+ 
+  syncCopyAccessibility(context, nextIndex);
 }
  
 /* FIRST ENTRANCE */
@@ -354,7 +345,7 @@ function getEntranceTargets(elements: ServiceHighlightElements): EntranceTargets
     image: getImageElement(imageLayer),
     title: copyLayer.querySelector<HTMLElement>(".service-highlights__title"),
     description: copyLayer.querySelector<HTMLElement>(".service-highlights__description"),
-    cta: copyLayer.querySelector<HTMLElement>(CTA_SELECTOR),
+    cta: copyLayer.querySelector<HTMLElement>(CTA_SELECTOR)
   };
 }
  
@@ -378,36 +369,25 @@ function prepareEntranceAnimation(context: ServiceHighlightContext): void {
     return;
   }
  
-  // The description rests at the opacity its CSS defines (e.g. 0.92). The
-  // entrance fades to exactly that value so there is no pop when the inline
-  // styles are cleared afterwards.
-  if (targets.description) {
-    const restingOpacity = parseFloat(getComputedStyle(targets.description).opacity);
-    state.descriptionOpacity = Number.isFinite(restingOpacity) ? restingOpacity : 1;
-  }
- 
   gsap.set(targets.imageLayer, { opacity: 0, zIndex: 1 });
  
   if (targets.image) {
     gsap.set(targets.image, { scale: 1, transformOrigin: "50% 50%" });
   }
  
-  if (targets.title) {
-    gsap.set(targets.title, { autoAlpha: 0, y: 40 });
-  }
- 
-  if (targets.description) {
-    gsap.set(targets.description, { autoAlpha: 0, y: 28 });
-  }
- 
+  [targets.title, targets.description].forEach((element) => {
+    if (element) {
+      gsap.set(element, { autoAlpha: 0, filter: `blur(${COPY_BLUR_PX}px)` });
+    }
+  });
+
   if (targets.cta) {
-    gsap.set(targets.cta, { autoAlpha: 0, y: 22, scale: 0.97, transformOrigin: "50% 50%" });
+    gsap.set(targets.cta, { autoAlpha: 0 });
   }
  
   state.entrancePrepared = true;
 }
- 
-/** The user is already at/after the section: show the final state at once. */
+
 function skipEntranceAnimation(context: ServiceHighlightContext): void {
   const { state, elements, section } = context;
   const targets = getEntranceTargets(elements);
@@ -422,14 +402,14 @@ function skipEntranceAnimation(context: ServiceHighlightContext): void {
     }
  
     gsap.killTweensOf(copyTargets);
-    gsap.set(copyTargets, { clearProps: "opacity,visibility,transform" });
+    gsap.set(copyTargets, { clearProps: "opacity,visibility,transform,filter" });
   }
  
   state.entrancePrepared = false;
   state.entrancePlayed = true;
  
   setStaticImageState(context, Math.max(state.activeIndex, 0));
-  setStaticCopyState(context, Math.max(state.activeIndex, 0));
+  setStaticCopyState(context);
   revealEdgeBlend(section);
 }
  
@@ -454,7 +434,7 @@ function playEntranceAnimation(context: ServiceHighlightContext): void {
   const timeline = gsap.timeline({
     defaults: { ease: "power3.out" },
     onComplete: () => {
-      gsap.set(getCopyTargets(targets), { clearProps: "opacity,visibility,transform" });
+      gsap.set(getCopyTargets(targets), { clearProps: "opacity,visibility,transform,filter" });
       state.entrancePrepared = false;
       revealEdgeBlend(section);
     },
@@ -471,27 +451,26 @@ function playEntranceAnimation(context: ServiceHighlightContext): void {
   }
  
   if (targets.title) {
-    timeline.to(targets.title, { autoAlpha: 1, y: 0, duration: ENTRANCE_TITLE_DURATION }, 0.16);
+    timeline.to(targets.title, { 
+      autoAlpha: 1, 
+      filter: "blur(0px)", 
+      duration: ENTRANCE_TITLE_DURATION 
+    }, 0.16);
   }
  
   if (targets.description) {
-    timeline.to(
-      targets.description,
-      { autoAlpha: state.descriptionOpacity, y: 0, duration: ENTRANCE_DESCRIPTION_DURATION },
-      0.3,
-    );
+    timeline.to(targets.description, {
+        autoAlpha: state.descriptionOpacity,
+        filter: "blur(0px)",
+        duration: ENTRANCE_DESCRIPTION_DURATION,
+      }, 0.3);
   }
  
   if (targets.cta) {
-    timeline.to(targets.cta, { autoAlpha: 1, y: 0, scale: 1, duration: ENTRANCE_CTA_DURATION }, 0.44);
+    timeline.to(targets.cta, { autoAlpha: 1, duration: ENTRANCE_CTA_DURATION }, 0.44);
   }
 }
- 
-/**
- * The entrance starts while the section is still sliding into view, so the
- * image is already fading in by the time it fills the screen. It never
- * moves the page.
- */
+
 function handleEntrance(context: ServiceHighlightContext, metrics: SectionMetrics): void {
   const { state } = context;
  
@@ -556,8 +535,7 @@ function update(context: ServiceHighlightContext, forceStatic = false): void {
   handleEntrance(context, metrics);
  
   const animate = !forceStatic && !isProgrammaticScrollActive() && !prefersReducedMotion();
-  const steps = metrics.progress * lastIndex;
-  const nextIndex = resolveIndex(steps, state.activeIndex, lastIndex);
+  const nextIndex = resolveIndex(metrics.steps, state.activeIndex, lastIndex);
  
   setActiveService(context, nextIndex, animate);
  
@@ -611,24 +589,29 @@ function initializeSection(section: HTMLElement): void {
       entrancePrepared: false,
       entrancePlayed: false,
       descriptionOpacity: 1,
-    },
+      holdSteps: readHoldSteps(section)
+    }
   };
- 
-  // Initial state is applied before the "initialized" flag removes the
-  // CSS pre-init hiding rule, so nothing flashes.
+
   setActiveService(context, 0, false);
+
+  context.state.descriptionOpacity = 0.92;
+ 
   prepareEntranceAnimation(context);
  
   section.dataset.serviceHighlightsInitialized = "true";
- 
-  // Restores the right slide after a reload or back/forward navigation.
+
   update(context, true);
  
   const onScrollOrResize = () => scheduleUpdate(context);
+  const onResize = () => {
+    context.state.holdSteps = readHoldSteps(section);
+    scheduleUpdate(context);
+  };
   const onStaticSync = () => window.requestAnimationFrame(() => update(context, true));
  
   window.addEventListener("scroll", onScrollOrResize, { passive: true });
-  window.addEventListener("resize", onScrollOrResize, { passive: true });
+  window.addEventListener("resize", onResize, { passive: true });
   window.addEventListener("pageshow", onStaticSync, { passive: true });
   window.addEventListener("site:programmatic-scroll-end", onStaticSync);
 }
