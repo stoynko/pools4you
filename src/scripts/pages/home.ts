@@ -167,14 +167,6 @@ function initializeHomeHero(hero: HTMLElement): void {
       showScrollCueAfterDelay();
     }
   }, { passive: true });
-
-  hero.classList.add("is-copy-pending");
-
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      hero.classList.add("is-copy-visible");
-    });
-  });
 }
 
 function initializeHomeAdvantagesReveal(section: HTMLElement): void {
